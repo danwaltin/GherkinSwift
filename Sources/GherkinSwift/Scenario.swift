@@ -20,13 +20,13 @@
 //  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
-public struct Scenario : Equatable, Taggable, HasTitle {
-	public let title: String
+public struct Scenario : Equatable, Taggable, HasName {
+	public let name: String
 	public let tags: [String]
 	public let steps: [Step]
 	
-	public init(title: String, tags: [String], steps: [Step]) {
-		self.title = title
+	public init(name: String, tags: [String], steps: [Step]) {
+		self.name = name
 		self.tags = tags
 		self.steps = steps
 	}

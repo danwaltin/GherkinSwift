@@ -20,13 +20,13 @@
 //  Created by Dan Waltin on 2016-06-26.
 //
 // ------------------------------------------------------------------------
-public struct Feature : Equatable, Taggable, HasTitle {
-	public let title: String
+public struct Feature : Equatable, Taggable, HasName {
+	public let name: String
 	public let tags: [String]
 	public let scenarios: [Scenario]
 	
-	public init(title: String, tags: [String] = [], scenarios: [Scenario] = []) {
-		self.title = title
+	public init(name: String, tags: [String] = [], scenarios: [Scenario] = []) {
+		self.name = name
 		self.tags = tags
 		self.scenarios = scenarios
 	}

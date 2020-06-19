@@ -14,13 +14,13 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  HasTitle.swift
+//  HasName.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2016-06-20.
+//  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
 
-public protocol HasTitle {
-	var title: String {get}
+public protocol HasName {
+	var name: String {get}
 }
