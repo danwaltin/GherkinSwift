@@ -35,7 +35,3 @@ public struct TableRow : Equatable {
 		return cells[column]!
 	}
 }
-
-public func ==(_ lhs: TableRow, _ rhs: TableRow) -> Bool {
-	return lhs.cells == rhs.cells
-}

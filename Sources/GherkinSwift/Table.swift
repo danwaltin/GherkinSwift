@@ -68,7 +68,3 @@ public struct Table : Equatable {
 		}
 	}
 }
-
-public func ==(_ lhs: Table, _ rhs: Table) -> Bool {
-	return lhs.columns == rhs.columns && lhs.rows == rhs.rows
-}
