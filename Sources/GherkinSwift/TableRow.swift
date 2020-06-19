@@ -27,10 +27,6 @@ public struct TableRow : Equatable {
 	
 	public let cells: [String: String]
 	
-	internal init(cells: [String: String]) {
-		self.cells = cells
-	}
-	
 	public subscript(column: String) -> String {
 		return cells[column]!
 	}
