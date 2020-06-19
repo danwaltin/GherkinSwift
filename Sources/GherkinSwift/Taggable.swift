@@ -14,35 +14,13 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Step.swift
+//  Taggable.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
-
-public struct Step : Equatable {
-	public let type: StepType
-	public let text: String
-	public let tableParameter: Table?
-	
-	public init(type: StepType, text: String, tableParameter: Table?) {
-		self.type = type
-		self.text = text
-		self.tableParameter = tableParameter
-	}
-	
-	public static func given(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .Given, text: text, tableParameter: table)
-	}
-
-	public static func when(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .When, text: text, tableParameter: table)
-	}
-
-	public static func then(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .Then, text: text, tableParameter: table)
-	}
+public protocol Taggable {
+	var tags: [String] {get}
 }
