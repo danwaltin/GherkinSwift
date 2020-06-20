@@ -14,24 +14,16 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Feature.swift
+//  Location.swift
 //  SwiftSpec
 //
-//  Created by Dan Waltin on 2016-06-26.
+//  Created by Dan Waltin on 2020-06-20.
 //
 // ------------------------------------------------------------------------
 
-public struct Feature : Equatable, Taggable, HasName {
-	public let name: String
-	public let tags: [String]
-	public let scenarios: [Scenario]
-	public let location: Location
-	
-	public init(name: String, tags: [String] = [], scenarios: [Scenario] = []) {
-		self.name = name
-		self.tags = tags
-		self.scenarios = scenarios
-		
-		self.location = Location(column: 1, line: 1)
-	}
+import Foundation
+
+public struct Location : Equatable, Encodable {
+	public let column: Int
+	public let line: Int
 }
