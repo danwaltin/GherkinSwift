@@ -14,14 +14,14 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinFile.swift
+//  GherkinDocument.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-06-20.
 //
 // ------------------------------------------------------------------------
 import Foundation
 
-public struct GherkinFile : Equatable {
-	public let gherkinDocument: GherkinDocument
+public struct GherkinDocument : Equatable {
+	public let feature: Feature
 }
