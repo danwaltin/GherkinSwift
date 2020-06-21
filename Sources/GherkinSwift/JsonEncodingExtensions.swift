@@ -45,8 +45,7 @@ extension GherkinDocument : Encodable {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
 		try container.encode(feature, forKey: .feature)
-		let path = "testdata/good/incomplete_feature_2.feature"
-		try container.encode("\(path)", forKey: .uri)
+		try container.encode(uri, forKey: .uri)
 	}
 }
 

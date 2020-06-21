@@ -24,4 +24,8 @@ import Foundation
 
 public struct GherkinFile : Equatable {
 	public let gherkinDocument: GherkinDocument
+	
+	public init(gherkinDocument: GherkinDocument) {
+		self.gherkinDocument = gherkinDocument
+	}
 }
