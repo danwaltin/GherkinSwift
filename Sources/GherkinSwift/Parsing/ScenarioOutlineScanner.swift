@@ -21,11 +21,11 @@
 //
 // ------------------------------------------------------------------------
 
-public class ScenarioOutlineScanner : ScenarioScanner {
+class ScenarioOutlineScanner : ScenarioScanner {
 	var isScanningExamples = false
 	let tableScanner = TableScanner()
 	
-	public override func scan(line: String) {
+	override func scan(line: String) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
@@ -40,7 +40,7 @@ public class ScenarioOutlineScanner : ScenarioScanner {
 		}
 	}
 	
-	public override func getScenarios() -> [Scenario] {
+	override func getScenarios() -> [Scenario] {
 		let names = scenarioNames()
 		
 		var scenarios = [Scenario]()

@@ -21,20 +21,20 @@
 //
 // ------------------------------------------------------------------------
 
-public class  StepScanner {
+class  StepScanner {
 	var text = ""
 	var step: Step!
 	
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
-	public init() {}
+	init() {}
 	
-	public func getStep() -> Step {
+	func getStep() -> Step {
 		return Step(type: step.type, text: step.text, tableParameter: tableScanner.getTableArgument())
 	}
 	
-	public func scan(line: String) {
+	func scan(line: String) {
 		handleStepText(line: line)
 		handleTable(line: line)
 	}

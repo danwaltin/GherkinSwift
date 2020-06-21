@@ -22,23 +22,23 @@
 // ------------------------------------------------------------------------
 
 
-public class TagScanner {
+class TagScanner {
 
-	public init() {}
+	init() {}
 	
 	var tags = [String]()
 
-	public func scan(line: String) {
+	func scan(line: String) {
 		if line.isTag() {
 			tags.append(contentsOf: tagsFromLine(line))
 		}
 	}
 	
-	public func clear() {
+	func clear() {
 		tags = []
 	}
 	
-	public func getTags() -> [String] {
+	func getTags() -> [String] {
 		return tags
 	}
 

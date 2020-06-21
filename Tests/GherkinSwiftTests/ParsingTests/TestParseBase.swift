@@ -38,8 +38,7 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parser() -> GherkinFeatureParser {
-		let scanner = FeatureScanner()
-		return GherkinFeatureParser(featureScanner: scanner)
+		return GherkinFeatureParser()
 	}
 	
 	func scenarios() -> [Scenario] {

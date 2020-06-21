@@ -25,9 +25,13 @@ public class GherkinFeatureParser : FeatureParser {
 	
 	let featureScanner: FeatureScanner
 	
-	public init(featureScanner: FeatureScanner) {
-		self.featureScanner = featureScanner
+	public init() {
+		self.featureScanner = FeatureScanner()
 	}
+	
+//	init(featureScanner: FeatureScanner) {
+//		self.featureScanner = FeatureScanner()
+//	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
 		let feature = parse(lines: lines)

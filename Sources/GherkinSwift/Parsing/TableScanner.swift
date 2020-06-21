@@ -21,7 +21,7 @@
 //
 // ------------------------------------------------------------------------
 
-public class TableScanner {
+class TableScanner {
 	
 	var hasScannedColumns = false
 	var columns: [String] = []
@@ -29,9 +29,9 @@ public class TableScanner {
 	
 	var hasTable = false
 	
-	public init() {}
+	init() {}
 	
-	public func scanLine(line: String) {
+	func scanLine(line: String) {
 		hasTable = true
 		
 		if hasScannedColumns {
@@ -41,7 +41,7 @@ public class TableScanner {
 		}
 	}
 
-	public func getTableArgument() -> Table? {
+	func getTableArgument() -> Table? {
 		if !hasTable {
 			return nil
 		}

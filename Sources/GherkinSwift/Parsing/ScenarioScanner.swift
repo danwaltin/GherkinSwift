@@ -21,7 +21,7 @@
 //
 // ------------------------------------------------------------------------
 
-public class ScenarioScanner {
+class ScenarioScanner {
 	var name = ""
 	
 	var hasScannedName = false
@@ -31,11 +31,11 @@ public class ScenarioScanner {
 	
 	let scenarioTags: [String]
 	
-	public init(scenarioTags: [String]) {
+	init(scenarioTags: [String]) {
 		self.scenarioTags = scenarioTags
 	}
 	
-	public func scan(line: String) {
+	func scan(line: String) {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
@@ -51,7 +51,7 @@ public class ScenarioScanner {
 		}
 	}
 	
-	public func getScenarios() -> [Scenario] {
+	func getScenarios() -> [Scenario] {
 		return [Scenario(name: name, tags: scenarioTags, steps: steps())]
 	}
 

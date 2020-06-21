@@ -22,7 +22,7 @@
 // ------------------------------------------------------------------------
 import Foundation
 
-public class FeatureScanner {
+class FeatureScanner {
 	var featureTags = [String]()
 	let tagScanner = TagScanner()
 
@@ -33,11 +33,11 @@ public class FeatureScanner {
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	public init() {
+	init() {
 		clear()
 	}
 	
-	public func clear() {
+	func clear() {
 		featureName = ""
 		hasScannedFeatureName = false
 	
@@ -46,7 +46,7 @@ public class FeatureScanner {
 		scenarioScanners = []
 	}
 	
-	public func scan(line: String) {
+	func scan(line: String) {
 		
 		if line.isTag() {
 			tagScanner.scan(line: line)
@@ -80,7 +80,7 @@ public class FeatureScanner {
 		}
 	}
 	
-	public func getFeature() -> Feature {
+	func getFeature() -> Feature {
 		return Feature(name: featureName, tags: featureTags, scenarios: getScenarios())
 	}
 	
