@@ -14,23 +14,23 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Scenario.swift
+//  FeatureChild.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-06-21.
 //
 // ------------------------------------------------------------------------
-public struct Scenario : Equatable, Taggable, HasName {
-	public let name: String
-	public let tags: [String]
-	public let steps: [Step]
-	public let location: Location
+import Foundation
 
-	public init(name: String, tags: [String], steps: [Step]) {
-		self.name = name
-		self.tags = tags
-		self.steps = steps
-		
-		self.location = Location(column: 1, line: 1)
+struct FeatureChild : Encodable {
+	let scenario: Scenario
+}
+
+
+extension Feature {
+	var children: [FeatureChild] {
+		get {
+			return scenarios.map {FeatureChild(scenario: $0)}
+		}
 	}
 }

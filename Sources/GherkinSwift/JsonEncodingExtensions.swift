@@ -55,6 +55,7 @@ extension Feature : Encodable {
 		case language
 		case location
 		case name
+		case children
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -64,5 +65,44 @@ extension Feature : Encodable {
 		try container.encode("en", forKey: .language)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
+		
+		if children.count > 0 {
+			try container.encode(children, forKey: .children)
+		}
+	}
+}
+
+extension Scenario : Encodable {
+	
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+		case name
+		case steps
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Scenario", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+		try container.encode(name, forKey: .name)
+		try container.encode(steps, forKey: .steps)
+	}
+}
+
+extension Step : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+		case text
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Given ", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+		try container.encode(text, forKey: .text)
 	}
 }

@@ -27,11 +27,14 @@ public struct Step : Equatable {
 	public let type: StepType
 	public let text: String
 	public let tableParameter: Table?
-	
+	public let location: Location
+
 	public init(type: StepType, text: String, tableParameter: Table?) {
 		self.type = type
 		self.text = text
 		self.tableParameter = tableParameter
+
+		self.location = Location(column: 1, line: 1)
 	}
 	
 	public static func given(_ text: String, _ table: Table? = nil) -> Step {
