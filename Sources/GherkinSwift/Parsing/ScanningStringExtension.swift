@@ -22,10 +22,6 @@
 // ------------------------------------------------------------------------
 
 
-let tagToken = "@"
-let keywordFeature = "Feature:"
-let keywordScenarioOutline = "Scenario Outline:"
-let keywordScenario = "Scenario:"
 let keywordExamples = "Examples:"
 let keywordGiven = "Given"
 let keywordWhen = "When"
@@ -40,22 +36,6 @@ extension String {
 	func removeKeyword(_ keyword: String) -> String {
 		let copy = deleteText(keyword)
 		return copy.trim()
-	}
-	
-	func isTag() -> Bool {
-		return hasPrefix(tagToken)
-	}
-	
-	func isFeature() -> Bool {
-		return beginsWithKeyword(keywordFeature)
-	}
-	
-	func isScenarioOutline() -> Bool {
-		return beginsWithKeyword(keywordScenarioOutline)
-	}
-
-	func isScenario() -> Bool {
-		return beginsWithKeyword(keywordScenario)
 	}
 	
 	func isExamples() -> Bool {

@@ -46,7 +46,7 @@ class FeatureScanner {
 		scenarioScanners = []
 	}
 	
-	func scan(line: String) {
+	func scan(line: Line) {
 		
 		if line.isTag() {
 			tagScanner.scan(line: line)

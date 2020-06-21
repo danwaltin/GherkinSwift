@@ -25,14 +25,14 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	var isScanningExamples = false
 	let tableScanner = TableScanner()
 	
-	override func scan(line: String) {
+	override func scan(line: Line) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
-		} else if isScanningExamples && !line.trim().isEmpty{
-			tableScanner.scanLine(line: line)
+		} else if isScanningExamples && !line.text.trim().isEmpty{
+			tableScanner.scanLine(line: line.text)
 			
-		} else if line.isExamples() {
+		} else if line.text.isExamples() {
 			isScanningExamples = true
 			
 		} else {

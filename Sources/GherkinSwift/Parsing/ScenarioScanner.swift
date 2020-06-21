@@ -35,19 +35,19 @@ class ScenarioScanner {
 		self.scenarioTags = scenarioTags
 	}
 	
-	func scan(line: String) {
+	func scan(line: Line) {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
 		
-		} else if line.isStep() {
+		} else if line.text.isStep() {
 			isScanningStep = true
 			currentStepScanner = StepScanner()
 			stepScanners += [currentStepScanner]
 			
-			currentStepScanner.scan(line: line)
+			currentStepScanner.scan(line: line.text)
 		} else if isScanningStep {
-			currentStepScanner.scan(line: line)
+			currentStepScanner.scan(line: line.text)
 		}
 	}
 	

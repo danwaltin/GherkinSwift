@@ -14,32 +14,49 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinFeatureParser.swift
+//  Line.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-21.
 //
 // ------------------------------------------------------------------------
+import Foundation
 
-public class GherkinFeatureParser : FeatureParser {
+let tagToken = "@"
+let keywordFeature = "Feature:"
+let keywordScenarioOutline = "Scenario Outline:"
+let keywordScenario = "Scenario:"
+
+struct Line {
+	let text: String
+	let number: Int
 	
-	let featureScanner: FeatureScanner
-	
-	public init() {
-		self.featureScanner = FeatureScanner()
+	func removeKeyword(_ keyword: String) -> String {
+		let copy = text.deleteText(keyword)
+		return copy.trim()
+	}
+
+	func isTag() -> Bool {
+		return hasPrefix(tagToken)
+	}
+
+	func isFeature() -> Bool {
+		return beginsWithKeyword(keywordFeature)
+	}
+
+	func isScenarioOutline() -> Bool {
+		return beginsWithKeyword(keywordScenarioOutline)
+	}
+
+	func isScenario() -> Bool {
+		return beginsWithKeyword(keywordScenario)
+	}
+
+	private func beginsWithKeyword(_ keyword: String) -> Bool {
+		return hasPrefix(keyword)
 	}
 	
-	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
-		featureScanner.clear()
-		for line in getLines(lines) {
-			featureScanner.scan(line: line)
-		}
-		let feature = featureScanner.getFeature()
-		
-		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
-	}
-	
-	private func getLines(_ lines:[String]) -> [Line] {
-		return lines.map{ Line(text: $0, number: 0) }
+	private func hasPrefix(_ prefix: String) -> Bool {
+		return text.trim().hasPrefix(prefix)
 	}
 }
