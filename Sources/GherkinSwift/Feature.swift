@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Copyright 2017 Dan Waltin
+// Copyright 2020 Dan Waltin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
 // ------------------------------------------------------------------------
 //
 //  Feature.swift
-//  SwiftSpec
+//  GherkinSwift
 //
-//  Created by Dan Waltin on 2016-06-26.
+//  Created by Dan Waltin on 2020-06-21.
 //
 // ------------------------------------------------------------------------
 

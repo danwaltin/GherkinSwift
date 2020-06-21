@@ -15,7 +15,7 @@
 // ------------------------------------------------------------------------
 //
 //  ScenarioOutlineScanner.swift
-//  GherkiSwift
+//  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-21.
 //
