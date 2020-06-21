@@ -23,5 +23,4 @@
 
 public protocol FeatureParser {
 	func pickle(lines: [String], fileUri: String) -> GherkinFile
-	func parse(lines: [String]) -> Feature
 }

@@ -28,14 +28,14 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
 		
-		let one = instance.parse(lines: [
+		let one = parse([
 			"@tagF1",
 			"Feature: f1",
 			"@tagS1",
 			"Scenario: s1",
-			"    Given g1"])
+			"    Given g1"], parser: instance)
 		
-		let two = instance.parse(lines: [
+		let two = parse([
 			"@tagF2",
 			"Feature: f2",
 			"@tagS21",
@@ -44,7 +44,7 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 			"    Given g2.1.2",
 			"@tagS22",
 			"Scenario: s2.2",
-			"    Given g2.2.1"])
+			"    Given g2.2.1"], parser: instance)
 		
 		XCTAssertEqual(one,
 		               feature("f1", ["tagF1"], [

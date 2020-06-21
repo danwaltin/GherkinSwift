@@ -30,16 +30,12 @@ public class GherkinFeatureParser : FeatureParser {
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
-		let feature = parse(lines: lines)
-		
-		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
-	}
-	
-	public func parse(lines: [String]) -> Feature {
 		featureScanner.clear()
 		for line in lines {
 			featureScanner.scan(line: line)
 		}
-		return featureScanner.getFeature()
+		let feature = featureScanner.getFeature()
+		
+		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
 	}
 }

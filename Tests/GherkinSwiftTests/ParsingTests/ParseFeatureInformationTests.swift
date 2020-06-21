@@ -51,10 +51,10 @@ class ParseFeatureInformationTests: TestParseBase {
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
 		
-		let one = instance.parse(lines: ["Feature: one"])
+		let one = parse(["Feature: one"], parser: instance)
 		XCTAssertEqual("one", one.name)
 
-		let two = instance.parse(lines: ["Feature: two"])
+		let two = parse(["Feature: two"], parser: instance)
 		XCTAssertEqual("two", two.name)
 	}
 	

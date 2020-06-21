@@ -27,9 +27,13 @@ class TestParseBase: XCTestCase {
 	var actualFeature: Feature!
 
 	func when_parsingFeature(_ lines: [String]) {
-		actualFeature = parser().parse(lines: lines)
+		actualFeature = parse(lines, parser: parser())
 	}
 	
+	func parse(_ lines: [String], parser: GherkinFeatureParser) -> Feature {
+		return parser.pickle(lines: lines, fileUri: "").gherkinDocument.feature
+	}
+
 	func then_shouldReturnScenariosWithNames(_ names: [String]) {
 		let actualNames = scenarios().map{ s in
 			s.name
