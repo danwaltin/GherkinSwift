@@ -30,18 +30,28 @@ class ParseLocationTests: TestParseBase {
 			"Feature: feature     ",
 			"                     ",
 			"Scenario: scenario 1 ",
-			"    Given: given 1    ",
-			"    When: when 1      ",
+			"   Given: given 1    ",
+			"   When: when 1      ",
+			"   Then: then 1      ",
 			"                     ",
 			"Scenario: scenario 2 ",
 			"   Given: given 2    ",
-			"   When: when 2      "
+			"   When: when 2      ",
+			"   Then: then 2      ",
 		])
 		
 		then_feature(shouldHaveLocation: Location(column: 1, line: 1))
 
 		then_scenario(0, shouldHaveLocation: Location(column: 1, line: 3))
-		then_scenario(1, shouldHaveLocation: Location(column: 1, line: 7))
+		then_scenario(1, shouldHaveLocation: Location(column: 1, line: 8))
+
+		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 4))
+		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 5))
+		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 6))
+
+		then_step(0, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 9))
+		then_step(1, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 10))
+		then_step(2, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 11))
 	}
 	
 	private func then_feature(shouldHaveLocation location: Location, file: StaticString = #file, line: UInt = #line) {
@@ -50,5 +60,9 @@ class ParseLocationTests: TestParseBase {
 
 	private func then_scenario(_ index: Int, shouldHaveLocation location: Location, file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.scenarios[index].location, location, file: file, line: line)
+	}
+
+	private func then_step(_ stepIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location, file: StaticString = #file, line: UInt = #line) {
+		XCTAssertEqual(actualFeature.scenarios[scenarioIndex].steps[stepIndex].location, location, file: file, line: line)
 	}
 }

@@ -26,10 +26,10 @@ public struct Scenario : Equatable, Taggable, HasName {
 	public let steps: [Step]
 	public let location: Location
 
-	public init(name: String, tags: [String], steps: [Step], location: Location) {
+	public init(name: String, tags: [String], location: Location, steps: [Step]) {
 		self.name = name
 		self.tags = tags
-		self.steps = steps
 		self.location = location
+		self.steps = steps
 	}
 }

@@ -54,8 +54,8 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			
 			scenarios.append(Scenario(name: names[index],
 									  tags: scenarioTags,
-									  steps: newSteps,
-									  location: Location(column: 1, line: 1)))
+									  location: Location(column: 1, line: 1),
+									  steps: newSteps))
 			index += 1
 		}
 		
@@ -66,6 +66,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 		return Step(
 			type: step.type,
 			text: replacePlaceHolders(step.text, examplesRow),
+			location: Location(column: 0, line: 0),
 			tableParameter: replacePlaceHolders(step.tableParameter, examplesRow))
 	}
 	

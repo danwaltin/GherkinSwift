@@ -27,3 +27,9 @@ public struct Location : Equatable, Encodable {
 	public let column: Int
 	public let line: Int
 }
+
+extension Location {
+	static func zero() -> Location {
+		return Location(column: 0, line: 0)
+	}
+}

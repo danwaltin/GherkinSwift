@@ -23,13 +23,14 @@
 
 class  StepScanner {
 	var text = ""
+	var location = Location(column: 0, line: 0)
 	var step: Step!
 	
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
 	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, tableParameter: tableScanner.getTableArgument())
+		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTableArgument())
 	}
 	
 	func scan(line: Line) {
@@ -38,6 +39,12 @@ class  StepScanner {
 	}
 	
 	private func handleStepText(line: Line) {
+		if line.isEmpty() {
+			return
+		}
+		
+		location = Location(column: 1, line: line.number)
+		
 		if line.isGiven() {
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}

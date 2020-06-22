@@ -56,8 +56,8 @@ class ScenarioScanner {
 	func getScenarios() -> [Scenario] {
 		return [Scenario(name: name,
 						 tags: scenarioTags,
-						 steps: steps(),
-						 location: Location(column: 1, line: lineNumber))]
+						 location: Location(column: 1, line: lineNumber),
+						 steps: steps())]
 	}
 
 	func steps() -> [Step] {
