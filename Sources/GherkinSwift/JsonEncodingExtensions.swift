@@ -75,6 +75,7 @@ extension Feature : Encodable {
 extension Scenario : Encodable {
 	
 	enum CodingKeys: String, CodingKey {
+		case id
 		case keyword
 		case location
 		case name
@@ -84,6 +85,7 @@ extension Scenario : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
+		try container.encode("1", forKey: .id)
 		try container.encode("Scenario", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
@@ -93,6 +95,7 @@ extension Scenario : Encodable {
 
 extension Step : Encodable {
 	enum CodingKeys: String, CodingKey {
+		case id
 		case keyword
 		case location
 		case text
@@ -101,6 +104,7 @@ extension Step : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
+		try container.encode("0", forKey: .id)
 		try container.encode("Given ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
