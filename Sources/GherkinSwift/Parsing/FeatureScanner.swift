@@ -26,8 +26,8 @@ class FeatureScanner {
 	var featureTags = [String]()
 	let tagScanner = TagScanner()
 
-	var featureName = ""
-	var hasScannedFeatureName = false
+	var name = ""
+	var hasScannedName = false
 
 	var isScanningScenarios = false
 	var currentScenarioScanner: ScenarioScanner!
@@ -38,8 +38,8 @@ class FeatureScanner {
 	}
 	
 	func clear() {
-		featureName = ""
-		hasScannedFeatureName = false
+		name = ""
+		hasScannedName = false
 	
 		isScanningScenarios = false
 		currentScenarioScanner = nil
@@ -52,8 +52,8 @@ class FeatureScanner {
 			tagScanner.scan(line: line)
 		
 		} else if line.isFeature() {
-			featureName = line.removeKeyword(keywordFeature)
-			hasScannedFeatureName = true
+			name = line.removeKeyword(keywordFeature)
+			hasScannedName = true
 			featureTags = tagScanner.getTags()
 			tagScanner.clear()
 			
@@ -81,7 +81,7 @@ class FeatureScanner {
 	}
 	
 	func getFeature() -> Feature {
-		return Feature(name: featureName, tags: featureTags, scenarios: getScenarios())
+		return Feature(name: name, tags: featureTags, scenarios: getScenarios())
 	}
 	
 	private func getScenarios() -> [Scenario] {

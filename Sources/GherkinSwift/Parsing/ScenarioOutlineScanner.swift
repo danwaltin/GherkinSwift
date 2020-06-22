@@ -52,7 +52,10 @@ class ScenarioOutlineScanner : ScenarioScanner {
 				replacePlaceHolders($0, examplesRow)
 			}
 			
-			scenarios.append(Scenario(name: names[index], tags: scenarioTags, steps: newSteps))
+			scenarios.append(Scenario(name: names[index],
+									  tags: scenarioTags,
+									  steps: newSteps,
+									  location: Location(column: 1, line: 1)))
 			index += 1
 		}
 		

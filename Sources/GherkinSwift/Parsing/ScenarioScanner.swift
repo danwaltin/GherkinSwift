@@ -23,7 +23,7 @@
 
 class ScenarioScanner {
 	var name = ""
-	
+	var lineNumber = 0
 	var hasScannedName = false
 	var isScanningStep = false
 	var currentStepScanner: StepScanner!
@@ -39,7 +39,8 @@ class ScenarioScanner {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
-		
+			lineNumber = line.number
+			
 		} else if line.isStep() {
 			isScanningStep = true
 			currentStepScanner = StepScanner()
@@ -53,7 +54,10 @@ class ScenarioScanner {
 	}
 	
 	func getScenarios() -> [Scenario] {
-		return [Scenario(name: name, tags: scenarioTags, steps: steps())]
+		return [Scenario(name: name,
+						 tags: scenarioTags,
+						 steps: steps(),
+						 location: Location(column: 1, line: lineNumber))]
 	}
 
 	func steps() -> [Step] {

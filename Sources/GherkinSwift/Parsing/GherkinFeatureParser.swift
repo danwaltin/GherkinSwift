@@ -40,6 +40,6 @@ public class GherkinFeatureParser : FeatureParser {
 	}
 	
 	private func getLines(_ lines:[String]) -> [Line] {
-		return lines.map{ Line(text: $0, number: 0) }
+		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
 	}
 }
