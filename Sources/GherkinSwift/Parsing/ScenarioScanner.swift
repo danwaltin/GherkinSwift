@@ -40,14 +40,15 @@ class ScenarioScanner {
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
 		
-		} else if line.text.isStep() {
+		} else if line.isStep() {
 			isScanningStep = true
 			currentStepScanner = StepScanner()
 			stepScanners += [currentStepScanner]
 			
-			currentStepScanner.scan(line: line.text)
+			currentStepScanner.scan(line: line)
+			
 		} else if isScanningStep {
-			currentStepScanner.scan(line: line.text)
+			currentStepScanner.scan(line: line)
 		}
 	}
 	

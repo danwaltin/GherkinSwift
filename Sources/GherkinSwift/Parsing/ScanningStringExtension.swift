@@ -22,14 +22,8 @@
 // ------------------------------------------------------------------------
 
 
-let keywordExamples = "Examples:"
-let keywordGiven = "Given"
-let keywordWhen = "When"
-let keywordThen = "Then"
-let tableSeparator = "|"
-
 extension String {
-	func beginsWithKeyword(_ keyword: String) -> Bool {
+	private func beginsWithKeyword(_ keyword: String) -> Bool {
 		return trim().hasPrefix(keyword)
 	}
 	
@@ -40,25 +34,5 @@ extension String {
 	
 	func isExamples() -> Bool {
 		return beginsWithKeyword(keywordExamples)
-	}
-	
-	func isGiven() -> Bool {
-		return beginsWithKeyword(keywordGiven)
-	}
-	
-	func isWhen() -> Bool {
-		return beginsWithKeyword(keywordWhen)
-	}
-	
-	func isThen() -> Bool {
-		return beginsWithKeyword(keywordThen)
-	}
-	
-	func isStep() -> Bool {
-		return isGiven() || isWhen() || isThen()
-	}
-	
-	func isTable() -> Bool {
-		return beginsWithKeyword(tableSeparator)
 	}
 }

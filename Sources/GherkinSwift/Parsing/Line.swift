@@ -26,10 +26,19 @@ let tagToken = "@"
 let keywordFeature = "Feature:"
 let keywordScenarioOutline = "Scenario Outline:"
 let keywordScenario = "Scenario:"
+let keywordExamples = "Examples:"
+let keywordGiven = "Given"
+let keywordWhen = "When"
+let keywordThen = "Then"
+let tableSeparator = "|"
 
 struct Line {
 	let text: String
 	let number: Int
+	
+	func isEmpty() -> Bool {
+		return text.trim().isEmpty
+	}
 	
 	func removeKeyword(_ keyword: String) -> String {
 		let copy = text.deleteText(keyword)
@@ -50,6 +59,30 @@ struct Line {
 
 	func isScenario() -> Bool {
 		return beginsWithKeyword(keywordScenario)
+	}
+
+	func isExamples() -> Bool {
+		return beginsWithKeyword(keywordExamples)
+	}
+	
+	func isGiven() -> Bool {
+		return beginsWithKeyword(keywordGiven)
+	}
+	
+	func isWhen() -> Bool {
+		return beginsWithKeyword(keywordWhen)
+	}
+	
+	func isThen() -> Bool {
+		return beginsWithKeyword(keywordThen)
+	}
+
+	func isStep() -> Bool {
+		return isGiven() || isWhen() || isThen()
+	}
+
+	func isTable() -> Bool {
+		return beginsWithKeyword(tableSeparator)
 	}
 
 	private func beginsWithKeyword(_ keyword: String) -> Bool {

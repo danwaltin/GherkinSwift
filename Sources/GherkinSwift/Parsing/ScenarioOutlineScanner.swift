@@ -29,7 +29,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
-		} else if isScanningExamples && !line.text.trim().isEmpty{
+		} else if isScanningExamples && !line.isEmpty() {
 			tableScanner.scanLine(line: line.text)
 			
 		} else if line.text.isExamples() {

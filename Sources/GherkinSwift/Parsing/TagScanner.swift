@@ -43,7 +43,7 @@ class TagScanner {
 	}
 
 	private func tagsFromLine(_ line: Line) -> [String] {
-		let parts = line.text.trim().compactWhitespace().trim().components(separatedBy: .whitespaces)
+		let parts = line.text.trim().compactWhitespace().components(separatedBy: .whitespaces)
 		return parts.map{$0.removeKeyword(tagToken)}
 	}
 }

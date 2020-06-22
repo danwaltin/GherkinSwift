@@ -34,12 +34,12 @@ class  StepScanner {
 		return Step(type: step.type, text: step.text, tableParameter: tableScanner.getTableArgument())
 	}
 	
-	func scan(line: String) {
+	func scan(line: Line) {
 		handleStepText(line: line)
 		handleTable(line: line)
 	}
 	
-	private func handleStepText(line: String) {
+	private func handleStepText(line: Line) {
 		if line.isGiven() {
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}
@@ -53,17 +53,17 @@ class  StepScanner {
 		}
 	}
 
-	private func handleTable(line: String) {
-		if line.trim().isEmpty {
+	private func handleTable(line: Line) {
+		if line.isEmpty() {
 			return
 		}
 
 		if isScanningTable {
-			tableScanner.scanLine(line: line)
+			tableScanner.scanLine(line: line.text)
 			
 		} else if line.isTable() {
 			isScanningTable = true
-			tableScanner.scanLine(line: line)
+			tableScanner.scanLine(line: line.text)
 		}
 	}
 }
