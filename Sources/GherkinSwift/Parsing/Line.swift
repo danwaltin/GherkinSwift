@@ -32,6 +32,13 @@ let keywordWhen = "When"
 let keywordThen = "Then"
 let tableSeparator = "|"
 
+extension String {
+	func removeKeyword(_ keyword: String) -> String {
+		let copy = deleteText(keyword)
+		return copy.trim()
+	}
+}
+
 struct Line {
 	let text: String
 	let number: Int
@@ -41,8 +48,7 @@ struct Line {
 	}
 	
 	func removeKeyword(_ keyword: String) -> String {
-		let copy = text.deleteText(keyword)
-		return copy.trim()
+		return text.removeKeyword(keyword)
 	}
 
 	func isTag() -> Bool {

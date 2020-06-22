@@ -24,8 +24,6 @@
 
 class TagScanner {
 
-	init() {}
-	
 	var tags = [String]()
 
 	func scan(line: Line) {

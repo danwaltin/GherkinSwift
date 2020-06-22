@@ -28,8 +28,6 @@ class  StepScanner {
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
-	init() {}
-	
 	func getStep() -> Step {
 		return Step(type: step.type, text: step.text, tableParameter: tableScanner.getTableArgument())
 	}
@@ -59,11 +57,11 @@ class  StepScanner {
 		}
 
 		if isScanningTable {
-			tableScanner.scanLine(line: line.text)
+			tableScanner.scan(line: line)
 			
 		} else if line.isTable() {
 			isScanningTable = true
-			tableScanner.scanLine(line: line.text)
+			tableScanner.scan(line: line)
 		}
 	}
 }
