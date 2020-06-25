@@ -25,7 +25,7 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseLocationTests: TestParseBase {
-	func test_Locations() {
+	func test_Locations_Rows() {
 		when_parsingFeature([
 			"Feature: feature     ",
 			"                     ",
@@ -53,7 +53,45 @@ class ParseLocationTests: TestParseBase {
 		then_step(1, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 10))
 		then_step(2, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 11))
 	}
-	
+
+	func test_Locations_Feature() {
+		when_parsingFeature([
+			"",
+			" Feature: feature",
+		])
+		
+		then_feature(shouldHaveLocation: Location(column: 2, line: 2))
+	}
+
+	func test_Locations_ColumnsScenarios() {
+		when_parsingFeature([
+			"Feature: feature     ",
+			"                     ",
+			" Scenario: scenario 1 ",
+			"                     ",
+			"   Scenario: scenario 2 ",
+		])
+		
+		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
+		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
+	}
+
+	func test_Locations_ColumnsSteps() {
+		when_parsingFeature([
+			"Feature: feature   ",
+			"                   ",
+			"Scenario: scenario ",
+			"    Given: given   ",
+			"   When: when      ",
+			"  Then: then       ",
+		])
+		
+		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
+		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
+		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 6))
+	}
+
+
 	private func then_feature(shouldHaveLocation location: Location, file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.location, location, file: file, line: line)
 	}
