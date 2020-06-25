@@ -35,7 +35,7 @@ class ParseLocationTests: TestParseBase {
 
 	func test_Locations_Feature() {
 		when_parsingFeature([
-			"#language: en",
+			"@tag",
 			" Feature: feature",
 		])
 		

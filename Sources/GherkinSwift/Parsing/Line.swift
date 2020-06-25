@@ -51,7 +51,7 @@ struct Line {
 		let range = text.range(of: keyword)!
 		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
 
-		return index
+		return index + 1
 	}
 
 	func removeKeyword(_ keyword: String) -> String {

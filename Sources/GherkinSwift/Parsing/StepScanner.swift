@@ -52,12 +52,12 @@ class  StepScanner {
 		
 		if line.isWhen() {
 			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
-			step = Step.given(line.removeKeyword(keywordWhen))
+			step = Step.when(line.removeKeyword(keywordWhen))
 		}
 		
 		if line.isThen() {
 			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
-			step = Step.given(line.removeKeyword(keywordThen))
+			step = Step.then(line.removeKeyword(keywordThen))
 		}
 	}
 
