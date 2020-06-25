@@ -47,6 +47,13 @@ struct Line {
 		return text.trim().isEmpty
 	}
 	
+	func columnForKeyword(_ keyword: String) -> Int {
+		let range = text.range(of: keyword)!
+		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
+
+		return index
+	}
+
 	func removeKeyword(_ keyword: String) -> String {
 		return text.removeKeyword(keyword)
 	}

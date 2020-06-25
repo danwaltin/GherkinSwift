@@ -46,15 +46,18 @@ class  StepScanner {
 		location = Location(column: 1, line: line.number)
 		
 		if line.isGiven() {
+			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}
 		
 		if line.isWhen() {
-			step = Step.when(line.removeKeyword(keywordWhen))
+			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
+			step = Step.given(line.removeKeyword(keywordWhen))
 		}
 		
 		if line.isThen() {
-			step = Step.then(line.removeKeyword(keywordThen))
+			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
+			step = Step.given(line.removeKeyword(keywordThen))
 		}
 	}
 

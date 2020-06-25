@@ -25,45 +25,24 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseLocationTests: TestParseBase {
-	func test_Locations_Rows() {
+	func test_Locations_Feature_At_1_1() {
 		when_parsingFeature([
-			"Feature: feature     ",
-			"                     ",
-			"Scenario: scenario 1 ",
-			"   Given: given 1    ",
-			"   When: when 1      ",
-			"   Then: then 1      ",
-			"                     ",
-			"Scenario: scenario 2 ",
-			"   Given: given 2    ",
-			"   When: when 2      ",
-			"   Then: then 2      ",
+			"Feature: feature",
 		])
 		
 		then_feature(shouldHaveLocation: Location(column: 1, line: 1))
-
-		then_scenario(0, shouldHaveLocation: Location(column: 1, line: 3))
-		then_scenario(1, shouldHaveLocation: Location(column: 1, line: 8))
-
-		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 4))
-		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 5))
-		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 6))
-
-		then_step(0, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 9))
-		then_step(1, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 10))
-		then_step(2, forScenario: 1, shouldHaveLocation: Location(column: 1, line: 11))
 	}
 
 	func test_Locations_Feature() {
 		when_parsingFeature([
-			"",
+			"#language: en",
 			" Feature: feature",
 		])
 		
 		then_feature(shouldHaveLocation: Location(column: 2, line: 2))
 	}
 
-	func test_Locations_ColumnsScenarios() {
+	func test_Locations_Scenarios() {
 		when_parsingFeature([
 			"Feature: feature     ",
 			"                     ",
@@ -76,7 +55,7 @@ class ParseLocationTests: TestParseBase {
 		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
 	}
 
-	func test_Locations_ColumnsSteps() {
+	func test_Locations_Steps() {
 		when_parsingFeature([
 			"Feature: feature   ",
 			"                   ",
