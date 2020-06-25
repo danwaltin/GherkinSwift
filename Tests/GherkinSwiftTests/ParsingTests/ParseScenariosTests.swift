@@ -33,7 +33,7 @@ class ParseScenariosTests: TestParseBase {
 			"scenario name"]
 		)
 	}
-
+	
 	func test_twoScenariosShouldReturnScenariosWithNames() {
 		when_parsingFeature([
 			"Feature: feature name",
@@ -51,34 +51,31 @@ class ParseScenariosTests: TestParseBase {
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Given there is something"])
-
-		then_shouldReturnScenarioWithSteps([
-			Step.given("there is something")]
-		)
+		
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(.Given, "there is something")
 	}
-
+	
 	func test_scenarioWithOneWhenStep() {
 		when_parsingFeature([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    When something happens"])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.when("something happens")]
-		)
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(.When, "something happens")
 	}
-
+	
 	func test_scenarioWithOneThenStep() {
 		when_parsingFeature([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Then something is the result"])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.then("something is the result")]
-		)
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
-
+	
 	// MARK:
 	// MARK: Table parameters to steps
 	
@@ -90,13 +87,15 @@ class ParseScenariosTests: TestParseBase {
 			"        | Column |    ",
 			"        | value  |    "])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("x", table(
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Given,
+			"x",
+			table(
 				"Column",
-				"value"))]
-		)
+				"value"))
 	}
-
+	
 	func test_tableParametersToSteps_oneColumnTwoRows() {
 		when_parsingFeature([
 			"Feature: feature  ",
@@ -106,14 +105,16 @@ class ParseScenariosTests: TestParseBase {
 			"        | v1  |       ",
 			"        | v2  |       "])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.when("y", table(
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.When,
+			"y",
+			table(
 				"col",
 				"v1",
-				"v2"))]
-		)
+				"v2"))
 	}
-
+	
 	func test_tableParametersToSteps_twoColumnsOneRow() {
 		when_parsingFeature([
 			"Feature: feature  ",
@@ -122,13 +123,15 @@ class ParseScenariosTests: TestParseBase {
 			"        | c1   | c2   |",
 			"        | r1c1 | r1c2 |"])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.then("z", table(
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Then,
+			"z",
+			table(
 				"c1", "c2",
-				"r1c1", "r1c2"))]
-		)
+				"r1c1", "r1c2"))
 	}
-
+	
 	func test_tableParametersToSteps_twoColumnsTwoRows() {
 		when_parsingFeature([
 			"Feature: feature  ",
@@ -143,22 +146,72 @@ class ParseScenariosTests: TestParseBase {
 			"        | i | j |",
 			"        | k | l |"])
 		
-		then_shouldReturnScenarioWithSteps([
-			Step.when("alfa", table(
+		then_shouldReturnScenarioWith(numberOfSteps: 2)
+		then_shouldReturnScenarioWithStep(
+			atIndex: 0,
+			.When,
+			"alfa",
+			table(
 				"A", "B",
 				"c", "d",
-				"e", "f")),
-			Step.then("beta", table(
+				"e", "f"))
+		then_shouldReturnScenarioWithStep(
+			atIndex: 1,
+			.Then,
+			"beta",
+			table(
 				"G", "H",
 				"i", "j",
-				"k", "l"))]
-		)
+				"k", "l"))
 	}
-
+	
 	// MARK: - Givens, whens, thens
 	
-	func then_shouldReturnScenarioWithSteps(_ steps: [Step], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: 0).steps, steps, file: file, line: line)
+	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
+											   file: StaticString = #file,
+											   line: UInt = #line) {
+		
+		let s = scenario(at: 0)
+		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
+	}
+	
+	private func then_shouldReturnScenarioWithStep(_ stepType: StepType,
+												   _ text: String,
+												   file: StaticString = #file,
+												   line: UInt = #line) {
+		let actual = step(at: 0)
+		
+		XCTAssertEqual(actual.type, stepType, file: file, line: line)
+		XCTAssertEqual(actual.text, text, file: file, line: line)
+	}
+	
+	private func then_shouldReturnScenarioWithStep(_ stepType: StepType,
+												   _ text: String,
+												   _ table: Table,
+												   file: StaticString = #file,
+												   line: UInt = #line) {
+		let actual = step(at: 0)
+
+		XCTAssertEqual(actual.type, stepType, file: file, line: line)
+		XCTAssertEqual(actual.text, text, file: file, line: line)
+		XCTAssertEqual(actual.tableParameter!, table, file: file, line: line)
+	}
+
+	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
+												   _ stepType: StepType,
+												   _ text: String,
+												   _ table: Table,
+												   file: StaticString = #file,
+												   line: UInt = #line) {
+		let actual = step(at: index)
+		
+		XCTAssertEqual(actual.type, stepType, file: file, line: line)
+		XCTAssertEqual(actual.text, text, file: file, line: line)
+		XCTAssertEqual(actual.tableParameter!, table, file: file, line: line)
+	}
+	
+	private func step(at index: Int) -> Step {
+		return scenario(at: 0).steps[index]
 	}
 }
 
