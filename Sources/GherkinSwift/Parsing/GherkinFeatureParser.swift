@@ -31,11 +31,16 @@ public class GherkinFeatureParser : FeatureParser {
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
 		featureScanner.clear()
-		for line in lines {
+		let theLines = getLines(lines)
+		for line in theLines {
 			featureScanner.scan(line: line)
 		}
 		let feature = featureScanner.getFeature()
 		
 		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
+	}
+	
+	private func getLines(_ lines:[String]) -> [Line] {
+		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
 	}
 }

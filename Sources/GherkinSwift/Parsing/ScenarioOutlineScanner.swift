@@ -25,12 +25,12 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	var isScanningExamples = false
 	let tableScanner = TableScanner()
 	
-	override func scan(line: String) {
+	override func scan(line: Line) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
-		} else if isScanningExamples && !line.trim().isEmpty{
-			tableScanner.scanLine(line: line)
+		} else if isScanningExamples && !line.isEmpty() {
+			tableScanner.scan(line: line)
 			
 		} else if line.isExamples() {
 			isScanningExamples = true
@@ -52,7 +52,10 @@ class ScenarioOutlineScanner : ScenarioScanner {
 				replacePlaceHolders($0, examplesRow)
 			}
 			
-			scenarios.append(Scenario(name: names[index], tags: scenarioTags, steps: newSteps))
+			scenarios.append(Scenario(name: names[index],
+									  tags: scenarioTags,
+									  location: Location(column: 1, line: 1),
+									  steps: newSteps))
 			index += 1
 		}
 		
@@ -63,6 +66,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 		return Step(
 			type: step.type,
 			text: replacePlaceHolders(step.text, examplesRow),
+			location: Location(column: 0, line: 0),
 			tableParameter: replacePlaceHolders(step.tableParameter, examplesRow))
 	}
 	

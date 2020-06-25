@@ -29,15 +29,13 @@ class TableScanner {
 	
 	var hasTable = false
 	
-	init() {}
-	
-	func scanLine(line: String) {
+	func scan(line: Line) {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line)
+			addRow(line.text)
 		} else {
-			createColumns(line)
+			createColumns(line.text)
 		}
 	}
 

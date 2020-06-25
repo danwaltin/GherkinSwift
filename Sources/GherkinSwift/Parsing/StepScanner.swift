@@ -23,47 +23,55 @@
 
 class  StepScanner {
 	var text = ""
+	var location = Location(column: 0, line: 0)
 	var step: Step!
 	
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
-	init() {}
-	
 	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, tableParameter: tableScanner.getTableArgument())
+		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTableArgument())
 	}
 	
-	func scan(line: String) {
+	func scan(line: Line) {
 		handleStepText(line: line)
 		handleTable(line: line)
 	}
 	
-	private func handleStepText(line: String) {
+	private func handleStepText(line: Line) {
+		if line.isEmpty() {
+			return
+		}
+		
+		location = Location(column: 1, line: line.number)
+		
 		if line.isGiven() {
+			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}
 		
 		if line.isWhen() {
+			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
 			step = Step.when(line.removeKeyword(keywordWhen))
 		}
 		
 		if line.isThen() {
+			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
 			step = Step.then(line.removeKeyword(keywordThen))
 		}
 	}
 
-	private func handleTable(line: String) {
-		if line.trim().isEmpty {
+	private func handleTable(line: Line) {
+		if line.isEmpty() {
 			return
 		}
 
 		if isScanningTable {
-			tableScanner.scanLine(line: line)
+			tableScanner.scan(line: line)
 			
 		} else if line.isTable() {
 			isScanningTable = true
-			tableScanner.scanLine(line: line)
+			tableScanner.scan(line: line)
 		}
 	}
 }

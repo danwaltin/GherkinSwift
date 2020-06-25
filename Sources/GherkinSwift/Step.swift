@@ -27,22 +27,24 @@ public struct Step : Equatable {
 	public let type: StepType
 	public let text: String
 	public let tableParameter: Table?
-	
-	public init(type: StepType, text: String, tableParameter: Table?) {
+	public let location: Location
+
+	public init(type: StepType, text: String, location: Location, tableParameter: Table?) {
 		self.type = type
 		self.text = text
+		self.location = location
 		self.tableParameter = tableParameter
 	}
 	
-	public static func given(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .Given, text: text, tableParameter: table)
+	static func given(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .Given, text: text, location: location, tableParameter: table)
 	}
 
-	public static func when(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .When, text: text, tableParameter: table)
+	static func when(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .When, text: text, location: location, tableParameter: table)
 	}
 
-	public static func then(_ text: String, _ table: Table? = nil) -> Step {
-		return Step(type: .Then, text: text, tableParameter: table)
+	static func then(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .Then, text: text, location: location, tableParameter: table)
 	}
 }

@@ -26,7 +26,9 @@ import XCTest
 
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
-	let goodTests = ["incomplete_feature_2"]
+	let goodTests = [
+		"incomplete_feature_2",
+		"minimal"]
 
 	func test_goodTestDataFiles() {
 
