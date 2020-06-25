@@ -29,7 +29,7 @@ class FeatureScanner {
 	var name = ""
 	var lineNumber = 0
 	var columnNumber = 0
-	var hasScannedName = false
+	var hasFoundFeature = false
 
 	var isScanningScenarios = false
 	var currentScenarioScanner: ScenarioScanner!
@@ -41,7 +41,7 @@ class FeatureScanner {
 	
 	func clear() {
 		name = ""
-		hasScannedName = false
+		hasFoundFeature = false
 	
 		isScanningScenarios = false
 		currentScenarioScanner = nil
@@ -57,7 +57,7 @@ class FeatureScanner {
 			name = line.removeKeyword(keywordFeature)
 			lineNumber = line.number
 			columnNumber = line.columnForKeyword(keywordFeature)
-			hasScannedName = true
+			hasFoundFeature = true
 			featureTags = tagScanner.getTags()
 			tagScanner.clear()
 			
@@ -84,8 +84,14 @@ class FeatureScanner {
 		}
 	}
 	
-	func getFeature() -> Feature {
-		return Feature(name: name, tags: featureTags, location: Location(column: columnNumber, line: lineNumber), scenarios: getScenarios())
+	func getFeature() -> Feature? {
+		if !hasFoundFeature {
+			return nil
+		}
+		return Feature(name: name,
+					   tags: featureTags,
+					   location: Location(column: columnNumber, line: lineNumber),
+					   scenarios: getScenarios())
 	}
 	
 	private func getScenarios() -> [Scenario] {

@@ -23,10 +23,10 @@
 import Foundation
 
 public struct GherkinDocument : Equatable {
-	public let feature: Feature
+	public let feature: Feature?
 	public let uri: String
 	
-	public init(feature: Feature, uri: String) {
+	public init(feature: Feature?, uri: String) {
 		self.feature = feature
 		self.uri = uri
 	}

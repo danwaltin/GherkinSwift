@@ -44,7 +44,9 @@ extension GherkinDocument : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(feature, forKey: .feature)
+		if let feature = feature {
+			try container.encode(feature, forKey: .feature)
+		}
 		try container.encode(uri, forKey: .uri)
 	}
 }
