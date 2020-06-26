@@ -27,7 +27,7 @@ import XCTest
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
-		"descriptions",
+		//"descriptions",
 		"empty",
 		"incomplete_feature_1",
 		"incomplete_feature_2",
@@ -37,6 +37,8 @@ class PickleTestDataFilesTests: XCTestCase {
 
 		let goodPath = "testdata/good"
 		
+		var failedTests = [String]()
+		
 		for test in goodTests {
 			let expected = expectedJson(path: goodPath, test: test)
 				.trim()
@@ -44,9 +46,14 @@ class PickleTestDataFilesTests: XCTestCase {
 			let actual = parseAndGetJson(path: goodPath, test: test)
 				.replacingOccurrences(of: " :", with: ":")
 				.trim()
-			
+		
+			if actual != expected {
+				failedTests.append(test)
+			}
 			XCTAssertEqual(actual, expected, "Wrong json for '\(test)'")
 		}
+		
+		XCTAssertEqual(failedTests, [])
 	}
 	
 	private func expectedJson(path: String, test: String) -> String {

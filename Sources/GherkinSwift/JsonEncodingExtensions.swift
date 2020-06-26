@@ -57,6 +57,7 @@ extension Feature : Encodable {
 		case language
 		case location
 		case name
+		case description
 		case children
 	}
 
@@ -67,7 +68,10 @@ extension Feature : Encodable {
 		try container.encode("en", forKey: .language)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
-		
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
+
 		if children.count > 0 {
 			try container.encode(children, forKey: .children)
 		}

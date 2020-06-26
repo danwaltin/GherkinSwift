@@ -27,6 +27,7 @@ class FeatureScanner {
 	let tagScanner = TagScanner()
 
 	var name = ""
+	var descriptionLines = [String]()
 	var lineNumber = 0
 	var columnNumber = 0
 	var hasFoundFeature = false
@@ -81,6 +82,9 @@ class FeatureScanner {
 
 		} else if isScanningScenarios {
 			currentScenarioScanner.scan(line: line)
+			
+		} else if !line.isEmpty() {
+			descriptionLines.append(line.text)
 		}
 	}
 	
@@ -88,7 +92,9 @@ class FeatureScanner {
 		if !hasFoundFeature {
 			return nil
 		}
+		let description = descriptionLines.count == 0 ? nil : descriptionLines.joined(separator: "\n")
 		return Feature(name: name,
+					   description: description,
 					   tags: featureTags,
 					   location: Location(column: columnNumber, line: lineNumber),
 					   scenarios: getScenarios())
