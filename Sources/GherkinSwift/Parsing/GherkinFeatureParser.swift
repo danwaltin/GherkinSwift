@@ -37,7 +37,7 @@ public class GherkinFeatureParser : FeatureParser {
 		}
 		let feature = featureScanner.getFeature()
 		
-		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
+		return GherkinFile(gherkinDocument: GherkinDocument(comments: [], feature: feature, uri: fileUri))
 	}
 	
 	private func getLines(_ lines:[String]) -> [Line] {

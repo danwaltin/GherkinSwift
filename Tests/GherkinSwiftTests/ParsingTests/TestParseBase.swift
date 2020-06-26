@@ -25,13 +25,22 @@ import XCTest
 
 class TestParseBase: XCTestCase {
 	var actualFeature: Feature!
+	var actualGherkinDocument: GherkinDocument!
+	
+	func when_parsingGherkinDocument(_ lines: [String]) {
+		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
+	}
 
 	func when_parsingFeature(_ lines: [String]) {
 		actualFeature = parse(lines, parser: parser())
 	}
-	
+
+	func parseGherkinDocument(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
+		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
+	}
+
 	func parse(_ lines: [String], parser: GherkinFeatureParser) -> Feature {
-		return parser.pickle(lines: lines, fileUri: "").gherkinDocument.feature!
+		return parseGherkinDocument(lines, parser: parser).feature!
 	}
 
 	func then_shouldReturnScenariosWithNames(_ names: [String]) {

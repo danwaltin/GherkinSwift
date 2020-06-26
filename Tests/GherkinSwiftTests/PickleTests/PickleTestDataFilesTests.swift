@@ -31,7 +31,8 @@ class PickleTestDataFilesTests: XCTestCase {
 		"empty",
 		"incomplete_feature_1",
 		"incomplete_feature_2",
-		"minimal"]
+		"minimal",
+	]
 
 	func test_goodTestDataFiles() {
 
