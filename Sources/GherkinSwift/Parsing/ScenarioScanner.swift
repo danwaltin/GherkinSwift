@@ -36,7 +36,7 @@ class ScenarioScanner {
 		self.scenarioTags = scenarioTags
 	}
 	
-	func scan(line: Line) {
+	func scan(line: Line, _ commentCollector: CommentCollector) {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
@@ -50,6 +50,9 @@ class ScenarioScanner {
 			
 			currentStepScanner.scan(line: line)
 			
+		} else if line.isComment() {
+			commentCollector.collectComment(line: line)
+
 		} else if isScanningStep {
 			currentStepScanner.scan(line: line)
 		}

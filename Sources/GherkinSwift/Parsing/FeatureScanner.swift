@@ -36,20 +36,7 @@ class FeatureScanner {
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	init() {
-		clear()
-	}
-	
-	func clear() {
-		name = ""
-		hasFoundFeature = false
-	
-		isScanningScenarios = false
-		currentScenarioScanner = nil
-		scenarioScanners = []
-	}
-	
-	func scan(line: Line) {
+	func scan(line: Line, _ commentCollector: CommentCollector) {
 		
 		if line.isTag() {
 			tagScanner.scan(line: line)
@@ -69,7 +56,7 @@ class FeatureScanner {
 			
 			isScanningScenarios = true
 			
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
 
 		} else if line.isScenario() {
 			currentScenarioScanner = ScenarioScanner(scenarioTags: tagScanner.getTags())
@@ -78,10 +65,10 @@ class FeatureScanner {
 			
 			isScanningScenarios = true
 			
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
 
 		} else if isScanningScenarios {
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
 			
 		} else if !line.isEmpty() {
 			descriptionLines.append(line.text)

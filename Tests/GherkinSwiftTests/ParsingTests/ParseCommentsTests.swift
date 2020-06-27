@@ -34,7 +34,7 @@ class ParseCommentsTests: TestParseBase {
 			"   # Another comment!"
 		])
 		
-		then_document(shouldHaveComments: ["# This is a comment!", "   # Another comment"])
+		then_document(shouldHaveComments: ["# This is a comment!", "   # Another comment!"])
 	}
 
 

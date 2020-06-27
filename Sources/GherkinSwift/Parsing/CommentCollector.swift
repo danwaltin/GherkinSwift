@@ -14,37 +14,24 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinFeatureParser.swift
+//  CommentCollector.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-06-27.
 //
 // ------------------------------------------------------------------------
 
-public class GherkinFeatureParser : FeatureParser {
+import Foundation
+
+class CommentCollector {
 	
-	public init() {
+	private var comments = [Comment]()
+	
+	func collectComment(line: Line) {
+		comments.append(Comment(text: line.text))
 	}
 	
-	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
-		let featureScanner = FeatureScanner()
-		let commentCollector = CommentCollector()
-		
-		let theLines = getLines(lines)
-		for line in theLines {
-			featureScanner.scan(line: line, commentCollector)
-		}
-		
-		let feature = featureScanner.getFeature()
-		let comments = commentCollector.getComments()
-		
-		return GherkinFile(gherkinDocument: GherkinDocument(
-			comments: comments,
-			feature: feature,
-			uri: fileUri))
-	}
-	
-	private func getLines(_ lines:[String]) -> [Line] {
-		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
+	func getComments() -> [Comment] {
+		return comments
 	}
 }

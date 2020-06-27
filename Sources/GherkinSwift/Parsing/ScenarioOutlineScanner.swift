@@ -25,7 +25,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	var isScanningExamples = false
 	let tableScanner = TableScanner()
 	
-	override func scan(line: Line) {
+	override func scan(line: Line, _ commentCollector: CommentCollector) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
@@ -36,7 +36,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			isScanningExamples = true
 			
 		} else {
-			super.scan(line: line)
+			super.scan(line: line, commentCollector)
 		}
 	}
 	
