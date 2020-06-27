@@ -23,8 +23,10 @@
 
 public struct Comment : Equatable {
 	public let text: String
+	public let location: Location
 	
-	public init(text: String) {
+	public init(text: String, location: Location) {
 		self.text = text
+		self.location = location
 	}
 }
