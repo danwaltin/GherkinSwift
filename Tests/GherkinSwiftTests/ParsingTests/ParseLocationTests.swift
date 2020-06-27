@@ -82,8 +82,8 @@ class ParseLocationTests: TestParseBase {
 		])
 		
 		then_comment(0, shouldHaveLocation: Location(column: 1, line: 4))
-		then_comment(1, shouldHaveLocation: Location(column: 3, line: 5))
-		then_comment(2, shouldHaveLocation: Location(column: 6, line: 7))
+		then_comment(1, shouldHaveLocation: Location(column: 1, line: 5))
+		then_comment(2, shouldHaveLocation: Location(column: 1, line: 7))
 	}
 	
 	private func then_feature(shouldHaveLocation location: Location,

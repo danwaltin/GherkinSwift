@@ -28,7 +28,7 @@ class CommentCollector {
 	private var comments = [Comment]()
 	
 	func collectComment(line: Line) {
-		let location = Location(column: line.columnForKeyword(commentToken), line: line.number)
+		let location = Location(column: 1, line: line.number)
 		comments.append(Comment(text: line.text, location: location))
 	}
 	
