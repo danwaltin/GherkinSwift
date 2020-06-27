@@ -37,6 +37,7 @@ extension GherkinFile : Encodable {
 
 extension GherkinDocument : Encodable {
 	enum CodingKeys: String, CodingKey {
+		case comments
 		case feature
 		case uri
 	}
@@ -44,8 +45,28 @@ extension GherkinDocument : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(feature, forKey: .feature)
+		if comments.count > 0 {
+			try container.encode(comments, forKey: .comments)
+		}
+		
+		if let feature = feature {
+			try container.encode(feature, forKey: .feature)
+		}
 		try container.encode(uri, forKey: .uri)
+	}
+}
+
+extension Comment : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case text
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(location, forKey: .location)
+		try container.encode(text, forKey: .text)
 	}
 }
 
@@ -55,6 +76,8 @@ extension Feature : Encodable {
 		case language
 		case location
 		case name
+		case description
+		case children
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -64,5 +87,55 @@ extension Feature : Encodable {
 		try container.encode("en", forKey: .language)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
+
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
+
+		if children.count > 0 {
+			try container.encode(children, forKey: .children)
+		}
+	}
+}
+
+extension Scenario : Encodable {
+	
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+		case name
+		case description
+		case steps
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Scenario", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+		try container.encode(name, forKey: .name)
+
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
+
+		try container.encode(steps, forKey: .steps)
+	}
+}
+
+extension Step : Encodable {
+	enum CodingKeys: String, CodingKey {
+		//case id
+		case keyword
+		case location
+		case text
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Given ", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+		try container.encode(text, forKey: .text)
 	}
 }

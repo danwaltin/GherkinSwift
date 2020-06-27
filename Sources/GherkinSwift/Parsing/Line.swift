@@ -14,15 +14,16 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ScanningStringExtension.swift
+//  Line.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-21.
 //
 // ------------------------------------------------------------------------
-
+import Foundation
 
 let tagToken = "@"
+let commentToken = "#"
 let keywordFeature = "Feature:"
 let keywordScenarioOutline = "Scenario Outline:"
 let keywordScenario = "Scenario:"
@@ -33,23 +34,43 @@ let keywordThen = "Then"
 let tableSeparator = "|"
 
 extension String {
-	func beginsWithKeyword(_ keyword: String) -> Bool {
-		return trim().hasPrefix(keyword)
-	}
-	
 	func removeKeyword(_ keyword: String) -> String {
 		let copy = deleteText(keyword)
 		return copy.trim()
 	}
+}
+
+struct Line {
+	let text: String
+	let number: Int
 	
+	func isEmpty() -> Bool {
+		return text.trim().isEmpty
+	}
+	
+	func columnForKeyword(_ keyword: String) -> Int {
+		let range = text.range(of: keyword)!
+		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
+
+		return index + 1
+	}
+
+	func removeKeyword(_ keyword: String) -> String {
+		return text.removeKeyword(keyword)
+	}
+
 	func isTag() -> Bool {
 		return hasPrefix(tagToken)
+	}
+
+	func isComment() -> Bool {
+		return hasPrefix(commentToken)
 	}
 	
 	func isFeature() -> Bool {
 		return beginsWithKeyword(keywordFeature)
 	}
-	
+
 	func isScenarioOutline() -> Bool {
 		return beginsWithKeyword(keywordScenarioOutline)
 	}
@@ -57,7 +78,7 @@ extension String {
 	func isScenario() -> Bool {
 		return beginsWithKeyword(keywordScenario)
 	}
-	
+
 	func isExamples() -> Bool {
 		return beginsWithKeyword(keywordExamples)
 	}
@@ -73,12 +94,20 @@ extension String {
 	func isThen() -> Bool {
 		return beginsWithKeyword(keywordThen)
 	}
-	
+
 	func isStep() -> Bool {
 		return isGiven() || isWhen() || isThen()
 	}
-	
+
 	func isTable() -> Bool {
 		return beginsWithKeyword(tableSeparator)
+	}
+
+	private func beginsWithKeyword(_ keyword: String) -> Bool {
+		return hasPrefix(keyword)
+	}
+	
+	private func hasPrefix(_ prefix: String) -> Bool {
+		return text.trim().hasPrefix(prefix)
 	}
 }

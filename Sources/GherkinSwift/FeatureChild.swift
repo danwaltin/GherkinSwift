@@ -14,22 +14,23 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinDocument.swift
+//  FeatureChild.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-06-21.
 //
 // ------------------------------------------------------------------------
 import Foundation
 
-public struct GherkinDocument : Equatable {
-	public let comments: [Comment]
-	public let feature: Feature?
-	public let uri: String
-	
-	public init(comments: [Comment], feature: Feature?, uri: String) {
-		self.comments = comments
-		self.feature = feature
-		self.uri = uri
+struct FeatureChild : Encodable {
+	let scenario: Scenario
+}
+
+
+extension Feature {
+	var children: [FeatureChild] {
+		get {
+			return scenarios.map {FeatureChild(scenario: $0)}
+		}
 	}
 }

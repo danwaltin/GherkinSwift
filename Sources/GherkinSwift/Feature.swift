@@ -23,15 +23,17 @@
 
 public struct Feature : Equatable, Taggable, HasName {
 	public let name: String
+	public let description: String?
 	public let tags: [String]
 	public let scenarios: [Scenario]
 	public let location: Location
 	
-	public init(name: String, tags: [String] = [], scenarios: [Scenario] = []) {
+	public init(name: String, description: String?, tags: [String] = [], location: Location, scenarios: [Scenario] = []) {
 		self.name = name
+		self.description = description
 		self.tags = tags
 		self.scenarios = scenarios
 		
-		self.location = Location(column: 1, line: 1)
+		self.location = location
 	}
 }

@@ -14,22 +14,33 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinDocument.swift
+//  ParseCommentsTests.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-06-26.
 //
 // ------------------------------------------------------------------------
-import Foundation
 
-public struct GherkinDocument : Equatable {
-	public let comments: [Comment]
-	public let feature: Feature?
-	public let uri: String
-	
-	public init(comments: [Comment], feature: Feature?, uri: String) {
-		self.comments = comments
-		self.feature = feature
-		self.uri = uri
+import XCTest
+@testable import GherkinSwift
+
+class ParseCommentsTests: TestParseBase {
+	func testScenarioWithComment() {
+		when_parsing([
+			"Feature: feature",
+			"Scenario: scenario one",
+			"# This is a comment!",
+			"Scenario: scenario two",
+			"   # Another comment!"
+		])
+		
+		then_document(shouldHaveComments: ["# This is a comment!", "   # Another comment!"])
 	}
+
+
+	private func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
+		let actual = actualGherkinDocument.comments.map{c in c.text}
+		XCTAssertEqual(actual, expected, file: file, line: line)
+	}
+
 }

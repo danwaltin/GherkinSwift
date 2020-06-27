@@ -14,22 +14,25 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinDocument.swift
+//  CommentCollector.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-06-27.
 //
 // ------------------------------------------------------------------------
+
 import Foundation
 
-public struct GherkinDocument : Equatable {
-	public let comments: [Comment]
-	public let feature: Feature?
-	public let uri: String
+class CommentCollector {
 	
-	public init(comments: [Comment], feature: Feature?, uri: String) {
-		self.comments = comments
-		self.feature = feature
-		self.uri = uri
+	private var comments = [Comment]()
+	
+	func collectComment(line: Line) {
+		let location = Location(column: 1, line: line.number)
+		comments.append(Comment(text: line.text, location: location))
+	}
+	
+	func getComments() -> [Comment] {
+		return comments
 	}
 }

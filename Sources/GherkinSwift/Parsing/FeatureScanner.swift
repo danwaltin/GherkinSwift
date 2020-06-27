@@ -26,34 +26,26 @@ class FeatureScanner {
 	var featureTags = [String]()
 	let tagScanner = TagScanner()
 
-	var featureName = ""
-	var hasScannedFeatureName = false
+	var name = ""
+	var descriptionLines = [String]()
+	var lineNumber = 0
+	var columnNumber = 0
+	var hasFoundFeature = false
 
 	var isScanningScenarios = false
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	init() {
-		clear()
-	}
-	
-	func clear() {
-		featureName = ""
-		hasScannedFeatureName = false
-	
-		isScanningScenarios = false
-		currentScenarioScanner = nil
-		scenarioScanners = []
-	}
-	
-	func scan(line: String) {
+	func scan(line: Line, _ commentCollector: CommentCollector) {
 		
 		if line.isTag() {
 			tagScanner.scan(line: line)
 		
 		} else if line.isFeature() {
-			featureName = line.removeKeyword(keywordFeature)
-			hasScannedFeatureName = true
+			name = line.removeKeyword(keywordFeature)
+			lineNumber = line.number
+			columnNumber = line.columnForKeyword(keywordFeature)
+			hasFoundFeature = true
 			featureTags = tagScanner.getTags()
 			tagScanner.clear()
 			
@@ -64,7 +56,7 @@ class FeatureScanner {
 			
 			isScanningScenarios = true
 			
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
 
 		} else if line.isScenario() {
 			currentScenarioScanner = ScenarioScanner(scenarioTags: tagScanner.getTags())
@@ -73,15 +65,25 @@ class FeatureScanner {
 			
 			isScanningScenarios = true
 			
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
 
 		} else if isScanningScenarios {
-			currentScenarioScanner.scan(line: line)
+			currentScenarioScanner.scan(line: line, commentCollector)
+			
+		} else {
+			descriptionLines.append(line.text)
 		}
 	}
 	
-	func getFeature() -> Feature {
-		return Feature(name: featureName, tags: featureTags, scenarios: getScenarios())
+	func getFeature() -> Feature? {
+		if !hasFoundFeature {
+			return nil
+		}
+		return Feature(name: name,
+					   description: descriptionLines.asDescription(),
+					   tags: featureTags,
+					   location: Location(column: columnNumber, line: lineNumber),
+					   scenarios: getScenarios())
 	}
 	
 	private func getScenarios() -> [Scenario] {

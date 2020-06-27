@@ -23,19 +23,28 @@
 
 public class GherkinFeatureParser : FeatureParser {
 	
-	let featureScanner: FeatureScanner
-	
 	public init() {
-		self.featureScanner = FeatureScanner()
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
-		featureScanner.clear()
-		for line in lines {
-			featureScanner.scan(line: line)
-		}
-		let feature = featureScanner.getFeature()
+		let featureScanner = FeatureScanner()
+		let commentCollector = CommentCollector()
 		
-		return GherkinFile(gherkinDocument: GherkinDocument(feature: feature, uri: fileUri))
+		let theLines = getLines(lines)
+		for line in theLines {
+			featureScanner.scan(line: line, commentCollector)
+		}
+		
+		let feature = featureScanner.getFeature()
+		let comments = commentCollector.getComments()
+		
+		return GherkinFile(gherkinDocument: GherkinDocument(
+			comments: comments,
+			feature: feature,
+			uri: fileUri))
+	}
+	
+	private func getLines(_ lines:[String]) -> [Line] {
+		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
 	}
 }

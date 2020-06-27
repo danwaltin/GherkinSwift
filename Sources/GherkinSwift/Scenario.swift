@@ -22,12 +22,16 @@
 // ------------------------------------------------------------------------
 public struct Scenario : Equatable, Taggable, HasName {
 	public let name: String
+	public let description: String?
 	public let tags: [String]
 	public let steps: [Step]
-	
-	public init(name: String, tags: [String], steps: [Step]) {
+	public let location: Location
+
+	public init(name: String, description: String?, tags: [String], location: Location, steps: [Step]) {
 		self.name = name
+		self.description = description
 		self.tags = tags
+		self.location = location
 		self.steps = steps
 	}
 }

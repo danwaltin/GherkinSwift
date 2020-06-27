@@ -24,11 +24,9 @@
 
 class TagScanner {
 
-	init() {}
-	
 	var tags = [String]()
 
-	func scan(line: String) {
+	func scan(line: Line) {
 		if line.isTag() {
 			tags.append(contentsOf: tagsFromLine(line))
 		}
@@ -42,8 +40,8 @@ class TagScanner {
 		return tags
 	}
 
-	private func tagsFromLine(_ line: String) -> [String] {
-		let parts = line.trim().compactWhitespace().trim().components(separatedBy: .whitespaces)
+	private func tagsFromLine(_ line: Line) -> [String] {
+		let parts = line.text.trim().compactWhitespace().components(separatedBy: .whitespaces)
 		return parts.map{$0.removeKeyword(tagToken)}
 	}
 }

@@ -27,21 +27,21 @@ import XCTest
 class ParseFeatureInformationTests: TestParseBase {
 
 	func test_parseFeature_shouldReturnFeatureWithName() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name"])
 		
 		then_featureNameShouldBe("feature name")
 	}
 
 	func test_parseFeature_whitespaceIsTrimmedFromName() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: name with white space at end   "])
 		
 		then_featureNameShouldBe("name with white space at end")
 	}
 
 	func test_parseFeature_withEmptyLine_shouldReturnFeatureWithName() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name",
 			""])
 		

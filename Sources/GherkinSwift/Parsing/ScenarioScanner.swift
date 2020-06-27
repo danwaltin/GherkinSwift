@@ -23,7 +23,9 @@
 
 class ScenarioScanner {
 	var name = ""
-	
+	var descriptionLines = [String]()
+	var lineNumber = 0
+	var columnNumber = 0
 	var hasScannedName = false
 	var isScanningStep = false
 	var currentStepScanner: StepScanner!
@@ -35,24 +37,37 @@ class ScenarioScanner {
 		self.scenarioTags = scenarioTags
 	}
 	
-	func scan(line: String) {
+	func scan(line: Line, _ commentCollector: CommentCollector) {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
-		
+			lineNumber = line.number
+			columnNumber = line.columnForKeyword(keywordScenario)
+			
 		} else if line.isStep() {
 			isScanningStep = true
 			currentStepScanner = StepScanner()
 			stepScanners += [currentStepScanner]
 			
 			currentStepScanner.scan(line: line)
+			
+		} else if line.isComment() {
+			commentCollector.collectComment(line: line)
+
 		} else if isScanningStep {
 			currentStepScanner.scan(line: line)
+
+		} else {
+			descriptionLines.append(line.text)
 		}
 	}
 	
 	func getScenarios() -> [Scenario] {
-		return [Scenario(name: name, tags: scenarioTags, steps: steps())]
+		return [Scenario(name: name,
+						 description: descriptionLines.asDescription(),
+						 tags: scenarioTags,
+						 location: Location(column: columnNumber, line: lineNumber),
+						 steps: steps())]
 	}
 
 	func steps() -> [Step] {

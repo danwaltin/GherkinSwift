@@ -14,22 +14,38 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinDocument.swift
+//  StringDescriptionExtensions.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-06-27.
 //
 // ------------------------------------------------------------------------
+
 import Foundation
 
-public struct GherkinDocument : Equatable {
-	public let comments: [Comment]
-	public let feature: Feature?
-	public let uri: String
+extension Array where Element == String {
 	
-	public init(comments: [Comment], feature: Feature?, uri: String) {
-		self.comments = comments
-		self.feature = feature
-		self.uri = uri
+	func asDescription() -> String? {
+		if count == 0 {
+			return nil
+		}
+		
+		let description = joined(separator: newLine).withoutEndingNewLines()
+
+		return description.trim().count > 0 ? description : nil
 	}
+	
+}
+
+extension String {
+	func withoutEndingNewLines() -> String {
+		var s = self
+		
+		while s.last?.isNewline == true {
+			s = String(s.dropLast())
+		}
+		
+		return s
+	}
+
 }

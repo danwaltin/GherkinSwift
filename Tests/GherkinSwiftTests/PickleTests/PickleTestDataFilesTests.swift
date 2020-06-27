@@ -26,22 +26,37 @@ import XCTest
 
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
-	let goodTests = ["incomplete_feature_2"]
+	let goodTests = [
+//		"descriptions",
+		"empty",
+		"incomplete_feature_1",
+		"incomplete_feature_2",
+		"minimal",
+//		"scenario_outline_no_newline",
+	]
 
 	func test_goodTestDataFiles() {
 
 		let goodPath = "testdata/good"
 		
+		var failedTests = [String]()
+		
 		for test in goodTests {
 			let expected = expectedJson(path: goodPath, test: test)
+				.withoutIds()
 				.trim()
 			
 			let actual = parseAndGetJson(path: goodPath, test: test)
 				.replacingOccurrences(of: " :", with: ":")
 				.trim()
-			
+		
+			if actual != expected {
+				failedTests.append(test)
+			}
 			XCTAssertEqual(actual, expected, "Wrong json for '\(test)'")
 		}
+		
+		XCTAssertEqual(failedTests, [])
 	}
 	
 	private func expectedJson(path: String, test: String) -> String {
@@ -90,3 +105,11 @@ class PickleTestDataFilesTests: XCTestCase {
 	}
 }
 
+extension String {
+	func withoutIds() -> String {
+		return self
+			.allLines()
+			.filter{ !$0.trim().starts(with: "\"id\":") }
+			.joined(separator: newLine)
+	}
+}
