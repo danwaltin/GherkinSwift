@@ -87,6 +87,7 @@ extension Feature : Encodable {
 		try container.encode("en", forKey: .language)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
+
 		if let description = description {
 			try container.encode(description, forKey: .description)
 		}
@@ -100,20 +101,24 @@ extension Feature : Encodable {
 extension Scenario : Encodable {
 	
 	enum CodingKeys: String, CodingKey {
-		//case id
 		case keyword
 		case location
 		case name
+		case description
 		case steps
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		//try container.encode("1", forKey: .id)
 		try container.encode("Scenario", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
+
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
+
 		try container.encode(steps, forKey: .steps)
 	}
 }
@@ -129,7 +134,6 @@ extension Step : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-	//	try container.encode("0", forKey: .id)
 		try container.encode("Given ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)

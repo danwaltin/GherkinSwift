@@ -70,7 +70,7 @@ class FeatureScanner {
 		} else if isScanningScenarios {
 			currentScenarioScanner.scan(line: line, commentCollector)
 			
-		} else if !line.isEmpty() {
+		} else /*if !line.isEmpty() */{
 			descriptionLines.append(line.text)
 		}
 	}
@@ -79,7 +79,7 @@ class FeatureScanner {
 		if !hasFoundFeature {
 			return nil
 		}
-		let description = descriptionLines.count == 0 ? nil : descriptionLines.joined(separator: "\n")
+		let description = descriptionLines.count == 0 ? nil : descriptionLines.joined(separator: newLine)
 		return Feature(name: name,
 					   description: description,
 					   tags: featureTags,

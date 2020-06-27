@@ -106,12 +106,9 @@ class PickleTestDataFilesTests: XCTestCase {
 
 extension String {
 	func withoutIds() -> String {
-		let all = allLines()
-		let withoutId = all.filter{ !$0.trim().starts(with: "\"id\":") }
-		return withoutId.joined(separator: newLine)
 		return self
 			.allLines()
-			.filter{ !$0.trim().starts(with: "id:") }
+			.filter{ !$0.trim().starts(with: "\"id\":") }
 			.joined(separator: newLine)
 	}
 }

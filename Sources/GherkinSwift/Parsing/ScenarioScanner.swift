@@ -23,6 +23,7 @@
 
 class ScenarioScanner {
 	var name = ""
+	var descriptionLines = [String]()
 	var lineNumber = 0
 	var columnNumber = 0
 	var hasScannedName = false
@@ -55,12 +56,16 @@ class ScenarioScanner {
 
 		} else if isScanningStep {
 			currentStepScanner.scan(line: line)
+
+		} else /*if !line.isEmpty() */{
+			descriptionLines.append(line.text)
 		}
 	}
 	
 	func getScenarios() -> [Scenario] {
+		let description = descriptionLines.count == 0 ? nil : descriptionLines.joined(separator: newLine)
 		return [Scenario(name: name,
-						 description: nil,
+						 description: description,
 						 tags: scenarioTags,
 						 location: Location(column: columnNumber, line: lineNumber),
 						 steps: steps())]

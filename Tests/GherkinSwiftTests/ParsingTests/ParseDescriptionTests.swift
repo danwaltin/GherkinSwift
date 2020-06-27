@@ -36,6 +36,27 @@ class ParseDescriptionTests: TestParseBase {
 		then_feature(shouldHaveDescription: "This is a description")
 	}
 
+	func testFeatureWithDescriptionWithOneEmptyLineAfter() {
+		when_parsing([
+			"Feature: feature",
+			"This is a description",
+			"",
+		])
+		
+		then_feature(shouldHaveDescription: "This is a description")
+	}
+
+	func testFeatureWithDescriptionWithTwoEmptyLinesAfter() {
+		when_parsing([
+			"Feature: feature",
+			"This is a description",
+			"",
+			"",
+		])
+		
+		then_feature(shouldHaveDescription: "This is a description")
+	}
+
 	func testFeatureWithIndentedDescription() {
 		when_parsing([
 			"Feature: feature",
@@ -45,7 +66,7 @@ class ParseDescriptionTests: TestParseBase {
 		then_feature(shouldHaveDescription: "   Indented description")
 	}
 
-	func testFeatureWithTwoIndentedLinesDescription() {
+	func testFeatureWithDescriptionWithTwoIndentedLines() {
 		when_parsing([
 			"Feature: feature",
 			"   First",
@@ -53,6 +74,17 @@ class ParseDescriptionTests: TestParseBase {
 		])
 		
 		then_feature(shouldHaveDescription: "   First\n   Second")
+	}
+
+	func testFeatureWithDescriptionWithTwoLinesWithEmptyLineBetween() {
+		when_parsing([
+			"Feature: feature",
+			"First",
+			"",
+			"Second",
+		])
+		
+		then_feature(shouldHaveDescription: "First\n\nSecond")
 	}
 
 	// MARK: scenario
@@ -69,6 +101,18 @@ class ParseDescriptionTests: TestParseBase {
 		
 		then_scenario(0, shouldHaveDescription: "This is a description")
 		then_scenario(1, shouldHaveDescription: "   First\n   Second")
+	}
+
+	func testScenarioWithDescriptionWithEmptyLine() {
+		when_parsing([
+			"Feature: feature",
+			"Scenario: scenario",
+			"   First",
+			"",
+			"   Second",
+		])
+		
+		then_scenario(0, shouldHaveDescription: "   First\n\n   Second")
 	}
 
 	private func then_feature(shouldHaveDescription description: String,
