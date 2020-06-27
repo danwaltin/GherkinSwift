@@ -28,16 +28,19 @@ class ParseCommentsTests: TestParseBase {
 	func testScenarioWithComment() {
 		when_parsingGherkinDocument([
 			"Feature: feature",
-			"Scenario: scenario",
-			"# This is a comment!"
+			"Scenario: scenario one",
+			"# This is a comment!",
+			"Scenario: scenario two",
+			"   # Another comment!"
 		])
 		
-		then_document(shouldHaveComments: ["# This is a comment!"])
+		then_document(shouldHaveComments: ["# This is a comment!", "   # Another comment"])
 	}
 
 
-	private func then_document(shouldHaveComments comments: [String], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualGherkinDocument.comments, comments, file: file, line: line)
+	private func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
+		let actual = actualGherkinDocument.comments.map{c in c.text}
+		XCTAssertEqual(actual, expected, file: file, line: line)
 	}
 
 }

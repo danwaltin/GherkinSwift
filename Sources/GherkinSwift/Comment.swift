@@ -14,22 +14,17 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinDocument.swift
+//  Comment.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-06-27.
 //
 // ------------------------------------------------------------------------
-import Foundation
 
-public struct GherkinDocument : Equatable {
-	public let comments: [Comment]
-	public let feature: Feature?
-	public let uri: String
+public struct Comment : Equatable {
+	public let text: String
 	
-	public init(comments: [Comment], feature: Feature?, uri: String) {
-		self.comments = comments
-		self.feature = feature
-		self.uri = uri
+	public init(text: String) {
+		self.text = text
 	}
 }
