@@ -26,6 +26,11 @@ import Foundation
 public struct Location : Equatable, Encodable {
 	public let column: Int
 	public let line: Int
+	
+	public init(column: Int, line: Int) {
+		self.column = column
+		self.line = line
+	}
 }
 
 extension Location {
