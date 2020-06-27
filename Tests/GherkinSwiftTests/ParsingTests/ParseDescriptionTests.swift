@@ -25,6 +25,8 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseDescriptionTests: TestParseBase {
+	
+	// MARK: feature
 	func testFeatureWithDescription() {
 		when_parsing([
 			"Feature: feature",
@@ -53,8 +55,30 @@ class ParseDescriptionTests: TestParseBase {
 		then_feature(shouldHaveDescription: "   First\n   Second")
 	}
 
-	private func then_feature(shouldHaveDescription description: String, file: StaticString = #file, line: UInt = #line) {
+	// MARK: scenario
+	func testScenariosWithDescription() {
+		when_parsing([
+			"Feature: feature",
+			"Scenario:",
+			"This is a description",
+			"",
+			"Scenario:",
+			"   First",
+			"   Second",
+		])
+		
+		then_scenario(0, shouldHaveDescription: "This is a description")
+		then_scenario(1, shouldHaveDescription: "   First\n   Second")
+	}
+
+	private func then_feature(shouldHaveDescription description: String,
+							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.description, description, file: file, line: line)
+	}
+
+	private func then_scenario(_ index: Int, shouldHaveDescription description: String,
+							   file: StaticString = #file, line: UInt = #line) {
+		XCTAssertEqual(actualFeature.scenarios[index].description, description, file: file, line: line)
 	}
 
 }

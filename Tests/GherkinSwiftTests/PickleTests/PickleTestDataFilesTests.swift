@@ -27,7 +27,7 @@ import XCTest
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
-		//"descriptions",
+		"descriptions",
 		"empty",
 		"incomplete_feature_1",
 		"incomplete_feature_2",
@@ -42,6 +42,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		
 		for test in goodTests {
 			let expected = expectedJson(path: goodPath, test: test)
+				.withoutIds()
 				.trim()
 			
 			let actual = parseAndGetJson(path: goodPath, test: test)
@@ -103,3 +104,14 @@ class PickleTestDataFilesTests: XCTestCase {
 	}
 }
 
+extension String {
+	func withoutIds() -> String {
+		let all = allLines()
+		let withoutId = all.filter{ !$0.trim().starts(with: "\"id\":") }
+		return withoutId.joined(separator: newLine)
+		return self
+			.allLines()
+			.filter{ !$0.trim().starts(with: "id:") }
+			.joined(separator: newLine)
+	}
+}

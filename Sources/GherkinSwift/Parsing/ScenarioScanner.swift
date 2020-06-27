@@ -60,6 +60,7 @@ class ScenarioScanner {
 	
 	func getScenarios() -> [Scenario] {
 		return [Scenario(name: name,
+						 description: nil,
 						 tags: scenarioTags,
 						 location: Location(column: columnNumber, line: lineNumber),
 						 steps: steps())]

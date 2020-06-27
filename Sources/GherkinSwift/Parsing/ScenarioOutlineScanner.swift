@@ -53,6 +53,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			}
 			
 			scenarios.append(Scenario(name: names[index],
+									  description: nil,
 									  tags: scenarioTags,
 									  location: Location(column: 1, line: 1),
 									  steps: newSteps))
