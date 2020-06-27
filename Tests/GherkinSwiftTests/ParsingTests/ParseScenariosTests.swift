@@ -25,7 +25,7 @@ import XCTest
 
 class ParseScenariosTests: TestParseBase {
 	func test_oneScenarioShouldReturnScenarioWithName() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name  ",
 			"Scenario: scenario name"])
 		
@@ -35,7 +35,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_twoScenariosShouldReturnScenariosWithNames() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name",
 			"Scenario: scenario one",
 			"Scenario: scenario two"])
@@ -47,7 +47,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_scenarioWithOneGivenStep() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Given there is something"])
@@ -57,7 +57,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_scenarioWithOneWhenStep() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    When something happens"])
@@ -67,7 +67,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_scenarioWithOneThenStep() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Then something is the result"])
@@ -80,7 +80,7 @@ class ParseScenariosTests: TestParseBase {
 	// MARK: Table parameters to steps
 	
 	func test_tableParametersToSteps_oneColumnOneRow() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Given x ",
@@ -97,7 +97,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_oneColumnTwoRows() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    When y            ",
@@ -116,7 +116,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_twoColumnsOneRow() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    Then z            ",
@@ -133,7 +133,7 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_twoColumnsTwoRows() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature  ",
 			"Scenario: scenario",
 			"    When alfa    ",

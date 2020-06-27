@@ -28,14 +28,14 @@ class ParseTagsTest : TestParseBase {
 
 	// MARK: - Feature tags
 	func test_parseFeatureWithZeroTags_shouldHaveEmptyListOfTags() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature without tags"])
 		
 		then_feature(shouldHaveTags: [])
 	}
 	
 	func test_parseFeatureWithOneTag() {
-		when_parsingFeature([
+		when_parsing([
 			"@tag",
 			"Feature: name"])
 		
@@ -43,7 +43,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_parseFeatureWithTwoTags_onOneRow() {
-		when_parsingFeature([
+		when_parsing([
 			"@one @two",
 			"Feature: name"])
 		
@@ -51,7 +51,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	func test_parseFeatureWithTwoTags_extraSpaceAfter() {
-		when_parsingFeature([
+		when_parsing([
 			"@one @two   ",
 			"Feature: name"])
 		
@@ -59,7 +59,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	func test_parseFeatureWithTwoTags_onTwoRows() {
-		when_parsingFeature([
+		when_parsing([
 			"@one",
 			"@two",
 			"Feature: name"])
@@ -68,7 +68,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_parseFeatureWithFourTags_onTwoRows_extraSpace() {
-		when_parsingFeature([
+		when_parsing([
 			"@one @two",
 			"@three @four",
 			"Feature: name"])
@@ -77,7 +77,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	func test_parseFeatureWithTwoTags_extraSpaceBetween() {
-		when_parsingFeature([
+		when_parsing([
 			"@one  @two",
 			"Feature: name"])
 		
@@ -85,7 +85,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_parseFeatureWithTwoTags_extraTabBetween() {
-		when_parsingFeature([
+		when_parsing([
 			"@one\t@two",
 			"Feature: name"])
 		
@@ -94,7 +94,7 @@ class ParseTagsTest : TestParseBase {
 	
 	// MARK: - Scenario tags
 	func test_scenarioWithOneTag() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"@tag",
 			"Scenario: scenario",
@@ -104,7 +104,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_scenarioWithTwoTags_oneRow() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"@one @two",
 			"Scenario: scenario",
@@ -114,7 +114,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_scenarioWithTwoTags_twoRows() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"@one",
 			"@two",
@@ -125,7 +125,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_scenarioWithTwoTags_twoExtraSpaces() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"@one   @two",
 			"Scenario: scenario",
@@ -136,7 +136,7 @@ class ParseTagsTest : TestParseBase {
 
 	// MARK: - Scenario Outline tags
 	func test_scenarioOutlineWithOneTag() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"@tag                      ",
 			"Scenario Outline: scenario",
@@ -149,7 +149,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	func test_scenarioOutlineWithOneTagTwoExamples() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"@tag                      ",
 			"Scenario Outline: scenario",
@@ -164,7 +164,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	func test_scenarioOutlineWithTwoTags_oneRow() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"@one @two                 ",
 			"Scenario Outline: scenario",
@@ -177,7 +177,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_scenarioOutlineWithTwoTags_twoRows() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"@one                      ",
 			"@two                      ",
@@ -191,7 +191,7 @@ class ParseTagsTest : TestParseBase {
 	}
 	
 	func test_scenarioOutlineWithTwoTags_twoExtraSpaces() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"@one   @two               ",
 			"Scenario Outline: scenario",
@@ -205,7 +205,7 @@ class ParseTagsTest : TestParseBase {
 
 	// MARK: - Feature, scenario and scenario outline tags
 	func test_featureWithThreeTags_andTwoScenariosWithThreeTagsEach() {
-		when_parsingFeature([
+		when_parsing([
 			"@f1 @f2              ",
 			"@f3                  ",
 			"Feature: f           ",

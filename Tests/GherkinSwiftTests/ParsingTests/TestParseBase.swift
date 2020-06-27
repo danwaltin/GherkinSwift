@@ -27,12 +27,9 @@ class TestParseBase: XCTestCase {
 	var actualFeature: Feature!
 	var actualGherkinDocument: GherkinDocument!
 	
-	func when_parsingGherkinDocument(_ lines: [String]) {
+	func when_parsing(_ lines: [String]) {
 		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
-	}
-
-	func when_parsingFeature(_ lines: [String]) {
-		actualFeature = parse(lines, parser: parser())
+		actualFeature = actualGherkinDocument.feature!
 	}
 
 	func parseGherkinDocument(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {

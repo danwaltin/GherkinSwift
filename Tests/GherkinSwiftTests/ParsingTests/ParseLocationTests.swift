@@ -26,7 +26,7 @@ import XCTest
 
 class ParseLocationTests: TestParseBase {
 	func test_Locations_Feature_At_1_1() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 		])
 		
@@ -34,7 +34,7 @@ class ParseLocationTests: TestParseBase {
 	}
 
 	func test_Locations_Feature() {
-		when_parsingFeature([
+		when_parsing([
 			"@tag",
 			" Feature: feature",
 		])
@@ -43,7 +43,7 @@ class ParseLocationTests: TestParseBase {
 	}
 
 	func test_Locations_Scenarios() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature     ",
 			"                     ",
 			" Scenario: scenario 1 ",
@@ -56,7 +56,7 @@ class ParseLocationTests: TestParseBase {
 	}
 
 	func test_Locations_Steps() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature   ",
 			"                   ",
 			"Scenario: scenario ",
@@ -70,7 +70,21 @@ class ParseLocationTests: TestParseBase {
 		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 6))
 	}
 
-
+	func test_Locations_Comments() {
+		when_parsing([
+			"Feature: feature   ",
+			"                   ",
+			"Scenario: scenario ",
+			"    Given: given   ",
+			"   When: when      ",
+			"  Then: then       ",
+		])
+		
+		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
+		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
+		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 6))
+	}
+	
 	private func then_feature(shouldHaveLocation location: Location, file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.location, location, file: file, line: line)
 	}

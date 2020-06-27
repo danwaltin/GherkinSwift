@@ -26,7 +26,7 @@ import XCTest
 
 class ParseDescriptionTests: TestParseBase {
 	func testFeatureWithDescription() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"This is a description"
 		])
@@ -35,7 +35,7 @@ class ParseDescriptionTests: TestParseBase {
 	}
 
 	func testFeatureWithIndentedDescription() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"   Indented description"
 		])
@@ -44,7 +44,7 @@ class ParseDescriptionTests: TestParseBase {
 	}
 
 	func testFeatureWithTwoIndentedLinesDescription() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature",
 			"   First",
 			"   Second",

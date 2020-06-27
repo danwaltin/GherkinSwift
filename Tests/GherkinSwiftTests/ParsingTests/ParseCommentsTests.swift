@@ -26,7 +26,7 @@ import XCTest
 
 class ParseCommentsTests: TestParseBase {
 	func testScenarioWithComment() {
-		when_parsingGherkinDocument([
+		when_parsing([
 			"Feature: feature",
 			"Scenario: scenario one",
 			"# This is a comment!",

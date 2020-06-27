@@ -25,7 +25,7 @@ import XCTest
 
 class ParseScenarioOutlinesTests: TestParseBase {
 	func test_oneScenarioOutlineWithOneExampleShouldReturnScenarioWithName() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Given <key>                ",
@@ -40,7 +40,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 	
 	func test_oneScenarioOutlineWithTwoExamplesShouldReturnTwoScenarios() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Given <key>                ",
@@ -57,7 +57,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_twoScenarioOutlinesWithTwoAndThreeExamplesShouldReturnFiveScenarios() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name         ",
 			"Scenario Outline: scenario one",
 			"    Given <key>               ",
@@ -88,7 +88,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	// MARK: - Replacing keys with examples in steps
 	
 	func test_oneKeyOneExample() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Given the key <key>        ",
@@ -103,7 +103,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_oneKeyInTwoInstancesInOneStepsOneExample() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Then foo <key> bar '<key>' ",
@@ -118,7 +118,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_twoKeyInInOneStepsOneExample() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name                 ",
 			"Scenario Outline: scenario name       ",
 			"    Then foo <key one> bar '<key two>'",
@@ -133,7 +133,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_oneKeyInTwoStepsOneExample() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Given foo <key>            ",
@@ -150,7 +150,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_threeKeysInThreeStepsOneExample() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name                     ",
 			"Scenario Outline: scenario name           ",
 			"    Given foo <key one>                   ",
@@ -169,7 +169,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_threeKeysInThreeStepsTwoExamples() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature name          ",
 			"Scenario Outline: scenario name",
 			"    Given alpha <k1>           ",
@@ -198,7 +198,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	// MARK: - Replacing keys with value in table parameters
 	
 	func test_oneColumnOneRow_oneKeyOneExample_replaceCell() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"Scenario Outline: scenario",
 			"    Given x               ",
@@ -217,7 +217,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_oneColumnOneRow_twoKeysOneExample_replaceCell() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"Scenario Outline: scenario",
 			"    Given x               ",
@@ -236,7 +236,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_oneColumnOneRow_oneKeyOneExample_replaceColumn() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature          ",
 			"Scenario Outline: scenario",
 			"    When x                ",
@@ -255,7 +255,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_oneColumnOneRow_twoKeysOneExample_replaceColumn() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature             ",
 			"Scenario Outline: scenario   ",
 			"    When x                   ",
@@ -274,7 +274,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	}
 
 	func test_twoColumnsTwoRows_fourKeysTwoSameTwoExamples_replaceColumnAndCells() {
-		when_parsingFeature([
+		when_parsing([
 			"Feature: feature                            ",
 			"Scenario Outline: scenario                  ",
 			"    Then x                                  ",
