@@ -57,15 +57,14 @@ class ScenarioScanner {
 		} else if isScanningStep {
 			currentStepScanner.scan(line: line)
 
-		} else /*if !line.isEmpty() */{
+		} else {
 			descriptionLines.append(line.text)
 		}
 	}
 	
 	func getScenarios() -> [Scenario] {
-		let description = descriptionLines.count == 0 ? nil : descriptionLines.joined(separator: newLine)
 		return [Scenario(name: name,
-						 description: description,
+						 description: descriptionLines.asDescription(),
 						 tags: scenarioTags,
 						 location: Location(column: columnNumber, line: lineNumber),
 						 steps: steps())]
