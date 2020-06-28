@@ -76,8 +76,7 @@ class ParseScenariosTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
 	
-	// MARK:
-	// MARK: Table parameters to steps
+	// MARK: - Table parameters to steps
 	
 	func test_tableParametersToSteps_oneColumnOneRow() {
 		when_parsing([

@@ -150,57 +150,14 @@ class ParseTagsTest : TestParseBase {
 
 	func test_scenarioOutlineWithOneTagTwoExamples() {
 		when_parsing([
-			"Feature: feature          ",
-			"@tag                      ",
-			"Scenario Outline: scenario",
-			"    Then x                ",
-			" Examples:                ",
-			"    | key |               ",
-			"    | one |               ",
-			"    | two |               "])
+			"Feature: feature      ",
+			"@tag                  ",
+			"Scenario Outline: one ",
+			"@tip @top             ",
+			"Scenario Outline: two "])
 		
 		then_scenario(0, shouldHaveTags: ["tag"])
-		then_scenario(1, shouldHaveTags: ["tag"])
-	}
-
-	func test_scenarioOutlineWithTwoTags_oneRow() {
-		when_parsing([
-			"Feature: feature          ",
-			"@one @two                 ",
-			"Scenario Outline: scenario",
-			"    Then x                ",
-			" Examples:                ",
-			"    | key |               ",
-			"    | one |               "])
-		
-		then_scenario(shouldHaveTags: ["one", "two"])
-	}
-	
-	func test_scenarioOutlineWithTwoTags_twoRows() {
-		when_parsing([
-			"Feature: feature          ",
-			"@one                      ",
-			"@two                      ",
-			"Scenario Outline: scenario",
-			"    Then x                ",
-			" Examples:                ",
-			"    | key |               ",
-			"    | one |               "])
-		
-		then_scenario(shouldHaveTags: ["one", "two"])
-	}
-	
-	func test_scenarioOutlineWithTwoTags_twoExtraSpaces() {
-		when_parsing([
-			"Feature: feature          ",
-			"@one   @two               ",
-			"Scenario Outline: scenario",
-			"    Then x                ",
-			" Examples:                ",
-			"    | key |               ",
-			"    | one |               "])
-		
-		then_scenario(shouldHaveTags: ["one", "two"])
+		then_scenario(1, shouldHaveTags: ["tip", "top"])
 	}
 
 	// MARK: - Feature, scenario and scenario outline tags
@@ -233,7 +190,6 @@ class ParseTagsTest : TestParseBase {
 		then_scenario(0, shouldHaveTags: ["s1.1", "s1.2", "s1.3"])
 		then_scenario(1, shouldHaveTags: ["s2.1", "s2.2", "s2.3"])
 		then_scenario(2, shouldHaveTags: ["s3.1", "s3.2", "s3.3"])
-		then_scenario(3, shouldHaveTags: ["s3.1", "s3.2", "s3.3"])
 	}
 	
 	// MARK: - Givens, whens, thens

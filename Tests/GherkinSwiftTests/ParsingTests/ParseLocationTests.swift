@@ -55,6 +55,19 @@ class ParseLocationTests: TestParseBase {
 		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
 	}
 
+	func test_Locations_ScenarioOutlines() {
+		when_parsing([
+			"Feature: feature     ",
+			"                     ",
+			" Scenario Outline: scenario 1 ",
+			"                     ",
+			"   Scenario Outline: scenario 2 ",
+		])
+		
+		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
+		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
+	}
+
 	func test_Locations_Steps() {
 		when_parsing([
 			"Feature: feature   ",
