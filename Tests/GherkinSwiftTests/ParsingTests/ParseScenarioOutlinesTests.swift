@@ -42,8 +42,8 @@ class ParseScenarioOutlinesTests: TestParseBase {
 		then_shouldReturnScenarioWith(numberOfSteps: 3)
 		
 		then_shouldReturnScenarioWithStep(atIndex: 0, .Given, "given <alpha>")
-		then_shouldReturnScenarioWithStep(atIndex: 1, .When, "when <gamma>")
-		then_shouldReturnScenarioWithStep(atIndex: 2, .Then, "then <then>")
+		then_shouldReturnScenarioWithStep(atIndex: 1, .When, "when <beta>")
+		then_shouldReturnScenarioWithStep(atIndex: 2, .Then, "then <gamma>")
 	}
 	
 	// MARK: - Table parameters to steps
@@ -67,7 +67,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 			"x",
 			table(
 				"Column",
-				"<>"))
+				"<key>"))
 	}
 
 	// MARK: - Examples
