@@ -21,7 +21,7 @@
 //
 // ------------------------------------------------------------------------
 
-class  StepScanner {
+class StepScanner {
 	var text = ""
 	var location = Location(column: 0, line: 0)
 	var step: Step!

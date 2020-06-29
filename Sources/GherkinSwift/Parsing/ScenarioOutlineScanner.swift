@@ -24,17 +24,24 @@
 class ScenarioOutlineScanner : ScenarioScanner {
 	var isScanningExamples = false
 	let tableScanner = TableScanner()
-	
+	var currentExamplesScanner: ScenarioOutlineExamplesScanner!
+	var examplesScanners = [ScenarioOutlineExamplesScanner]()
+
 	override func scan(line: Line, _ commentCollector: CommentCollector) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			
 		} else if isScanningExamples && !line.isEmpty() && line.isTable(){
 			tableScanner.scan(line: line)
-			
+			currentExamplesScanner.scan(line: line)
+
 		} else if line.isExamples() {
 			isScanningExamples = true
+			currentExamplesScanner = ScenarioOutlineExamplesScanner()
+			examplesScanners += [currentExamplesScanner]
 			
+			currentExamplesScanner.scan(line: line)
+
 		} else {
 			super.scan(line: line, commentCollector)
 		}
@@ -47,7 +54,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 								  tags: scenarioTags,
 								  location: Location(column: 1, line: 1),
 								  steps: steps(),
-								  examples: [ScenarioOutlineExamples(name: "", table: Table(columns: []))]))
+								  examples: examples()))
 
 		return scenarios
 		
@@ -68,6 +75,10 @@ class ScenarioOutlineScanner : ScenarioScanner {
 		}
 		
 		return scenarios
+	}
+
+	func examples() -> [ScenarioOutlineExamples] {
+		return examplesScanners.map{$0.getExamples()}
 	}
 
 	private func replacePlaceHolders(_ step: Step, _ examplesRow: TableRow) -> Step {
