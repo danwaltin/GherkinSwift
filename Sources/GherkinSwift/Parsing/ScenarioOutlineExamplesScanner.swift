@@ -22,10 +22,15 @@
 // ------------------------------------------------------------------------
 
 class ScenarioOutlineExamplesScanner {
+	var name = ""
+	
 	func scan(line: Line) {
+		if line.isExamples() {
+			name = line.removeKeyword(keywordExamples)
+		}
 	}
 	
 	func getExamples() -> ScenarioOutlineExamples {
-		return ScenarioOutlineExamples(name: "", table: Table(columns: []))
+		return ScenarioOutlineExamples(name: name, table: Table(columns: []))
 	}
 }

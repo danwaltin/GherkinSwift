@@ -97,7 +97,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 				"two"))
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 1,
-			name: "lorem ipsum",
+			name: "Lorem ipsum",
 			table(
 				"foo",
 				"one",
