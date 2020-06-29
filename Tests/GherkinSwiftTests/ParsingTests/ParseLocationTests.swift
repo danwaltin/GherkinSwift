@@ -73,7 +73,7 @@ class ParseLocationTests: TestParseBase {
 		])
 		
 		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
-		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
+		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 9))
 	}
 
 	func test_Locations_Steps() {

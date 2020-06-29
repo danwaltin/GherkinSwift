@@ -30,6 +30,8 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	override func scan(line: Line, _ commentCollector: CommentCollector) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
+			lineNumber = line.number
+			columnNumber = line.columnForKeyword(keywordScenarioOutline)
 			
 		} else if isScanningExamples && !line.isEmpty() && line.isTable(){
 			tableScanner.scan(line: line)
@@ -52,28 +54,10 @@ class ScenarioOutlineScanner : ScenarioScanner {
 		scenarios.append(Scenario(name: name,
 								  description: nil,
 								  tags: scenarioTags,
-								  location: Location(column: 1, line: 1),
+								  location: location(),
 								  steps: steps(),
 								  examples: examples()))
 
-		return scenarios
-		
-		var index = 0
-		let examplesTable = tableScanner.getTableArgument()!
-		for examplesRow in examplesTable.rows {
-			let newSteps = steps().map {
-				replacePlaceHolders($0, examplesRow)
-			}
-			
-			scenarios.append(Scenario(name: name,
-									  description: nil,
-									  tags: scenarioTags,
-									  location: Location(column: 1, line: 1),
-									  steps: newSteps,
-									  examples: []))
-			index += 1
-		}
-		
 		return scenarios
 	}
 
