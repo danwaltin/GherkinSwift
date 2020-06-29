@@ -52,7 +52,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	override func getScenarios() -> [Scenario] {
 		var scenarios = [Scenario]()
 		scenarios.append(Scenario(name: name,
-								  description: nil,
+								  description: descriptionLines.asDescription(),
 								  tags: scenarioTags,
 								  location: location(),
 								  steps: steps(),
