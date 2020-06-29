@@ -67,7 +67,8 @@ class ScenarioScanner {
 						 description: descriptionLines.asDescription(),
 						 tags: scenarioTags,
 						 location: Location(column: columnNumber, line: lineNumber),
-						 steps: steps())]
+						 steps: steps(),
+						 examples: [])]
 	}
 
 	func steps() -> [Step] {

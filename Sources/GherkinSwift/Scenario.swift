@@ -27,13 +27,19 @@ public struct Scenario : Equatable, Taggable, HasName {
 	public let tags: [String]
 	public let steps: [Step]
 	public let location: Location
-	public let examples = [ScenarioOutlineExamples]()
+	public let examples: [ScenarioOutlineExamples]
 
-	public init(name: String, description: String?, tags: [String], location: Location, steps: [Step]) {
+	public init(name: String,
+				description: String?,
+				tags: [String],
+				location: Location,
+				steps: [Step],
+				examples: [ScenarioOutlineExamples]) {
 		self.name = name
 		self.description = description
 		self.tags = tags
 		self.location = location
 		self.steps = steps
+		self.examples = examples
 	}
 }

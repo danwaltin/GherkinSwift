@@ -61,7 +61,15 @@ class ParseLocationTests: TestParseBase {
 			"                     ",
 			" Scenario Outline: scenario 1 ",
 			"                     ",
+			"   Examples:",
+			"      |foo|",
+			"      |bar|",
+			"                     ",
 			"   Scenario Outline: scenario 2 ",
+			"",
+			"   Examples:",
+			"      |foo|",
+			"      |bar|",
 		])
 		
 		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))

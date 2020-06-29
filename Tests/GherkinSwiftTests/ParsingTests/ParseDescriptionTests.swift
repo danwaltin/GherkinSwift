@@ -123,9 +123,17 @@ class ParseDescriptionTests: TestParseBase {
 			"Scenario Outline: one",
 			"This is a description",
 			"",
+			"Examples:",
+			"|foo|",
+			"|bar|",
+			"",
 			"Scenario Outline: two",
 			"   First",
 			"   Second",
+			"",
+			"Examples:",
+			"|foo|",
+			"|bar|",
 		])
 		
 		then_scenario(0, shouldHaveDescription: "This is a description")

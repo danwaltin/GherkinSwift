@@ -51,7 +51,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	func test_tableParametersToSteps() {
 		when_parsing([
 			"Feature: feature          ",
-			"Scenario outline: scenario",
+			"Scenario Outline: scenario",
 			"    Given x               ",
 			"        | Column |        ",
 			"        | <key>  |        ",
@@ -74,7 +74,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	func test_outlineExamples() {
 		when_parsing([
 			"Feature: feature          ",
-			"Scenario outline: scenario",
+			"Scenario Outline: scenario",
 			"    When the <foo>        ",
 			"    Then should <bar>     ",
 			"                          ",

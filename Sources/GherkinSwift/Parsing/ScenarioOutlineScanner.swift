@@ -41,9 +41,15 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	}
 	
 	override func getScenarios() -> [Scenario] {
-		let names = scenarioNames()
-		
 		var scenarios = [Scenario]()
+		scenarios.append(Scenario(name: name,
+								  description: nil,
+								  tags: scenarioTags,
+								  location: Location(column: 1, line: 1),
+								  steps: steps(),
+								  examples: [ScenarioOutlineExamples(name: "", table: Table(columns: []))]))
+
+		return scenarios
 		
 		var index = 0
 		let examplesTable = tableScanner.getTableArgument()!
@@ -52,11 +58,12 @@ class ScenarioOutlineScanner : ScenarioScanner {
 				replacePlaceHolders($0, examplesRow)
 			}
 			
-			scenarios.append(Scenario(name: names[index],
+			scenarios.append(Scenario(name: name,
 									  description: nil,
 									  tags: scenarioTags,
 									  location: Location(column: 1, line: 1),
-									  steps: newSteps))
+									  steps: newSteps,
+									  examples: []))
 			index += 1
 		}
 		
@@ -71,11 +78,6 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			tableParameter: replacePlaceHolders(step.tableParameter, examplesRow))
 	}
 	
-	private func scenarioNames() -> [String] {
-		let indices = 0...(tableScanner.rows.count-1)
-		return indices.map {"\(name)_\($0)"}
-	}
-
 	private func replacePlaceHolders(_ table: Table?, _ examplesRow: TableRow) -> Table? {
 		if table == nil {
 			return nil
