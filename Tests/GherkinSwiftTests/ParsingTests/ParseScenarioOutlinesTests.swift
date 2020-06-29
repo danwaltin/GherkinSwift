@@ -70,6 +70,40 @@ class ParseScenarioOutlinesTests: TestParseBase {
 				"<>"))
 	}
 
+	// MARK: - Examples
+	func test_outlineExamples() {
+		when_parsing([
+			"Feature: feature          ",
+			"Scenario outline: scenario",
+			"    When the <foo>        ",
+			"    Then should <bar>     ",
+			"                          ",
+			"    Examples:             ",
+			"        | foo | bar   |   ",
+			"        | one | two   |   ",
+			"                          ",
+			"    Examples: Lorem ipsum ",
+			"        | foo   | bar   | ",
+			"        | alpha | beta  | ",
+			"        | beta  | delta | "])
+
+		then_shouldReturnScenarioWith(numberOfExamples: 2)
+		then_shouldReturnScenarioWithExamples(
+			atIndex: 0,
+			name: "",
+			table(
+				"foo",
+				"one",
+				"two"))
+		then_shouldReturnScenarioWithExamples(
+			atIndex: 1,
+			name: "lorem ipsum",
+			table(
+				"foo",
+				"one",
+				"two"))
+	}
+
 
 	// MARK: - Replacing keys with examples in steps
 	
@@ -299,6 +333,25 @@ class ParseScenarioOutlinesTests: TestParseBase {
 		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
 	}
 
+	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
+											   file: StaticString = #file,
+											   line: UInt = #line) {
+		
+		let s = scenario(at: 0)
+		XCTAssertEqual(s.examples.count, expected, file: file, line: line)
+	}
+
+	private func then_shouldReturnScenarioWithExamples(atIndex index: Int,
+												   name: String,
+												   _ table: Table,
+												   file: StaticString = #file,
+												   line: UInt = #line) {
+		let actual = examples(at: index)
+		
+		XCTAssertEqual(actual.name, name, file: file, line: line)
+		XCTAssertEqual(actual.table, table, file: file, line: line)
+	}
+
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
@@ -334,6 +387,10 @@ class ParseScenarioOutlinesTests: TestParseBase {
 
 	private func step(at index: Int) -> Step {
 		return scenario(at: 0).steps[index]
+	}
+
+	private func examples(at index: Int) -> ScenarioOutlineExamples {
+		return scenario(at: 0).examples[index]
 	}
 }
 
