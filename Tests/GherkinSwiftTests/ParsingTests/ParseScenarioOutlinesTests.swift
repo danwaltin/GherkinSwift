@@ -348,7 +348,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 		let actual = examples(at: index)
 		
 		XCTAssertEqual(actual.name, name, file: file, line: line)
-		XCTAssertEqual(actual.table, table, file: file, line: line)
+		XCTAssertEqual(actual.table.withoutLocation(), table, file: file, line: line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
@@ -372,7 +372,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 		
 		XCTAssertEqual(actual.type, stepType, file: file, line: line)
 		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!, table, file: file, line: line)
+		XCTAssertEqual(actual.tableParameter!.withoutLocation(), table, file: file, line: line)
 	}
 
 	func then_shouldReturnScenarioWithSteps(_ steps: [Step], file: StaticString = #file, line: UInt = #line) {

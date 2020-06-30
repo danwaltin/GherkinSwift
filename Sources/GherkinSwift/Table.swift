@@ -30,7 +30,7 @@ public struct Table : Equatable {
 		rows = []
 	}
 	
-	private init(columns: [String], rows: [TableRow]) {
+	init(columns: [String], rows: [TableRow]) {
 		self.columns = columns
 		self.rows = rows
 	}

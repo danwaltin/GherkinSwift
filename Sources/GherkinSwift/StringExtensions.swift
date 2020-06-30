@@ -34,6 +34,13 @@ public extension String {
 		return trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	}
 	
+	func trimLeft() -> String {
+		guard let index = firstIndex(where: { !CharacterSet(charactersIn: String($0)).isSubset(of: .whitespaces) }) else {
+            return self
+        }
+        return String(self[index...])
+	}
+	
 	func appendLine() -> String {
 		return self + newLine
 	}
