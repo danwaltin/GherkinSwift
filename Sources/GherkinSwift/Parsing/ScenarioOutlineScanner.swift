@@ -26,24 +26,25 @@ class ScenarioOutlineScanner : ScenarioScanner {
 	let tableScanner = TableScanner()
 	var currentExamplesScanner: ScenarioOutlineExamplesScanner!
 	var examplesScanners = [ScenarioOutlineExamplesScanner]()
-
+	
 	override func scan(line: Line, _ commentCollector: CommentCollector) {
 		if line.isScenarioOutline() {
 			name = line.removeKeyword(keywordScenarioOutline)
 			lineNumber = line.number
 			columnNumber = line.columnForKeyword(keywordScenarioOutline)
 			
-		} else if isScanningExamples && !line.isEmpty() && line.isTable(){
-			tableScanner.scan(line: line)
-			currentExamplesScanner.scan(line: line)
-
+			
 		} else if line.isExamples() {
 			isScanningExamples = true
 			currentExamplesScanner = ScenarioOutlineExamplesScanner()
 			examplesScanners += [currentExamplesScanner]
 			
 			currentExamplesScanner.scan(line: line)
-
+			
+		} else if isScanningExamples /*&& !line.isEmpty() && line.isTable()*/{
+			//tableScanner.scan(line: line)
+			currentExamplesScanner.scan(line: line)
+			
 		} else {
 			super.scan(line: line, commentCollector)
 		}
@@ -57,14 +58,14 @@ class ScenarioOutlineScanner : ScenarioScanner {
 								  location: location(),
 								  steps: steps(),
 								  examples: examples()))
-
+		
 		return scenarios
 	}
-
+	
 	func examples() -> [ScenarioOutlineExamples] {
 		return examplesScanners.map{$0.getExamples()}
 	}
-
+	
 	private func replacePlaceHolders(_ step: Step, _ examplesRow: TableRow) -> Step {
 		return Step(
 			type: step.type,
@@ -95,13 +96,13 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			let value = rowCells[oldKey]
 			rowCellsWithReplacedKeys[newKey] = value
 		}
-
+		
 		return rowCellsWithReplacedKeys
 	}
 	
 	private func replacePlaceHolders(_ cells: [String: String], _ examplesRow: TableRow) -> [String: String] {
 		var replaced = [String: String]()
-
+		
 		for cell in cells {
 			let newValue = replacePlaceHolders(cell.value, examplesRow)
 			replaced[cell.key] = newValue

@@ -24,13 +24,19 @@
 class ScenarioOutlineExamplesScanner {
 	var name = ""
 	
+	let tableScanner = TableScanner()
+
 	func scan(line: Line) {
 		if line.isExamples() {
 			name = line.removeKeyword(keywordExamples)
+		
+		} else if line.isTable() {
+			tableScanner.scan(line: line)
 		}
+
 	}
 	
 	func getExamples() -> ScenarioOutlineExamples {
-		return ScenarioOutlineExamples(name: name, table: Table(columns: []))
+		return ScenarioOutlineExamples(name: name, table: tableScanner.getTableArgument()!)
 	}
 }

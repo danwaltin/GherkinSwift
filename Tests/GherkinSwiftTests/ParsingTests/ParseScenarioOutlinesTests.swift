@@ -83,25 +83,24 @@ class ParseScenarioOutlinesTests: TestParseBase {
 			"        | one | two   |   ",
 			"                          ",
 			"    Examples: Lorem ipsum ",
-			"        | foo   | bar   | ",
-			"        | alpha | beta  | ",
-			"        | beta  | delta | "])
+			"        | foo   |         ",
+			"        | alpha |         ",
+			"        | beta  |         "])
 
 		then_shouldReturnScenarioWith(numberOfExamples: 2)
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 0,
 			name: "",
 			table(
-				"foo",
-				"one",
-				"two"))
+				"foo", "bar",
+				"one", "two"))
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 1,
 			name: "Lorem ipsum",
 			table(
 				"foo",
-				"one",
-				"two"))
+				"alpha",
+				"beta"))
 	}
 
 
