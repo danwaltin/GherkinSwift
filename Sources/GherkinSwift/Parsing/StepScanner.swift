@@ -30,7 +30,7 @@ class StepScanner {
 	let tableScanner = TableScanner()
 
 	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTableArgument())
+		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
 	}
 	
 	func scan(line: Line) {

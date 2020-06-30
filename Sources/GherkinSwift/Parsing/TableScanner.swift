@@ -39,7 +39,7 @@ class TableScanner {
 		}
 	}
 
-	func getTableArgument() -> Table? {
+	func getTable() -> Table? {
 		if !hasTable {
 			return nil
 		}

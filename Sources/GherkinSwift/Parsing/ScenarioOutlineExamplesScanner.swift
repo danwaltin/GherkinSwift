@@ -37,6 +37,6 @@ class ScenarioOutlineExamplesScanner {
 	}
 	
 	func getExamples() -> ScenarioOutlineExamples {
-		return ScenarioOutlineExamples(name: name, table: tableScanner.getTableArgument()!)
+		return ScenarioOutlineExamples(name: name, table: tableScanner.getTable()!)
 	}
 }
