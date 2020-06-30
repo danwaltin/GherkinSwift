@@ -23,4 +23,6 @@
 
 public struct TableCell : Equatable {
 	public let value: String
+	public let location: Location = Location(column: 0, line: 0)
+
 }

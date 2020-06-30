@@ -120,10 +120,11 @@ class ParseLocationTests: TestParseBase {
 			"Examples:",
 			"     | foo   |",
 			"     | alpha |",
+			"     | beta |",
 			"                   ",
 			"  Examples: Plopp",
 			"     | bar  |",
-			"     | beta |",
+			"     | gamma |",
 			"                   ",
 			"Scenario Outline: two ",
 			"  Given: given   ",
@@ -134,8 +135,27 @@ class ParseLocationTests: TestParseBase {
 		])
 		
 		then_examples(0, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 6))
-		then_examples(1, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 10))
-		then_examples(0, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 17))
+		then_examples(1, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 11))
+		then_examples(0, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 18))
+	}
+
+	func test_Locations_ScenarioOutlineCells() {
+		when_parsing([
+			"Feature: feature   ",
+			"                   ",
+			"Scenario Outline: scenario",
+			"   Given: given   ",
+			"                   ",
+			"  Examples:",
+			"     | foo   | bar   |",
+			"     |alpha   | beta  |",
+			"     |  gamma | delta |",
+		])
+		
+		then_cell("foo", atExampleRow: 0, shouldHaveLocation: Location(column: 7, line: 8))
+		then_cell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 1, line: 8))
+		then_cell("foo", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
+		then_cell("bar", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
 	}
 
 	func test_Locations_Comments() {
@@ -177,5 +197,11 @@ class ParseLocationTests: TestParseBase {
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location, file: file, line: line)
+	}
+	
+	private func then_cell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
+							  file: StaticString = #file, line: UInt = #line) {
+		
+		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location, file: file, line: line)
 	}
 }
