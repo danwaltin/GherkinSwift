@@ -44,7 +44,7 @@ class TableScanner {
 			return nil
 		}
 		
-		var t = Table(columns: columns)
+		var t = Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
 		for row in rows {
 			t = t.addingRow(cells: row)
 		}

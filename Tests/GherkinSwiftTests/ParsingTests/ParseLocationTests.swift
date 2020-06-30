@@ -45,48 +45,51 @@ class ParseLocationTests: TestParseBase {
 	}
 	
 	func test_Locations_Scenarios() {
-		when_parsing([
-			"Feature: feature     ",
-			"                     ",
-			" Scenario: scenario 1 ",
-			"                     ",
-			"   Scenario: scenario 2 ",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		 Scenario: scenario 1
+
+		   Scenario: scenario 2
+		""")
 		
 		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
 		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
 	}
 	
 	func test_Locations_ScenarioOutlines() {
-		when_parsing([
-			"Feature: feature     ",
-			"                     ",
-			" Scenario Outline: scenario 1 ",
-			"                     ",
-			"   Examples:",
-			"      |foo|",
-			"      |bar|",
-			"                     ",
-			"   Scenario Outline: scenario 2 ",
-			"",
-			"   Examples:",
-			"      |foo|",
-			"      |bar|",
-		])
+		when_parsingDocument(
+			"""
+			Feature: feature
+
+			 Scenario Outline: scenario 1
+
+			   Examples:
+			      |foo|
+			      |bar|
+
+			   Scenario Outline: scenario 2
+
+			   Examples:
+			      |foo|
+			      |bar|
+			""")
 		
 		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
 		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 9))
 	}
 	
 	func test_Locations_Steps_Scenario() {
-		when_parsing([
-			"Feature: feature   ",
-			"                   ",
-			"Scenario: scenario ",
-			"    Given: given   ",
-			"   When: when      ",
-			"  Then: then       ",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario: scenario
+		    Given: given
+		   When: when
+		  Then: then
+		""")
 		
 		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
 		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
@@ -94,18 +97,19 @@ class ParseLocationTests: TestParseBase {
 	}
 	
 	func test_Locations_Steps_ScenarioOutline() {
-		when_parsing([
-			"Feature: feature   ",
-			"                   ",
-			"Scenario Outline: scenario ",
-			"    Given: given   ",
-			"   When: when      ",
-			"  Then: then       ",
-			"                   ",
-			"   Examples:",
-			"      |foo|",
-			"      |bar|",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario Outline: scenario
+		    Given: given
+		   When: when
+		  Then: then
+
+		Examples:
+		    |foo|
+		    |bar|
+		""")
 		
 		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
 		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
@@ -113,28 +117,29 @@ class ParseLocationTests: TestParseBase {
 	}
 	
 	func test_Locations_ScenarioOutlineExamples() {
-		when_parsing([
-			"Feature: feature   ",
-			"                   ",
-			"Scenario Outline: one ",
-			"  Given: given   ",
-			"                   ",
-			"Examples:",
-			"     | foo   |",
-			"     | alpha |",
-			"     | beta |",
-			"                   ",
-			"  Examples: Plopp",
-			"     | bar  |",
-			"     | gamma |",
-			"                   ",
-			"Scenario Outline: two ",
-			"  Given: given   ",
-			"                   ",
-			"    Examples:",
-			"     | foo   |",
-			"     | alpha |",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario Outline: one
+		   Given: given
+			                   
+		Examples:
+		  | foo   |
+		  | alpha |
+		  | beta |
+
+		  Examples: Plopp
+		     | bar  |
+		     | gamma |
+
+		Scenario Outline: two
+		   Given: given
+
+		    Examples:
+		       | foo   |
+		       | alpha |
+		""")
 		
 		then_examples(0, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 6))
 		then_examples(1, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 11))
@@ -142,18 +147,19 @@ class ParseLocationTests: TestParseBase {
 	}
 	
 	func test_Locations_ScenarioOutlineCells() {
-		when_parsing([
-			"Feature: feature   ",
-			"                   ",
-			"Scenario Outline: scenario",
-			"   Given: given   ",
-			"                   ",
-			"  Examples:",
-			"     | foo   | bar   |",
-			"     |alpha   | beta  |",
-			"     |  gamma | delta |",
-			"   | equal|    equal |",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario Outline: scenario
+		   Given: given
+
+		Examples:
+		   | foo   | bar   |
+		     |alpha   | beta  |
+		     |  gamma | delta |
+		   | equal|    equal |
+		""")
 		
 		then_cell("foo", atExampleRow: 0, shouldHaveLocation: Location(column: 7, line: 8))
 		then_cell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 17, line: 8))
@@ -162,17 +168,44 @@ class ParseLocationTests: TestParseBase {
 		then_cell("foo", atExampleRow: 2, shouldHaveLocation: Location(column: 6, line: 10))
 		then_cell("bar", atExampleRow: 2, shouldHaveLocation: Location(column: 16, line: 10))
 	}
-	
+
+	func test_Locations_ScenarioOutlineTableBodyAndHeader() {
+		when_parsingDocument(
+			"""
+			Feature: feature
+
+			Scenario Outline: scenario
+			   Given: given
+
+			   Examples: one
+			    | foo   |
+			      | bar |
+			     | baz  |
+
+			   Examples: two
+			       | alpha   |
+			     | beta      |
+			         | gamma |
+			""")
+		
+		then_examplesTableHeader(atExample: 0, shouldHaveLocation: Location(column: 5, line: 7))
+		then_examplesTableBody(atExample: 0, shouldHaveLocation: Location(column: 7, line: 8))
+		
+		then_examplesTableHeader(atExample: 1, shouldHaveLocation: Location(column: 8, line: 12))
+		then_examplesTableBody(atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
+	}
+
 	func test_Locations_Comments() {
-		when_parsing([
-			"Feature: feature     ",
-			"                     ",
-			"Scenario: one        ",
-			"# comment one        ",
-			"  # comment two      ",
-			"Scenario: two        ",
-			"     # comment three ",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario: one
+		# comment one
+		  # comment two
+		Scenario: two
+		     # comment three
+		""")
 		
 		then_comment(0, shouldHaveLocation: Location(column: 1, line: 4))
 		then_comment(1, shouldHaveLocation: Location(column: 1, line: 5))
@@ -209,4 +242,17 @@ class ParseLocationTests: TestParseBase {
 		
 		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location, file: file, line: line)
 	}
+	
+	private func then_examplesTableHeader(atExample exampleIndex: Int, shouldHaveLocation location: Location,
+										  file: StaticString = #file, line: UInt = #line) {
+		
+		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.headerLocation, location, file: file, line: line)
+	}
+
+	private func then_examplesTableBody(atExample exampleIndex: Int, shouldHaveLocation location: Location,
+										  file: StaticString = #file, line: UInt = #line) {
+		
+		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.bodyLocation, location, file: file, line: line)
+	}
+
 }

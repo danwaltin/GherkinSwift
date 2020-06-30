@@ -24,31 +24,34 @@
 public struct Table : Equatable {
 	public let columns: [String]
 	public let rows: [TableRow]
-	
-	public init(columns: [String]) {
-		self.columns = columns
-		rows = []
+	public let headerLocation: Location
+	public let bodyLocation: Location
+
+	public init(columns: [String], headerLocation: Location, bodyLocation: Location) {
+		self.init(columns: columns, rows: [], headerLocation: headerLocation, bodyLocation: bodyLocation)
 	}
 	
-	init(columns: [String], rows: [TableRow]) {
+	init(columns: [String], rows: [TableRow], headerLocation: Location, bodyLocation: Location) {
 		self.columns = columns
 		self.rows = rows
+		self.headerLocation = headerLocation
+		self.bodyLocation = bodyLocation
 	}
 	
 	public func addingRow(cells: [TableCell]) -> Table {
-		var copyOfCurrentRows = self.rows
+		var copyOfCurrentRows = rows
 		copyOfCurrentRows.append(tableRow(cells))
 		
-		return Table(columns: self.columns, rows: copyOfCurrentRows)
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation, bodyLocation: bodyLocation)
 	}
 
 	public func addingRow(cells: [String: TableCell]) -> Table {
 		assertValidAddedColumns(Array(cells.keys))
 
-		var copyOfCurrentRows = self.rows
+		var copyOfCurrentRows = rows
 		copyOfCurrentRows.append(TableRow(cells: cells))
 
-		return Table(columns: self.columns, rows: copyOfCurrentRows)
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation, bodyLocation: bodyLocation)
 	}
 
 	private func tableRow(_ cells: [TableCell]) -> TableRow {
