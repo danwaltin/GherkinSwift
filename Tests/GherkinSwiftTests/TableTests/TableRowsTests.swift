@@ -28,94 +28,98 @@ class TableRowsTests : XCTestCase {
 	// MARK: - Adding row with values
 	func test_oneColumn_addOneRowWithValue() {
 		let table = Table(columns: ["Column"])
-			.addingRow(cells: ["rowValue"])
+			.addingRowWithCellValues(["rowValue"])
 		
 		XCTAssertEqual(table.rows.count, 1)
 		XCTAssertEqual(table.columns.count, 1)
 
-		XCTAssertEqual(table.rows[0]["Column"], "rowValue")
+		XCTAssertEqual(table.rows[0]["Column"], cell("rowValue"))
 	}
 
 	func test_twoColumns_addOneRowWithValues() {
 		let table = Table(columns: ["c1", "c2"])
-			.addingRow(cells: ["v1", "v2"])
+			.addingRowWithCellValues(["v1", "v2"])
 		
 		XCTAssertEqual(table.rows.count, 1)
 		XCTAssertEqual(table.columns.count, 2)
 
-		XCTAssertEqual(table.rows[0]["c1"], "v1")
-		XCTAssertEqual(table.rows[0]["c2"], "v2")
+		XCTAssertEqual(table.rows[0]["c1"], cell("v1"))
+		XCTAssertEqual(table.rows[0]["c2"], cell("v2"))
 	}
 
 	func test_oneColumns_addTwoRowsWithValue() {
 		let table = Table(columns: ["c"])
-			.addingRow(cells: ["v1"])
-			.addingRow(cells: ["v2"])
+			.addingRowWithCellValues(["v1"])
+			.addingRowWithCellValues(["v2"])
 		
 		XCTAssertEqual(table.rows.count, 2)
 		XCTAssertEqual(table.columns.count, 1)
 
-		XCTAssertEqual(table.rows[0]["c"], "v1")
-		XCTAssertEqual(table.rows[1]["c"], "v2")
+		XCTAssertEqual(table.rows[0]["c"], cell("v1"))
+		XCTAssertEqual(table.rows[1]["c"], cell("v2"))
 	}
 
 	func test_twoColumns_addTwoRowsWithValues() {
 		let table = Table(columns: ["c1", "c2"])
-			.addingRow(cells: ["r1c1", "r1c2"])
-			.addingRow(cells: ["r2c1", "r2c2"])
+			.addingRowWithCellValues(["r1c1", "r1c2"])
+			.addingRowWithCellValues(["r2c1", "r2c2"])
 		
 		XCTAssertEqual(table.rows.count, 2)
 		XCTAssertEqual(table.columns.count, 2)
 
-		XCTAssertEqual(table.rows[0]["c1"], "r1c1")
-		XCTAssertEqual(table.rows[0]["c2"], "r1c2")
-		XCTAssertEqual(table.rows[1]["c1"], "r2c1")
-		XCTAssertEqual(table.rows[1]["c2"], "r2c2")
+		XCTAssertEqual(table.rows[0]["c1"], cell("r1c1"))
+		XCTAssertEqual(table.rows[0]["c2"], cell("r1c2"))
+		XCTAssertEqual(table.rows[1]["c1"], cell("r2c1"))
+		XCTAssertEqual(table.rows[1]["c2"], cell("r2c2"))
 	}
 	
 	// MARK: - Adding row as key/value-pairs
 	func test_oneColumnOneRow_addOneRowWithKeyValue() {
 		let table = Table(columns: ["Column"])
-			.addingRow(cells: ["Column": "rowValue"])
+			.addingRow(cells: ["Column": cell("rowValue")])
 		
 		XCTAssertEqual(table.rows.count, 1)
 		XCTAssertEqual(table.columns.count, 1)
 
-		XCTAssertEqual(table.rows[0]["Column"], "rowValue")
+		XCTAssertEqual(table.rows[0]["Column"], cell("rowValue"))
 	}
 
 
 	func test_twoColumns_addOneRowWithKeyValues() {
 		let table = Table(columns: ["c1", "c2"])
-			.addingRow(cells: ["c1": "v1", "c2":"v2"])
+			.addingRow(cells: ["c1": cell("v1"), "c2": cell("v2")])
 		
 		XCTAssertEqual(table.rows.count, 1)
 		XCTAssertEqual(table.columns.count, 2)
 
-		XCTAssertEqual(table.rows[0]["c1"], "v1")
-		XCTAssertEqual(table.rows[0]["c2"], "v2")
+		XCTAssertEqual(table.rows[0]["c1"], cell("v1"))
+		XCTAssertEqual(table.rows[0]["c2"], cell("v2"))
 	}
 
 	func test_oneColumn_addTwoRowsWithKeyValues() {
 		let table = Table(columns: ["c"])
-			.addingRow(cells: ["c": "v1"])
-			.addingRow(cells: ["c": "v2"])
+			.addingRow(cells: ["c": cell("v1")])
+			.addingRow(cells: ["c": cell("v2")])
 		
-		XCTAssertEqual(table.rows[0]["c"], "v1")
-		XCTAssertEqual(table.rows[1]["c"], "v2")
+		XCTAssertEqual(table.rows[0]["c"], cell("v1"))
+		XCTAssertEqual(table.rows[1]["c"], cell("v2"))
 	}
 
 	func test_twoColumns_addTwoRowsWithKeyValues() {
 		let table = Table(columns: ["c1", "c2"])
-			.addingRow(cells: ["c1": "r1c1", "c2": "r1c2"])
-			.addingRow(cells: ["c1": "r2c1", "c2": "r2c2"])
+			.addingRow(cells: ["c1": cell("r1c1"), "c2": cell("r1c2")])
+			.addingRow(cells: ["c1": cell("r2c1"), "c2": cell("r2c2")])
 		
 		XCTAssertEqual(table.rows.count, 2)
 		XCTAssertEqual(table.columns.count, 2)
 		
-		XCTAssertEqual(table.rows[0]["c1"], "r1c1")
-		XCTAssertEqual(table.rows[0]["c2"], "r1c2")
-		XCTAssertEqual(table.rows[1]["c1"], "r2c1")
-		XCTAssertEqual(table.rows[1]["c2"], "r2c2")
+		XCTAssertEqual(table.rows[0]["c1"], cell("r1c1"))
+		XCTAssertEqual(table.rows[0]["c2"], cell("r1c2"))
+		XCTAssertEqual(table.rows[1]["c1"], cell("r2c1"))
+		XCTAssertEqual(table.rows[1]["c2"], cell("r2c2"))
+	}
+	
+	private func cell(_ value: String) -> TableCell {
+		return TableCell(value: value)
 	}
 }

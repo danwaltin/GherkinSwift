@@ -148,6 +148,7 @@ extension ScenarioOutlineExamples : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case keyword
 		case location
+		case tableBody
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -156,5 +157,4 @@ extension ScenarioOutlineExamples : Encodable {
 		try container.encode("Examples ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 	}
-
 }

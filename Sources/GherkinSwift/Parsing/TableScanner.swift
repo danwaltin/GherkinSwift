@@ -25,7 +25,7 @@ class TableScanner {
 	
 	var hasScannedColumns = false
 	var columns: [String] = []
-	public var rows: [[String]] = []
+	public var rows: [[TableCell]] = []
 	
 	var hasTable = false
 	
@@ -58,9 +58,19 @@ class TableScanner {
 	}
 
 	private func addRow(_ line: String) {
-		rows.append(lineItems(line))
+		rows.append(cells(line))
 	}
 	
+	private func cells(_ line: String) -> [TableCell] {
+		
+		var cells = [TableCell]()
+		for cellValue in lineItems(line) {
+			cells.append(TableCell(value: cellValue))
+		}
+		
+		return cells
+	}
+
 	private func lineItems(_ line: String) -> [String] {
 		var v = line.components(separatedBy: tableSeparator)
 		v.removeLast()
@@ -73,5 +83,5 @@ class TableScanner {
 		
 		return items
 	}
-	
+
 }

@@ -63,29 +63,29 @@ class TestParseBase: XCTestCase {
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
 		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
+			.addingRowWithCellValues([r1c1])
 	}
 	
 	func table(_ col: String,
 	           _ r1c1: String,
 	           _ r2c1: String) -> Table {
 		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
-			.addingRow(cells: [r2c1])
+			.addingRowWithCellValues([r1c1])
+			.addingRowWithCellValues([r2c1])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String) -> Table {
 		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
+			.addingRowWithCellValues([r1c1, r1c2])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String,
 	           _ r2c1: String, _ r2c2: String) -> Table {
 		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
-			.addingRow(cells: [r2c1, r2c2])
+			.addingRowWithCellValues([r1c1, r1c2])
+			.addingRowWithCellValues([r2c1, r2c2])
 	}
 }
 
