@@ -33,7 +33,7 @@ class TableScanner {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line.text)
+			addRow(line)
 		} else {
 			createColumns(line.text)
 		}
@@ -57,15 +57,15 @@ class TableScanner {
 		hasScannedColumns = true
 	}
 
-	private func addRow(_ line: String) {
+	private func addRow(_ line: Line) {
 		rows.append(cells(line))
 	}
 	
-	private func cells(_ line: String) -> [TableCell] {
+	private func cells(_ line: Line) -> [TableCell] {
 		
 		var cells = [TableCell]()
-		for cellValue in lineItems(line) {
-			cells.append(TableCell(value: cellValue))
+		for cellValue in lineItems(line.text) {
+			cells.append(TableCell(value: cellValue, location: Location(column: 0, line: line.number)))
 		}
 		
 		return cells

@@ -71,6 +71,6 @@ public struct Table : Equatable {
 
 extension Table {
 	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
-		return addingRow(cells: cellValues.map {TableCell(value: $0)})
+		return addingRow(cells: cellValues.map {TableCell(value: $0, location: Location(column: 0, line: 0))})
 	}
 }

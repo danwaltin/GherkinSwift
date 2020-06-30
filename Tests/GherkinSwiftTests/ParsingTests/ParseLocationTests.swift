@@ -150,12 +150,15 @@ class ParseLocationTests: TestParseBase {
 			"     | foo   | bar   |",
 			"     |alpha   | beta  |",
 			"     |  gamma | delta |",
+		    "   | equal|    equal |",
 		])
 		
 		then_cell("foo", atExampleRow: 0, shouldHaveLocation: Location(column: 7, line: 8))
-		then_cell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 1, line: 8))
-		then_cell("foo", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
+		then_cell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 17, line: 8))
+		then_cell("foo", atExampleRow: 1, shouldHaveLocation: Location(column: 9, line: 9))
 		then_cell("bar", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
+		then_cell("foo", atExampleRow: 2, shouldHaveLocation: Location(column: 6, line: 10))
+		then_cell("bar", atExampleRow: 2, shouldHaveLocation: Location(column: 16, line: 10))
 	}
 
 	func test_Locations_Comments() {

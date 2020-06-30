@@ -120,6 +120,6 @@ class TableRowsTests : XCTestCase {
 	}
 	
 	private func cell(_ value: String) -> TableCell {
-		return TableCell(value: value)
+		return TableCell(value: value, location: Location.zero())
 	}
 }
