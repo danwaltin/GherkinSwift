@@ -156,5 +156,32 @@ extension ScenarioOutlineExamples : Encodable {
 
 		try container.encode("Examples ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
+
+		try container.encode(table.rows, forKey: .tableBody)
+	}
+}
+
+extension TableRow : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case cells
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		let cellItems = cells.map {$0.value}
+		try container.encode(cellItems, forKey: .cells)
+	}
+}
+
+extension TableCell : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case value
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(value, forKey: .value)
 	}
 }
