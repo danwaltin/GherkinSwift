@@ -106,6 +106,7 @@ extension Scenario : Encodable {
 		case name
 		case description
 		case steps
+		case examples
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -120,12 +121,15 @@ extension Scenario : Encodable {
 		}
 
 		try container.encode(steps, forKey: .steps)
+		
+		if examples.count > 0 {
+			try container.encode(examples, forKey: .examples)
+		}
 	}
 }
 
 extension Step : Encodable {
 	enum CodingKeys: String, CodingKey {
-		//case id
 		case keyword
 		case location
 		case text
@@ -138,4 +142,19 @@ extension Step : Encodable {
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
 	}
+}
+
+extension ScenarioOutlineExamples : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Examples ", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+	}
+
 }
