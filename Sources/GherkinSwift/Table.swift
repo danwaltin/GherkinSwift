@@ -42,10 +42,6 @@ public struct Table : Equatable {
 		return TableHeader(location: headerLocation)
 	}
 
-	var body: TableBody {
-		return TableBody(rows: rows, location: bodyLocation)
-	}
-	
 	public func addingRow(cells: [TableCell]) -> Table {
 		var copyOfCurrentRows = rows
 		copyOfCurrentRows.append(tableRow(cells))
