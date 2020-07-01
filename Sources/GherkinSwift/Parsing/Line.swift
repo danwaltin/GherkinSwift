@@ -31,7 +31,7 @@ let keywordExamples = "Examples:"
 let keywordGiven = "Given"
 let keywordWhen = "When"
 let keywordThen = "Then"
-let tableSeparator = "|"
+let tableSeparator: Character = "|"
 
 extension String {
 	func removeKeyword(_ keyword: String) -> String {
@@ -100,7 +100,7 @@ struct Line {
 	}
 
 	func isTable() -> Bool {
-		return beginsWithKeyword(tableSeparator)
+		return beginsWithKeyword(String(tableSeparator))
 	}
 
 	private func beginsWithKeyword(_ keyword: String) -> Bool {

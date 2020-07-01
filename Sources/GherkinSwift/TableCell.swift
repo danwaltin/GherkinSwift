@@ -14,20 +14,15 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  TableRow.swift
+//  TableCELL.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-06-30.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
+public struct TableCell : Equatable {
+	public let value: String
+	public let location: Location
 
-public struct TableRow : Equatable {
-	
-	public let cells: [String: TableCell]
-	
-	public subscript(column: String) -> TableCell {
-		return cells[column]!
-	}
 }

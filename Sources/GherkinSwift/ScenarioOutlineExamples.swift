@@ -23,5 +23,6 @@
 
 public struct ScenarioOutlineExamples : Equatable {
 	public let name: String
+	public let location: Location
 	public let table: Table
 }

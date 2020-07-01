@@ -26,52 +26,57 @@ import XCTest
 
 class TableEqualityTests : XCTestCase {
 	func test_equalWhenTwoColumns() {
-		let one = Table(columns: ["alpha", "beta"])
-		let two = Table(columns: ["alpha", "beta"])
+		let one = t(["alpha", "beta"])
+		let two = t(["alpha", "beta"])
 		
 		XCTAssertEqual(one, two)
 	}
 	
 	func test_notEqualWhenTwoColumns() {
-		let one = Table(columns: ["alpha", "beta"])
-		let two = Table(columns: ["alpha", "gamma"])
+		let one = t(["alpha", "beta"])
+		let two = t(["alpha", "gamma"])
 		
 		XCTAssertNotEqual(one, two)
 	}
 	
 	func test_equalWhenTwoRows() {
-		let one = Table(columns: ["column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["beta"])
+		let one = t(["column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["beta"])
 		
-		let two = Table(columns: ["column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["beta"])
+		let two = t(["column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["beta"])
 		
 		XCTAssertEqual(one, two)
 	}
 	
 	func test_notEqualWhenTwoRows_differentColumnNames() {
-		let one = Table(columns: ["column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["beta"])
+		let one = t(["column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["beta"])
 		
-		let two = Table(columns: ["another column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["beta"])
+		let two = t(["another column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["beta"])
 		
 		XCTAssertNotEqual(one, two)
 	}
 	
 	func test_notEqualWhenTwoRows_differentRowValuesSecondRow() {
-		let one = Table(columns: ["column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["beta"])
+		let one = t(["column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["beta"])
 		
-		let two = Table(columns: ["column"])
-			.addingRow(cells: ["alpha"])
-			.addingRow(cells: ["gamma"])
+		let two = t(["column"])
+			.addingRowWithCellValues(["alpha"])
+			.addingRowWithCellValues(["gamma"])
 		
 		XCTAssertNotEqual(one, two)
 	}
+	
+	private func t(_ columns: [String]) -> Table {
+		return Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
+	}
+
 }

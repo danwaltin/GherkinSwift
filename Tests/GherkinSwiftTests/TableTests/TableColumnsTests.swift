@@ -26,20 +26,24 @@ import XCTest
 
 class TableColumnsTests : XCTestCase {
 	func test_zeroColumns() {
-		let table = Table(columns: [])
+		let table = t([])
 		
 		XCTAssertEqual(table.columns, [])
 	}
 	
 	func test_oneColumn() {
-		let table = Table(columns: ["column"])
+		let table = t(["column"])
 		
 		XCTAssertEqual(table.columns, ["column"])
 	}
 	
 	func test_twoColumns() {
-		let table = Table(columns: ["one", "two"])
+		let table = t(["one", "two"])
 		
 		XCTAssertEqual(table.columns, ["one", "two"])
+	}
+	
+	private func t(_ columns: [String]) -> Table {
+		return Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
 	}
 }

@@ -25,7 +25,7 @@ class TableScanner {
 	
 	var hasScannedColumns = false
 	var columns: [String] = []
-	public var rows: [[String]] = []
+	public var rows: [[TableCell]] = []
 	
 	var hasTable = false
 	
@@ -33,7 +33,7 @@ class TableScanner {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line.text)
+			addRow(line)
 		} else {
 			createColumns(line.text)
 		}
@@ -44,7 +44,7 @@ class TableScanner {
 			return nil
 		}
 		
-		var t = Table(columns: columns)
+		var t = Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
 		for row in rows {
 			t = t.addingRow(cells: row)
 		}
@@ -57,12 +57,35 @@ class TableScanner {
 		hasScannedColumns = true
 	}
 
-	private func addRow(_ line: String) {
-		rows.append(lineItems(line))
+	private func addRow(_ line: Line) {
+		rows.append(cells(line))
 	}
 	
+	private func cells(_ line: Line) -> [TableCell] {
+		
+		let i = line.text.firstIndex(of: tableSeparator)!
+		let d = line.text.distance(from: line.text.startIndex, to: i)
+		
+		var cellValues = line.text.components(separatedBy: String(tableSeparator))
+		cellValues.removeLast()
+		cellValues.remove(at: 0)
+
+		var cells = [TableCell]()
+		
+		var previousCellColumn = d + 1 + String(tableSeparator).count // + 1 because index is zero based and columns should be one based
+
+		for cellValue in cellValues {
+			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
+			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
+			cells.append(TableCell(value: cellValue.trim(), location: Location(column: col, line: line.number)))
+			previousCellColumn += cellValue.count + String(tableSeparator).count
+		}
+		
+		return cells
+	}
+
 	private func lineItems(_ line: String) -> [String] {
-		var v = line.components(separatedBy: tableSeparator)
+		var v = line.components(separatedBy: String(tableSeparator))
 		v.removeLast()
 		v.remove(at: 0)
 		
@@ -73,5 +96,5 @@ class TableScanner {
 		
 		return items
 	}
-	
+
 }

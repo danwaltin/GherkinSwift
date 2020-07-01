@@ -27,6 +27,11 @@ class TestParseBase: XCTestCase {
 	var actualFeature: Feature!
 	var actualGherkinDocument: GherkinDocument!
 	
+	func when_parsingDocument(_ document: String) {
+		actualGherkinDocument = parseGherkinDocument(document.allLines(), parser: parser())
+		actualFeature = actualGherkinDocument.feature!
+	}
+
 	func when_parsing(_ lines: [String]) {
 		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
 		actualFeature = actualGherkinDocument.feature!
@@ -62,30 +67,35 @@ class TestParseBase: XCTestCase {
 	// MARK: - Factory methods
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
-		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
+		return t([col])
+			.addingRowWithCellValues([r1c1])
 	}
 	
 	func table(_ col: String,
 	           _ r1c1: String,
 	           _ r2c1: String) -> Table {
-		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
-			.addingRow(cells: [r2c1])
+		return t([col])
+			.addingRowWithCellValues([r1c1])
+			.addingRowWithCellValues([r2c1])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String) -> Table {
-		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
+		return t([c1, c2])
+			.addingRowWithCellValues([r1c1, r1c2])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String,
 	           _ r2c1: String, _ r2c2: String) -> Table {
-		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
-			.addingRow(cells: [r2c1, r2c2])
+		return t([c1, c2])
+			.addingRowWithCellValues([r1c1, r1c2])
+			.addingRowWithCellValues([r2c1, r2c2])
 	}
+	
+	private func t(_ columns: [String]) -> Table {
+		return Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
+	}
+
 }
 
