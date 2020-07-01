@@ -25,7 +25,7 @@ class TableScanner {
 	
 	var hasScannedColumns = false
 	var columns = [String]()
-	var rowCells: [[TableCell]] = []
+	var headerRow: TableRow!
 	var rows = [TableRow]()
 	
 	var hasTable = false
@@ -55,10 +55,7 @@ class TableScanner {
 		let headerLocation = Location(column: headerColumn,
 									  line: headerLine)
 		
-		let headerCells: [String: TableCell] = Dictionary(uniqueKeysWithValues: columns.map { ($0, TableCell(value: $0, location: Location.zero()))})
-		
-		return Table(header: TableRow(cells: headerCells,
-									  location: headerLocation),
+		return Table(header: headerRow,
 					 columns: columns,
 					 rows: rows,
 					 headerLocation: headerLocation)
@@ -69,6 +66,10 @@ class TableScanner {
 		
 		headerLine = line.number
 		headerColumn = line.columnForKeyword(tableSeparator)
+		
+		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		headerRow = TableRow(cells: cells(line), location: location)
+		
 		hasScannedColumns = true
 	}
 
