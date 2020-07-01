@@ -107,6 +107,7 @@ class ParseDescriptionTests: TestParseBase {
 		when_parsing([
 			"Feature: feature",
 			"Scenario: scenario",
+			"",
 			"   First",
 			"",
 			"   Second",
