@@ -38,6 +38,10 @@ public struct Table : Equatable {
 		self.bodyLocation = bodyLocation
 	}
 	
+	var header: TableHeader {
+		return TableHeader(location: headerLocation)
+	}
+
 	var body: TableBody {
 		return TableBody(rows: rows, location: bodyLocation)
 	}

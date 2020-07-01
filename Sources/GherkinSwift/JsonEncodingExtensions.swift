@@ -157,7 +157,20 @@ extension ScenarioOutlineExamples : Encodable {
 		try container.encode("Examples ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 
+		try container.encode(table.header, forKey: .tableHeader)
 		try container.encode(table.body, forKey: .tableBody)
+	}
+}
+
+extension TableHeader : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(location, forKey: .location)
 	}
 }
 
