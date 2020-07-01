@@ -29,13 +29,19 @@ class TableScanner {
 	
 	var hasTable = false
 	
+	var headerLine = 0
+	var headerColumn = 0
+
+	var bodyLine = 0
+	var bodyColumn = 0
+
 	func scan(line: Line) {
 		hasTable = true
 		
 		if hasScannedColumns {
 			addRow(line)
 		} else {
-			createColumns(line.text)
+			createColumns(line)
 		}
 	}
 
@@ -44,7 +50,7 @@ class TableScanner {
 			return nil
 		}
 		
-		var t = Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
+		var t = Table(columns: columns, headerLocation: Location(column: headerColumn, line: headerLine), bodyLocation: Location(column: bodyColumn, line: bodyColumn))
 		for row in rows {
 			t = t.addingRow(cells: row)
 		}
@@ -52,8 +58,10 @@ class TableScanner {
 		return t
 	}
 
-	private func createColumns(_ line: String) {
-		columns = lineItems(line)
+	private func createColumns(_ line: Line) {
+		columns = lineItems(line.text)
+		
+		headerLine = line.number
 		hasScannedColumns = true
 	}
 

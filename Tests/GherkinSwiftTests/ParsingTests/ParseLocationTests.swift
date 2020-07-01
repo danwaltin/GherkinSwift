@@ -186,6 +186,13 @@ class ParseLocationTests: TestParseBase {
 			       | alpha   |
 			     | beta      |
 			         | gamma |
+
+			   Examples: three
+
+			      | person |
+
+			      | ada    |
+			      | alan   |
 			""")
 		
 		then_examplesTableHeader(atExample: 0, shouldHaveLocation: Location(column: 5, line: 7))
@@ -193,6 +200,9 @@ class ParseLocationTests: TestParseBase {
 		
 		then_examplesTableHeader(atExample: 1, shouldHaveLocation: Location(column: 8, line: 12))
 		then_examplesTableBody(atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
+
+		then_examplesTableHeader(atExample: 2, shouldHaveLocation: Location(column: 6, line: 18))
+		then_examplesTableBody(atExample: 2, shouldHaveLocation: Location(column: 6, line: 20))
 	}
 
 	func test_Locations_Comments() {
