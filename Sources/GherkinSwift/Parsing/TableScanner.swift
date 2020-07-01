@@ -56,6 +56,7 @@ class TableScanner {
 									  line: headerLine)
 		
 		let headerCells: [String: TableCell] = Dictionary(uniqueKeysWithValues: columns.map { ($0, TableCell(value: $0, location: Location.zero()))})
+		
 		return Table(header: TableRow(cells: headerCells,
 									  location: headerLocation),
 					 columns: columns,

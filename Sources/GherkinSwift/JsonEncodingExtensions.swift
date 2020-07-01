@@ -157,7 +157,7 @@ extension ScenarioOutlineExamples : Encodable {
 		try container.encode("Examples ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 
-		try container.encode(table.theHeader, forKey: .tableHeader)
+		try container.encode(table.header, forKey: .tableHeader)
 		try container.encode(table.rows, forKey: .tableBody)
 	}
 }
