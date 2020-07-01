@@ -158,8 +158,11 @@ extension ScenarioOutlineExamples : Encodable {
 
 		try container.encode("Examples", forKey: .keyword)
 		try container.encode(location, forKey: .location)
-		try container.encode(name, forKey: .name)
-
+		
+		if name != "" {
+			try container.encode(name, forKey: .name)
+		}
+		
 		try container.encode(table.header, forKey: .tableHeader)
 		try container.encode(table.rows, forKey: .tableBody)
 	}

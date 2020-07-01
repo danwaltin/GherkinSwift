@@ -32,7 +32,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"incomplete_feature_1",
 		"incomplete_feature_2",
 		"minimal",
-		//"scenario_outline_no_newline",
+		"scenario_outline_no_newline",
 	]
 
 	func test_goodTestDataFiles() {
