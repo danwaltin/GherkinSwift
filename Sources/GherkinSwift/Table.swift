@@ -40,22 +40,6 @@ public struct Table : Equatable {
 		return TableHeader(location: headerLocation)
 	}
 
-	public func addingRow(cells: [TableCell], location: Location) -> Table {
-		var copyOfCurrentRows = rows
-		copyOfCurrentRows.append(tableRow(cells, location))
-		
-		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
-	}
-
-	public func addingRow(cells: [String: TableCell]) -> Table {
-		assertValidAddedColumns(Array(cells.keys))
-
-		var copyOfCurrentRows = rows
-		copyOfCurrentRows.append(TableRow(cells: cells, location: Location.zero()))
-
-		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
-	}
-
 	private func tableRow(_ cells: [TableCell], _ location: Location) -> TableRow {
 		var newRowContent = [String: TableCell]()
 		for i in 0...columns.count-1 {
@@ -77,5 +61,21 @@ public struct Table : Equatable {
 extension Table {
 	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
 		return addingRow(cells: cellValues.map {TableCell(value: $0, location: Location.zero())}, location: Location.zero())
+	}
+	
+	func addingRow(cells: [TableCell], location: Location) -> Table {
+		var copyOfCurrentRows = rows
+		copyOfCurrentRows.append(tableRow(cells, location))
+		
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
+	}
+
+	func addingRow(cells: [String: TableCell]) -> Table {
+		assertValidAddedColumns(Array(cells.keys))
+
+		var copyOfCurrentRows = rows
+		copyOfCurrentRows.append(TableRow(cells: cells, location: Location.zero()))
+
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
 	}
 }

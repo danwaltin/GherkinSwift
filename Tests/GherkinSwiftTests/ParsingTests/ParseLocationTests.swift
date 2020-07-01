@@ -192,20 +192,21 @@ class ParseLocationTests: TestParseBase {
 			      | person |
 
 			      | ada    |
+
 			      | alan   |
 			""")
 		
 		then_examplesTableHeader(atExample: 0, shouldHaveLocation: Location(column: 5, line: 7))
 		then_examplesTableRow(0, atExample: 0, shouldHaveLocation: Location(column: 7, line: 8))
-		then_examplesTableRow(1, atExample: 0, shouldHaveLocation: Location(column: 6, line: 8))
+		then_examplesTableRow(1, atExample: 0, shouldHaveLocation: Location(column: 6, line: 9))
 
 		then_examplesTableHeader(atExample: 1, shouldHaveLocation: Location(column: 8, line: 12))
 		then_examplesTableRow(0, atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
-		then_examplesTableRow(1, atExample: 1, shouldHaveLocation: Location(column: 10, line: 13))
+		then_examplesTableRow(1, atExample: 1, shouldHaveLocation: Location(column: 10, line: 14))
 
 		then_examplesTableHeader(atExample: 2, shouldHaveLocation: Location(column: 7, line: 18))
 		then_examplesTableRow(0, atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
-		then_examplesTableRow(1, atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
+		then_examplesTableRow(1, atExample: 2, shouldHaveLocation: Location(column: 7, line: 22))
 	}
 
 	func test_Locations_Comments() {

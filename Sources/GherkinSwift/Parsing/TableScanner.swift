@@ -24,8 +24,9 @@
 class TableScanner {
 	
 	var hasScannedColumns = false
-	var columns: [String] = []
-	public var rows: [[TableCell]] = []
+	var columns = [String]()
+	var rowCells: [[TableCell]] = []
+	var rows = [TableRow]()
 	
 	var hasTable = false
 	
@@ -51,16 +52,10 @@ class TableScanner {
 			return nil
 		}
 		
-		var t = Table(columns: columns,
-					  headerLocation: Location(column: headerColumn,
-											   line: headerLine))
-		for row in rows {
-			t = t.addingRow(cells: row,
-							location: Location(column: bodyColumn,
-											   line: bodyLine))
-		}
-
-		return t
+		return Table(columns: columns,
+					 rows: rows,
+					 headerLocation: Location(column: headerColumn,
+											  line: headerLine))
 	}
 
 	private func createColumns(_ line: Line) {
@@ -72,16 +67,21 @@ class TableScanner {
 	}
 
 	private func addRow(_ line: Line) {
-		rows.append(cells(line))
+		let c = cells(line)
+		var location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
 		
-		if !hasStartedOnBody {
-			bodyColumn = line.columnForKeyword(tableSeparator)
-			bodyLine = line.number
-			hasStartedOnBody = true
-		}
+		rows.append(TableRow(cells: cells(line), location: location))
+		return
+//		rowCells.append(cells(line))
+//
+//		if !hasStartedOnBody {
+//			bodyColumn = line.columnForKeyword(tableSeparator)
+//			bodyLine = line.number
+//			hasStartedOnBody = true
+//		}
 	}
 	
-	private func cells(_ line: Line) -> [TableCell] {
+	private func cells(_ line: Line) -> [String: TableCell] {
 		
 		let i = line.text.firstIndex(of: tableSeparator)!
 		let d = line.text.distance(from: line.text.startIndex, to: i)
@@ -90,15 +90,21 @@ class TableScanner {
 		cellValues.removeLast()
 		cellValues.remove(at: 0)
 
-		var cells = [TableCell]()
+		var cells = [String: TableCell]()
 		
 		var previousCellColumn = d + 1 + String(tableSeparator).count // + 1 because index is zero based and columns should be one based
 
+		var columnIndex = 0
 		for cellValue in cellValues {
 			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
-			cells.append(TableCell(value: cellValue.trim(), location: Location(column: col, line: line.number)))
+			
+			let column = columns[columnIndex]
+			let cell = TableCell(value: cellValue.trim(), location: Location(column: col, line: line.number))
+			cells[column] = cell
+			
 			previousCellColumn += cellValue.count + String(tableSeparator).count
+			columnIndex += 1
 		}
 		
 		return cells
