@@ -99,7 +99,6 @@ extension Feature : Encodable {
 }
 
 extension Scenario : Encodable {
-	
 	enum CodingKeys: String, CodingKey {
 		case keyword
 		case location
@@ -148,6 +147,7 @@ extension ScenarioOutlineExamples : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case keyword
 		case location
+		case tableHeader
 		case tableBody
 	}
 
@@ -157,19 +157,22 @@ extension ScenarioOutlineExamples : Encodable {
 		try container.encode("Examples ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 
-		try container.encode(table.rows, forKey: .tableBody)
+		try container.encode(table.body, forKey: .tableBody)
 	}
 }
 
-extension TableRow : Encodable {
+extension TableBody : Encodable {
 	enum CodingKeys: String, CodingKey {
+		case location
 		case cells
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		let cellItems = cells.map {$0.value}
+		try container.encode(location, forKey: .location)
+
+		let cellItems = rows.flatMap { $0.cells.map{ $0.value}}
 		try container.encode(cellItems, forKey: .cells)
 	}
 }

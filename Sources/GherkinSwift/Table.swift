@@ -38,6 +38,10 @@ public struct Table : Equatable {
 		self.bodyLocation = bodyLocation
 	}
 	
+	var body: TableBody {
+		return TableBody(rows: rows, location: bodyLocation)
+	}
+	
 	public func addingRow(cells: [TableCell]) -> Table {
 		var copyOfCurrentRows = rows
 		copyOfCurrentRows.append(tableRow(cells))
