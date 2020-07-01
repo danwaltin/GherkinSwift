@@ -28,116 +28,152 @@ class ParseDescriptionTests: TestParseBase {
 	
 	// MARK: feature
 	func testFeatureWithDescription() {
-		when_parsing([
-			"Feature: feature",
-			"This is a description"
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		This is a description
+		""")
 		
 		then_feature(shouldHaveDescription: "This is a description")
 	}
 
 	func testFeatureWithDescriptionWithOneEmptyLineAfter() {
-		when_parsing([
-			"Feature: feature",
-			"This is a description",
-			"",
-		])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		This is a description
+
+		""")
+
 		then_feature(shouldHaveDescription: "This is a description")
 	}
 
 	func testFeatureWithDescriptionWithTwoEmptyLinesAfter() {
-		when_parsing([
-			"Feature: feature",
-			"This is a description",
-			"",
-			"",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		This is a description
 		
+		
+		""")
+
 		then_feature(shouldHaveDescription: "This is a description")
 	}
 
 	func testFeatureWithIndentedDescription() {
-		when_parsing([
-			"Feature: feature",
-			"   Indented description"
-		])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		   Indented description
+		""")
+
 		then_feature(shouldHaveDescription: "   Indented description")
 	}
 
 	func testFeatureWithDescriptionWithTwoIndentedLines() {
-		when_parsing([
-			"Feature: feature",
-			"   First",
-			"   Second",
-		])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		   First
+		   Second
+		""")
+
 		then_feature(shouldHaveDescription: "   First\n   Second")
 	}
 
 	func testFeatureWithDescriptionWithTwoLinesWithEmptyLineBetween() {
-		when_parsing([
-			"Feature: feature",
-			"First",
-			"",
-			"Second",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		First
 		
+		Second
+		""")
+
 		then_feature(shouldHaveDescription: "First\n\nSecond")
 	}
 
 	// MARK: - scenario
 	func testScenariosWithDescription() {
-		when_parsing([
-			"Feature: feature",
-			"Scenario:",
-			"This is a description",
-			"",
-			"Scenario:",
-			"   First",
-			"   Second",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario:
+		This is a description
 		
+		Scenario:
+		   First
+		   Second
+		""")
+
 		then_scenario(0, shouldHaveDescription: "This is a description")
 		then_scenario(1, shouldHaveDescription: "   First\n   Second")
 	}
 
 	func testScenarioWithDescriptionWithEmptyLine() {
-		when_parsing([
-			"Feature: feature",
-			"Scenario: scenario",
-			"   First",
-			"",
-			"   Second",
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
 		
+		   First
+		
+		   Second
+		""")
+
 		then_scenario(0, shouldHaveDescription: "   First\n\n   Second")
 	}
 
 	
 	// MARK: - scenario outline
-	func testScenarioOutlinessWithDescription() {
-		when_parsing([
-			"Feature: feature",
-			"Scenario Outline: one",
-			"This is a description",
-			"",
-			"Examples:",
-			"|foo|",
-			"|bar|",
-			"",
-			"Scenario Outline: two",
-			"   First",
-			"   Second",
-			"",
-			"Examples:",
-			"|foo|",
-			"|bar|",
-		])
+	func testScenarioOutlinesWithDescription() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: one
+		This is a description
+		
+		Examples:
+		|foo|
+		|bar|
+		
+		Scenario Outline: two
+		   First
+		   Second
+		
+		Examples:
+		|foo|
+		|bar|
+		""")
 		
 		then_scenario(0, shouldHaveDescription: "This is a description")
 		then_scenario(1, shouldHaveDescription: "   First\n   Second")
+	}
+
+	func testScenarioOutlinesWithExamplesWithDescription() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: one
+		
+		Examples: Alpha
+		This is a simple description
+		|foo|
+		|bar|
+		
+		Examples: Beta
+		
+		   This is an indented
+		   description over several
+		
+		   lines
+		
+		|one|
+		|two|
+		""")
+		
+		then_example(0, shouldHaveDescription: "This is a simple description")
+		then_example(1, shouldHaveDescription: "   This is an indented\n   description over several\n\n   lines")
 	}
 
 	// MARK: - Givens, whens and thens
@@ -151,4 +187,8 @@ class ParseDescriptionTests: TestParseBase {
 		XCTAssertEqual(actualFeature.scenarios[index].description, description, file: file, line: line)
 	}
 
+	private func then_example(_ index: Int, shouldHaveDescription description: String,
+							   file: StaticString = #file, line: UInt = #line) {
+		XCTAssertEqual(actualFeature.scenarios[0].examples[index].description, description, file: file, line: line)
+	}
 }

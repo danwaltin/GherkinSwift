@@ -23,6 +23,10 @@
 
 class ScenarioOutlineExamplesScanner {
 	var name = ""
+	
+	var isScanningDescription = false
+	var descriptionLines = [String]()
+
 	var lineNumber = 0
 	var columnNumber = 0
 
@@ -32,6 +36,7 @@ class ScenarioOutlineExamplesScanner {
 	func scan(line: Line) {
 		handleName(line: line)
 		handleTable(line: line)
+		handleDescription(line: line)
 	}
 	
 	private func handleName(line: Line) {
@@ -43,7 +48,15 @@ class ScenarioOutlineExamplesScanner {
 			name = line.removeKeyword(keywordExamples)
 			lineNumber = line.number
 			columnNumber = line.columnForKeyword(keywordExamples)
-
+		}
+	}
+	
+	private func handleDescription(line: Line) {
+		if isScanningDescription && !isScanningTable {
+			descriptionLines.append(line.text)
+		} else if !line.isExamples() && !line.isTable() && !isScanningDescription &&  !line.isEmpty() {
+			isScanningDescription = true
+			descriptionLines.append(line.text)
 		}
 	}
 	
@@ -61,6 +74,7 @@ class ScenarioOutlineExamplesScanner {
 
 	func getExamples() -> ScenarioOutlineExamples {
 		return ScenarioOutlineExamples(name: name,
+									   description: descriptionLines.asDescription(),
 									   location: Location(column: columnNumber, line: lineNumber),
 									   table: tableScanner.getTable()!)
 	}

@@ -148,6 +148,8 @@ extension ScenarioOutlineExamples : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case keyword
 		case location
+		case name
+		case description
 		case tableHeader
 		case tableBody
 	}
@@ -157,6 +159,14 @@ extension ScenarioOutlineExamples : Encodable {
 
 		try container.encode("Examples", forKey: .keyword)
 		try container.encode(location, forKey: .location)
+		
+		if name != "" {
+			try container.encode(name, forKey: .name)
+		}
+		
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
 
 		try container.encode(table.header, forKey: .tableHeader)
 		try container.encode(table.rows, forKey: .tableBody)

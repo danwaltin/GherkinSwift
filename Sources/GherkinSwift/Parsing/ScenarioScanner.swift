@@ -23,10 +23,10 @@
 
 class ScenarioScanner {
 	var name = ""
+	var isScanningDescription = false
 	var descriptionLines = [String]()
 	var lineNumber = 0
 	var columnNumber = 0
-	var hasScannedName = false
 	var isScanningStep = false
 	var currentStepScanner: StepScanner!
 	var stepScanners = [StepScanner]()
@@ -45,6 +45,7 @@ class ScenarioScanner {
 			columnNumber = line.columnForKeyword(keywordScenario)
 			
 		} else if line.isStep() {
+			isScanningDescription = false
 			isScanningStep = true
 			currentStepScanner = StepScanner()
 			stepScanners += [currentStepScanner]
@@ -57,8 +58,14 @@ class ScenarioScanner {
 		} else if isScanningStep {
 			currentStepScanner.scan(line: line)
 
-		} else {
+		} else if isScanningDescription {
 			descriptionLines.append(line.text)
+
+		} else {
+			if !isScanningDescription &&  !line.isEmpty() {
+				isScanningDescription = true
+				descriptionLines.append(line.text)
+			}
 		}
 	}
 	
