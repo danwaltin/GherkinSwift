@@ -25,7 +25,10 @@
 
 extension Table {
 	func withoutLocation() -> Table {
-		return Table(columns: columns, rows: rows.map{ $0.withoutLocation()}, headerLocation: Location.zero())
+		return Table(header: header.withoutLocation(),
+					 columns: columns,
+					 rows: rows.map{ $0.withoutLocation()},
+					 headerLocation: Location.zero())
 	}
 }
 
@@ -34,7 +37,6 @@ extension TableRow {
 		
 		return TableRow(cells: cells.mapValues{ $0.withoutLocation()}, location: Location.zero())
 	}
-
 }
 
 extension TableCell {

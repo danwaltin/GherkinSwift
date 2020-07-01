@@ -67,35 +67,30 @@ class TestParseBase: XCTestCase {
 	// MARK: - Factory methods
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
-		return t([col])
+		return Table.withColumns([col])
 			.addingRowWithCellValues([r1c1])
 	}
 	
 	func table(_ col: String,
 	           _ r1c1: String,
 	           _ r2c1: String) -> Table {
-		return t([col])
+		return Table.withColumns([col])
 			.addingRowWithCellValues([r1c1])
 			.addingRowWithCellValues([r2c1])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String) -> Table {
-		return t([c1, c2])
+		return Table.withColumns([c1, c2])
 			.addingRowWithCellValues([r1c1, r1c2])
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String,
 	           _ r2c1: String, _ r2c2: String) -> Table {
-		return t([c1, c2])
+		return Table.withColumns([c1, c2])
 			.addingRowWithCellValues([r1c1, r1c2])
 			.addingRowWithCellValues([r2c1, r2c2])
 	}
-	
-	private func t(_ columns: [String]) -> Table {
-		return Table(columns: columns, headerLocation: Location.zero())
-	}
-
 }
 

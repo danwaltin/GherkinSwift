@@ -52,7 +52,11 @@ class TableScanner {
 			return nil
 		}
 		
-		return Table(columns: columns,
+		let headerCells: [String: TableCell] = [:]
+		return Table(header: TableRow(cells: headerCells,
+									  location: Location(column: headerColumn,
+														 line: headerLine)),
+					 columns: columns,
 					 rows: rows,
 					 headerLocation: Location(column: headerColumn,
 											  line: headerLine))
@@ -67,18 +71,9 @@ class TableScanner {
 	}
 
 	private func addRow(_ line: Line) {
-		let c = cells(line)
-		var location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
 		
 		rows.append(TableRow(cells: cells(line), location: location))
-		return
-//		rowCells.append(cells(line))
-//
-//		if !hasStartedOnBody {
-//			bodyColumn = line.columnForKeyword(tableSeparator)
-//			bodyLine = line.number
-//			hasStartedOnBody = true
-//		}
 	}
 	
 	private func cells(_ line: Line) -> [String: TableCell] {

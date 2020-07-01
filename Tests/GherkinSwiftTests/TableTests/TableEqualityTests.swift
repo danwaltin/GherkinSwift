@@ -26,25 +26,25 @@ import XCTest
 
 class TableEqualityTests : XCTestCase {
 	func test_equalWhenTwoColumns() {
-		let one = t(["alpha", "beta"])
-		let two = t(["alpha", "beta"])
+		let one = Table.withColumns(["alpha", "beta"])
+		let two = Table.withColumns(["alpha", "beta"])
 		
 		XCTAssertEqual(one, two)
 	}
 	
 	func test_notEqualWhenTwoColumns() {
-		let one = t(["alpha", "beta"])
-		let two = t(["alpha", "gamma"])
+		let one = Table.withColumns(["alpha", "beta"])
+		let two = Table.withColumns(["alpha", "gamma"])
 		
 		XCTAssertNotEqual(one, two)
 	}
 	
 	func test_equalWhenTwoRows() {
-		let one = t(["column"])
+		let one = Table.withColumns(["column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["beta"])
 		
-		let two = t(["column"])
+		let two = Table.withColumns(["column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["beta"])
 		
@@ -52,11 +52,11 @@ class TableEqualityTests : XCTestCase {
 	}
 	
 	func test_notEqualWhenTwoRows_differentColumnNames() {
-		let one = t(["column"])
+		let one = Table.withColumns(["column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["beta"])
 		
-		let two = t(["another column"])
+		let two = Table.withColumns(["another column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["beta"])
 		
@@ -64,19 +64,14 @@ class TableEqualityTests : XCTestCase {
 	}
 	
 	func test_notEqualWhenTwoRows_differentRowValuesSecondRow() {
-		let one = t(["column"])
+		let one = Table.withColumns(["column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["beta"])
 		
-		let two = t(["column"])
+		let two = Table.withColumns(["column"])
 			.addingRowWithCellValues(["alpha"])
 			.addingRowWithCellValues(["gamma"])
 		
 		XCTAssertNotEqual(one, two)
 	}
-	
-	private func t(_ columns: [String]) -> Table {
-		return Table(columns: columns, headerLocation: Location.zero())
-	}
-
 }

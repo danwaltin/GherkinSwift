@@ -27,7 +27,7 @@ import XCTest
 class TableRowsTests : XCTestCase {
 	// MARK: - Adding row with values
 	func test_oneColumn_addOneRowWithValue() {
-		let table = t(["Column"])
+		let table = Table.withColumns(["Column"])
 			.addingRowWithCellValues(["rowValue"])
 		
 		XCTAssertEqual(table.rows.count, 1)
@@ -37,7 +37,7 @@ class TableRowsTests : XCTestCase {
 	}
 
 	func test_twoColumns_addOneRowWithValues() {
-		let table = t(["c1", "c2"])
+		let table = Table.withColumns(["c1", "c2"])
 			.addingRowWithCellValues(["v1", "v2"])
 		
 		XCTAssertEqual(table.rows.count, 1)
@@ -48,7 +48,7 @@ class TableRowsTests : XCTestCase {
 	}
 
 	func test_oneColumns_addTwoRowsWithValue() {
-		let table = t(["c"])
+		let table = Table.withColumns(["c"])
 			.addingRowWithCellValues(["v1"])
 			.addingRowWithCellValues(["v2"])
 		
@@ -60,7 +60,7 @@ class TableRowsTests : XCTestCase {
 	}
 
 	func test_twoColumns_addTwoRowsWithValues() {
-		let table = t(["c1", "c2"])
+		let table = Table.withColumns(["c1", "c2"])
 			.addingRowWithCellValues(["r1c1", "r1c2"])
 			.addingRowWithCellValues(["r2c1", "r2c2"])
 		
@@ -75,7 +75,7 @@ class TableRowsTests : XCTestCase {
 	
 	// MARK: - Adding row as key/value-pairs
 	func test_oneColumnOneRow_addOneRowWithKeyValue() {
-		let table = t(["Column"])
+		let table = Table.withColumns(["Column"])
 			.addingRow(cells: ["Column": cell("rowValue")])
 		
 		XCTAssertEqual(table.rows.count, 1)
@@ -86,7 +86,7 @@ class TableRowsTests : XCTestCase {
 
 
 	func test_twoColumns_addOneRowWithKeyValues() {
-		let table = t(["c1", "c2"])
+		let table = Table.withColumns(["c1", "c2"])
 			.addingRow(cells: ["c1": cell("v1"), "c2": cell("v2")])
 		
 		XCTAssertEqual(table.rows.count, 1)
@@ -97,7 +97,7 @@ class TableRowsTests : XCTestCase {
 	}
 
 	func test_oneColumn_addTwoRowsWithKeyValues() {
-		let table = t(["c"])
+		let table = Table.withColumns(["c"])
 			.addingRow(cells: ["c": cell("v1")])
 			.addingRow(cells: ["c": cell("v2")])
 		
@@ -106,7 +106,7 @@ class TableRowsTests : XCTestCase {
 	}
 
 	func test_twoColumns_addTwoRowsWithKeyValues() {
-		let table = t(["c1", "c2"])
+		let table = Table.withColumns(["c1", "c2"])
 			.addingRow(cells: ["c1": cell("r1c1"), "c2": cell("r1c2")])
 			.addingRow(cells: ["c1": cell("r2c1"), "c2": cell("r2c2")])
 		
@@ -122,9 +122,4 @@ class TableRowsTests : XCTestCase {
 	private func cell(_ value: String) -> TableCell {
 		return TableCell(value: value, location: Location.zero())
 	}
-	
-	private func t(_ columns: [String]) -> Table {
-		return Table(columns: columns, headerLocation: Location.zero())
-	}
-
 }
