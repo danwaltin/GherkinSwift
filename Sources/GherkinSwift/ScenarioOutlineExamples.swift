@@ -14,21 +14,15 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Table.swift
+//  ScenarioOutlineExamples.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
 
-public struct Table : Equatable {
-	let header: TableRow
-	let rows: [TableRow]
-	let headerLocation: Location
-
-	init(header: TableRow, columns: [String], rows: [TableRow], headerLocation: Location) {
-		self.header = header
-		self.rows = rows
-		self.headerLocation = headerLocation
-	}	
+public struct ScenarioOutlineExamples : Equatable {
+	public let name: String
+	public let location: Location
+	public let table: Table
 }

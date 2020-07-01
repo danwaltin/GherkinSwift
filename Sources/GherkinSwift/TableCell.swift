@@ -14,32 +14,17 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  TableColumnsTests.swift
+//  TableCELL.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-06-30.
 //
 // ------------------------------------------------------------------------
 
-import XCTest
-@testable import GherkinSwift
+public struct TableCell : Equatable {
+	public let value: String
+	public let location: Location
 
-class TableColumnsTests : XCTestCase {
-	func test_zeroColumns() {
-		let table = Table(columns: [])
-		
-		XCTAssertEqual(table.columns, [])
-	}
-	
-	func test_oneColumn() {
-		let table = Table(columns: ["column"])
-		
-		XCTAssertEqual(table.columns, ["column"])
-	}
-	
-	func test_twoColumns() {
-		let table = Table(columns: ["one", "two"])
-		
-		XCTAssertEqual(table.columns, ["one", "two"])
-	}
+	// the header of the column this cell belongs to
+	public let header: String
 }

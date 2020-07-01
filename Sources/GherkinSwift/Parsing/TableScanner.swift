@@ -24,45 +24,95 @@
 class TableScanner {
 	
 	var hasScannedColumns = false
-	var columns: [String] = []
-	public var rows: [[String]] = []
+	var columns = [String]()
+	var headerRow: TableRow!
+	var rows = [TableRow]()
 	
 	var hasTable = false
 	
+	var headerLine = 0
+	var headerColumn = 0
+
+	var hasStartedOnBody = false
+	var bodyLine = 0
+	var bodyColumn = 0
+
 	func scan(line: Line) {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line.text)
+			addRow(line)
 		} else {
-			createColumns(line.text)
+			createColumns(line)
 		}
 	}
 
-	func getTableArgument() -> Table? {
+	func getTable() -> Table? {
 		if !hasTable {
 			return nil
 		}
 		
-		var t = Table(columns: columns)
-		for row in rows {
-			t = t.addingRow(cells: row)
-		}
-
-		return t
+		let headerLocation = Location(column: headerColumn,
+									  line: headerLine)
+		
+		return Table(header: headerRow,
+					 columns: columns,
+					 rows: rows,
+					 headerLocation: headerLocation)
 	}
 
-	private func createColumns(_ line: String) {
-		columns = lineItems(line)
+	private func createColumns(_ line: Line) {
+		columns = lineItems(line.text)
+		
+		headerLine = line.number
+		headerColumn = line.columnForKeyword(tableSeparator)
+		
+		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		let apa = cells(line)
+		headerRow = TableRow(cells: apa, location: location)
+		
 		hasScannedColumns = true
 	}
 
-	private func addRow(_ line: String) {
-		rows.append(lineItems(line))
+	private func addRow(_ line: Line) {
+		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		
+		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	
+	private func cells(_ line: Line) -> [TableCell] {
+		
+		let i = line.text.firstIndex(of: tableSeparator)!
+		let d = line.text.distance(from: line.text.startIndex, to: i)
+		
+		var cellValues = line.text.components(separatedBy: String(tableSeparator))
+		cellValues.removeLast()
+		cellValues.remove(at: 0)
+
+		var cells = [TableCell]()
+		
+		var previousCellColumn = d + 1 + String(tableSeparator).count // + 1 because index is zero based and columns should be one based
+
+		var columnIndex = 0
+		for cellValue in cellValues {
+			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
+			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
+			
+			let column = columns[columnIndex]
+			let cell = TableCell(value: cellValue.trim(),
+								 location: Location(column: col, line: line.number),
+								 header: column)
+			cells.append(cell)
+			
+			previousCellColumn += cellValue.count + String(tableSeparator).count
+			columnIndex += 1
+		}
+		
+		return cells
+	}
+
 	private func lineItems(_ line: String) -> [String] {
-		var v = line.components(separatedBy: tableSeparator)
+		var v = line.components(separatedBy: String(tableSeparator))
 		v.removeLast()
 		v.remove(at: 0)
 		
@@ -73,5 +123,5 @@ class TableScanner {
 		
 		return items
 	}
-	
+
 }

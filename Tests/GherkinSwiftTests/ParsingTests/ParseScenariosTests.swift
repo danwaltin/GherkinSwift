@@ -76,8 +76,7 @@ class ParseScenariosTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
 	
-	// MARK:
-	// MARK: Table parameters to steps
+	// MARK: - Table parameters to steps
 	
 	func test_tableParametersToSteps_oneColumnOneRow() {
 		when_parsing([
@@ -194,7 +193,9 @@ class ParseScenariosTests: TestParseBase {
 
 		XCTAssertEqual(actual.type, stepType, file: file, line: line)
 		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!, table, file: file, line: line)
+		
+		let actualTable = actual.tableParameter!.withoutLocation()
+		XCTAssertEqual(actualTable, table, file: file, line: line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
@@ -207,7 +208,7 @@ class ParseScenariosTests: TestParseBase {
 		
 		XCTAssertEqual(actual.type, stepType, file: file, line: line)
 		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!, table, file: file, line: line)
+		XCTAssertEqual(actual.tableParameter!.withoutLocation(), table, file: file, line: line)
 	}
 	
 	private func step(at index: Int) -> Step {

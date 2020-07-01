@@ -99,19 +99,20 @@ extension Feature : Encodable {
 }
 
 extension Scenario : Encodable {
-	
 	enum CodingKeys: String, CodingKey {
 		case keyword
 		case location
 		case name
 		case description
 		case steps
+		case examples
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode("Scenario", forKey: .keyword)
+		let keyword = isOutline() ? "Scenario Outline" : "Scenario"
+		try container.encode(keyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)
 
@@ -120,12 +121,15 @@ extension Scenario : Encodable {
 		}
 
 		try container.encode(steps, forKey: .steps)
+		
+		if examples.count > 0 {
+			try container.encode(examples, forKey: .examples)
+		}
 	}
 }
 
 extension Step : Encodable {
 	enum CodingKeys: String, CodingKey {
-		//case id
 		case keyword
 		case location
 		case text
@@ -137,5 +141,64 @@ extension Step : Encodable {
 		try container.encode("Given ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
+	}
+}
+
+extension ScenarioOutlineExamples : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+		case tableHeader
+		case tableBody
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Examples", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+
+		try container.encode(table.header, forKey: .tableHeader)
+		try container.encode(table.rows, forKey: .tableBody)
+	}
+}
+
+extension TableHeader : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(location, forKey: .location)
+	}
+}
+
+extension TableRow : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case cells
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(cells, forKey: .cells)
+		try container.encode(location, forKey: .location)
+	}
+}
+
+extension TableCell : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case value
+		case location
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(value, forKey: .value)
+		try container.encode(location, forKey: .location)
 	}
 }

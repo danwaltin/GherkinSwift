@@ -14,21 +14,13 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Table.swift
+//  TableHeader.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-07-01.
 //
 // ------------------------------------------------------------------------
 
-public struct Table : Equatable {
-	let header: TableRow
-	let rows: [TableRow]
-	let headerLocation: Location
-
-	init(header: TableRow, columns: [String], rows: [TableRow], headerLocation: Location) {
-		self.header = header
-		self.rows = rows
-		self.headerLocation = headerLocation
-	}	
+struct TableHeader {
+	let location: Location
 }

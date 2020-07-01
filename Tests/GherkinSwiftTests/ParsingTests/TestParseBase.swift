@@ -27,6 +27,11 @@ class TestParseBase: XCTestCase {
 	var actualFeature: Feature!
 	var actualGherkinDocument: GherkinDocument!
 	
+	func when_parsingDocument(_ document: String) {
+		actualGherkinDocument = parseGherkinDocument(document.allLines(), parser: parser())
+		actualFeature = actualGherkinDocument.feature!
+	}
+
 	func when_parsing(_ lines: [String]) {
 		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
 		actualFeature = actualGherkinDocument.feature!
@@ -62,30 +67,34 @@ class TestParseBase: XCTestCase {
 	// MARK: - Factory methods
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
-		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
+		return Table.withColumns([col])
+			.addingRow(cells: [cell(r1c1, col)], location: Location.zero())
 	}
 	
 	func table(_ col: String,
 	           _ r1c1: String,
 	           _ r2c1: String) -> Table {
-		return Table(columns: [col])
-			.addingRow(cells: [r1c1])
-			.addingRow(cells: [r2c1])
+		return Table.withColumns([col])
+			.addingRow(cells: [cell(r1c1, col)], location: Location.zero())
+			.addingRow(cells: [cell(r2c1, col)], location: Location.zero())
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String) -> Table {
-		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
+		return Table.withColumns([c1, c2])
+			.addingRow(cells: [cell(r1c1, c1), cell(r1c2, c2)], location: Location.zero())
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String,
 	           _ r2c1: String, _ r2c2: String) -> Table {
-		return Table(columns: [c1, c2])
-			.addingRow(cells: [r1c1, r1c2])
-			.addingRow(cells: [r2c1, r2c2])
+		return Table.withColumns([c1, c2])
+			.addingRow(cells: [cell(r1c1, c1), cell(r1c2, c2)], location: Location.zero())
+			.addingRow(cells: [cell(r2c1, c1), cell(r2c2, c2)], location: Location.zero())
+	}
+	
+	private func cell(_ value: String, _ header: String) -> TableCell {
+		return TableCell(value: value, location: Location.zero(), header: header)
 	}
 }
 

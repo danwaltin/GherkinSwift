@@ -20,18 +20,30 @@
 //  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
+
 public struct Scenario : Equatable, Taggable, HasName {
 	public let name: String
 	public let description: String?
 	public let tags: [String]
 	public let steps: [Step]
 	public let location: Location
+	public let examples: [ScenarioOutlineExamples]
 
-	public init(name: String, description: String?, tags: [String], location: Location, steps: [Step]) {
+	public init(name: String,
+				description: String?,
+				tags: [String],
+				location: Location,
+				steps: [Step],
+				examples: [ScenarioOutlineExamples]) {
 		self.name = name
 		self.description = description
 		self.tags = tags
 		self.location = location
 		self.steps = steps
+		self.examples = examples
+	}
+	
+	func isOutline() -> Bool {
+		return examples.count > 0
 	}
 }

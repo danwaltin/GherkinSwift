@@ -14,62 +14,54 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  StepScanner.swift
+//  ScenarioOutlineExamplesScanner.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-06-29.
 //
 // ------------------------------------------------------------------------
 
-class StepScanner {
-	var text = ""
-	var location = Location(column: 0, line: 0)
-	var step: Step!
-	
+class ScenarioOutlineExamplesScanner {
+	var name = ""
+	var lineNumber = 0
+	var columnNumber = 0
+
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
-	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
-	}
-	
 	func scan(line: Line) {
-		handleStepText(line: line)
+		handleName(line: line)
 		handleTable(line: line)
 	}
 	
-	private func handleStepText(line: Line) {
+	private func handleName(line: Line) {
 		if line.isEmpty() {
 			return
 		}
-		
-		location = Location(column: 1, line: line.number)
-		
-		if line.isGiven() {
-			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
-			step = Step.given(line.removeKeyword(keywordGiven))
-		}
-		
-		if line.isWhen() {
-			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
-			step = Step.when(line.removeKeyword(keywordWhen))
-		}
-		
-		if line.isThen() {
-			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
-			step = Step.then(line.removeKeyword(keywordThen))
+
+		if line.isExamples() {
+			name = line.removeKeyword(keywordExamples)
+			lineNumber = line.number
+			columnNumber = line.columnForKeyword(keywordExamples)
+
 		}
 	}
-
+	
 	private func handleTable(line: Line) {
 		if line.isEmpty() {
 			return
 		}
 
 		isScanningTable = isScanningTable || line.isTable()
-
+		
 		if isScanningTable {
 			tableScanner.scan(line: line)
 		}
+	}
+
+	func getExamples() -> ScenarioOutlineExamples {
+		return ScenarioOutlineExamples(name: name,
+									   location: Location(column: columnNumber, line: lineNumber),
+									   table: tableScanner.getTable()!)
 	}
 }

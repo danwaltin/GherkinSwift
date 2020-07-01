@@ -25,9 +25,10 @@ import Foundation
 
 public struct TableRow : Equatable {
 	
-	public let cells: [String: String]
+	public let cells: [TableCell]
+	public let location: Location
 	
-	public subscript(column: String) -> String {
-		return cells[column]!
+	public subscript(column: String) -> TableCell {
+		return cells.filter { $0.header == column }[0]
 	}
 }

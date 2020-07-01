@@ -66,10 +66,15 @@ class ScenarioScanner {
 		return [Scenario(name: name,
 						 description: descriptionLines.asDescription(),
 						 tags: scenarioTags,
-						 location: Location(column: columnNumber, line: lineNumber),
-						 steps: steps())]
+						 location: location(),
+						 steps: steps(),
+						 examples: [])]
 	}
 
+	func location() -> Location {
+		return Location(column: columnNumber, line: lineNumber)
+	}
+	
 	func steps() -> [Step] {
 		return stepScanners.map{$0.getStep()}
 	}

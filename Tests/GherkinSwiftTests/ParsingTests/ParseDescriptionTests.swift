@@ -87,7 +87,7 @@ class ParseDescriptionTests: TestParseBase {
 		then_feature(shouldHaveDescription: "First\n\nSecond")
 	}
 
-	// MARK: scenario
+	// MARK: - scenario
 	func testScenariosWithDescription() {
 		when_parsing([
 			"Feature: feature",
@@ -115,6 +115,32 @@ class ParseDescriptionTests: TestParseBase {
 		then_scenario(0, shouldHaveDescription: "   First\n\n   Second")
 	}
 
+	
+	// MARK: - scenario outline
+	func testScenarioOutlinessWithDescription() {
+		when_parsing([
+			"Feature: feature",
+			"Scenario Outline: one",
+			"This is a description",
+			"",
+			"Examples:",
+			"|foo|",
+			"|bar|",
+			"",
+			"Scenario Outline: two",
+			"   First",
+			"   Second",
+			"",
+			"Examples:",
+			"|foo|",
+			"|bar|",
+		])
+		
+		then_scenario(0, shouldHaveDescription: "This is a description")
+		then_scenario(1, shouldHaveDescription: "   First\n   Second")
+	}
+
+	// MARK: - Givens, whens and thens
 	private func then_feature(shouldHaveDescription description: String,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.description, description, file: file, line: line)

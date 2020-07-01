@@ -14,21 +14,37 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Table.swift
+//  WithoutLocationExtensions.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-06-26.
 //
 // ------------------------------------------------------------------------
 
-public struct Table : Equatable {
-	let header: TableRow
-	let rows: [TableRow]
-	let headerLocation: Location
+@testable import GherkinSwift
 
-	init(header: TableRow, columns: [String], rows: [TableRow], headerLocation: Location) {
-		self.header = header
-		self.rows = rows
-		self.headerLocation = headerLocation
-	}	
+extension Table {
+	func withoutLocation() -> Table {
+		var newRows = [TableRow]()
+		for row in rows {
+			newRows.append(row.withoutLocation())
+		}
+		return Table(header: header.withoutLocation(),
+					 columns: columns,
+					 rows: newRows,
+					 headerLocation: Location.zero())
+	}
+}
+
+extension TableRow {
+	func withoutLocation() -> TableRow {
+		
+		return TableRow(cells: cells.map { $0.withoutLocation()}, location: Location.zero())
+	}
+}
+
+extension TableCell {
+	func withoutLocation() -> TableCell {
+		return TableCell(value: value, location: Location.zero(), header: header)
+	}
 }
