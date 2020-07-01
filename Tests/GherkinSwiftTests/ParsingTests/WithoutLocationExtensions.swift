@@ -25,9 +25,13 @@
 
 extension Table {
 	func withoutLocation() -> Table {
+		var newRows = [TableRow]()
+		for row in rows {
+			newRows.append(row.withoutLocation())
+		}
 		return Table(header: header.withoutLocation(),
 					 columns: columns,
-					 rows: rows.map{ $0.withoutLocation()},
+					 rows: newRows,
 					 headerLocation: Location.zero())
 	}
 }

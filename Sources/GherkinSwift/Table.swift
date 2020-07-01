@@ -23,18 +23,13 @@
 
 public struct Table : Equatable {
 	let header: TableRow
-	let columns: [String]
 	let rows: [TableRow]
 	let headerLocation: Location
 
 	init(header: TableRow, columns: [String], rows: [TableRow], headerLocation: Location) {
 		self.header = header
-		self.columns = columns
 		self.rows = rows
 		self.headerLocation = headerLocation
 	}
 	
-	var theHeader: TableHeader {
-		return TableHeader(location: headerLocation)
-	}
 }

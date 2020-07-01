@@ -24,14 +24,30 @@
 @testable import GherkinSwift
 
 extension Table {
+	var columns: [String] {
+		var c = [String]()
+		for cell in header.cells {
+			c.append(cell.value.value)
+		}
+		return c
+	}
+
 	static func withColumns(_ columns: [String]) -> Table {
-		let cells : [String: TableCell] = Dictionary(uniqueKeysWithValues: columns.map { ($0, TableCell(value: $0, location: Location.zero()))})
+		var cells = [String: TableCell]()
+		for column in columns {
+			cells[column] = TableCell(value: column, location: Location.zero())
+		}
 		let header = TableRow(cells: cells, location: Location.zero())
 		return Table(header: header, columns: columns, rows: [], headerLocation: Location.zero())
 	}
 	
 	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
-		return addingRow(cells: cellValues.map {TableCell(value: $0, location: Location.zero())}, location: Location.zero())
+		var cells = [TableCell]()
+		for cell in cellValues {
+			cells.append(TableCell(value: cell, location: Location.zero()))
+		}
+		
+		return addingRow(cells: cells, location: Location.zero())
 	}
 
 	

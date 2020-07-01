@@ -193,7 +193,9 @@ class ParseScenariosTests: TestParseBase {
 
 		XCTAssertEqual(actual.type, stepType, file: file, line: line)
 		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!.withoutLocation(), table, file: file, line: line)
+		
+		let actualTable = actual.tableParameter!.withoutLocation()
+		XCTAssertEqual(actualTable, table, file: file, line: line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
