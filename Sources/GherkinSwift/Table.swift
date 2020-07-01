@@ -57,7 +57,7 @@ public struct Table : Equatable {
 		assertValidAddedColumns(Array(cells.keys))
 
 		var copyOfCurrentRows = rows
-		copyOfCurrentRows.append(TableRow(cells: cells))
+		copyOfCurrentRows.append(TableRow(cells: cells, location: bodyLocation))
 
 		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation, bodyLocation: bodyLocation)
 	}
@@ -68,7 +68,7 @@ public struct Table : Equatable {
 			newRowContent[columns[i]] = cells[i]
 		}
 		
-		return TableRow(cells: newRowContent)
+		return TableRow(cells: newRowContent, location: bodyLocation)
 	}
 	
 	private func assertValidAddedColumns(_ addedColumns: [String]) {

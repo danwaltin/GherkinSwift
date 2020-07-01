@@ -158,7 +158,7 @@ extension ScenarioOutlineExamples : Encodable {
 		try container.encode(location, forKey: .location)
 
 		try container.encode(table.header, forKey: .tableHeader)
-		try container.encode(table.body, forKey: .tableBody)
+		try container.encode(table.rows, forKey: .tableBody)
 	}
 }
 
@@ -174,19 +174,18 @@ extension TableHeader : Encodable {
 	}
 }
 
-extension TableBody : Encodable {
+extension TableRow : Encodable {
 	enum CodingKeys: String, CodingKey {
-		case location
 		case cells
+		case location
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
+		let cellValues = cells.map { $0.value }
+		try container.encode(cellValues, forKey: .cells)
 		try container.encode(location, forKey: .location)
-
-		let cellItems = rows.flatMap { $0.cells.map{ $0.value}}
-		try container.encode(cellItems, forKey: .cells)
 	}
 }
 

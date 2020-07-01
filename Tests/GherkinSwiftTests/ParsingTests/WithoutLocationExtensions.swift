@@ -32,7 +32,7 @@ extension Table {
 extension TableRow {
 	func withoutLocation() -> TableRow {
 		
-		return TableRow(cells: cells.mapValues{ $0.withoutLocation()})
+		return TableRow(cells: cells.mapValues{ $0.withoutLocation()}, location: Location.zero())
 	}
 
 }

@@ -196,13 +196,16 @@ class ParseLocationTests: TestParseBase {
 			""")
 		
 		then_examplesTableHeader(atExample: 0, shouldHaveLocation: Location(column: 5, line: 7))
-		then_examplesTableBody(atExample: 0, shouldHaveLocation: Location(column: 7, line: 8))
-		
+		then_examplesTableRow(0, atExample: 0, shouldHaveLocation: Location(column: 7, line: 8))
+		then_examplesTableRow(1, atExample: 0, shouldHaveLocation: Location(column: 6, line: 8))
+
 		then_examplesTableHeader(atExample: 1, shouldHaveLocation: Location(column: 8, line: 12))
-		then_examplesTableBody(atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
+		then_examplesTableRow(0, atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
+		then_examplesTableRow(1, atExample: 1, shouldHaveLocation: Location(column: 10, line: 13))
 
 		then_examplesTableHeader(atExample: 2, shouldHaveLocation: Location(column: 7, line: 18))
-		then_examplesTableBody(atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
+		then_examplesTableRow(0, atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
+		then_examplesTableRow(1, atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
 	}
 
 	func test_Locations_Comments() {
@@ -266,10 +269,10 @@ class ParseLocationTests: TestParseBase {
 					   file: file, line: line)
 	}
 
-	private func then_examplesTableBody(atExample exampleIndex: Int, shouldHaveLocation location: Location,
+	private func then_examplesTableRow(_ rowIndex: Int, atExample exampleIndex: Int, shouldHaveLocation location: Location,
 										  file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.bodyLocation, location,
+		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.rows[rowIndex].location, location,
 					   file: file, line: line)
 	}
 }

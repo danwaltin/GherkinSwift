@@ -26,6 +26,7 @@ import Foundation
 public struct TableRow : Equatable {
 	
 	public let cells: [String: TableCell]
+	public let location: Location
 	
 	public subscript(column: String) -> TableCell {
 		return cells[column]!
