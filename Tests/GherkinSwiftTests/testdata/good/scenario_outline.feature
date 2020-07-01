@@ -1,6 +1,6 @@
 Feature: Minimal Scenario Outline
 
-  Scenario: minimalistic
+  Scenario Outline: minimalistic
     Given the <what>
 
     Examples:
