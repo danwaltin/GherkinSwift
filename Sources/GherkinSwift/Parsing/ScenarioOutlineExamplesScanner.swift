@@ -26,20 +26,39 @@ class ScenarioOutlineExamplesScanner {
 	var lineNumber = 0
 	var columnNumber = 0
 
+	var isScanningTable = false
 	let tableScanner = TableScanner()
 
 	func scan(line: Line) {
+		handleName(line: line)
+		handleTable(line: line)
+	}
+	
+	private func handleName(line: Line) {
+		if line.isEmpty() {
+			return
+		}
+
 		if line.isExamples() {
 			name = line.removeKeyword(keywordExamples)
 			lineNumber = line.number
 			columnNumber = line.columnForKeyword(keywordExamples)
 
-		} else if line.isTable() {
-			tableScanner.scan(line: line)
 		}
-
 	}
 	
+	private func handleTable(line: Line) {
+		if line.isEmpty() {
+			return
+		}
+
+		isScanningTable = isScanningTable || line.isTable()
+		
+		if isScanningTable {
+			tableScanner.scan(line: line)
+		}
+	}
+
 	func getExamples() -> ScenarioOutlineExamples {
 		return ScenarioOutlineExamples(name: name,
 									   location: Location(column: columnNumber, line: lineNumber),

@@ -66,11 +66,9 @@ class StepScanner {
 			return
 		}
 
+		isScanningTable = isScanningTable || line.isTable()
+
 		if isScanningTable {
-			tableScanner.scan(line: line)
-			
-		} else if line.isTable() {
-			isScanningTable = true
 			tableScanner.scan(line: line)
 		}
 	}

@@ -224,45 +224,52 @@ class ParseLocationTests: TestParseBase {
 	
 	private func then_feature(shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualFeature.location, location, file: file, line: line)
+		XCTAssertEqual(actualFeature.location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_scenario(_ index: Int, shouldHaveLocation location: Location,
 							   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: index).location, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: index).location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_step(_ stepIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: scenarioIndex).steps[stepIndex].location, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: scenarioIndex).steps[stepIndex].location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_examples(_ examplesIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: scenarioIndex).examples[examplesIndex].location, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: scenarioIndex).examples[examplesIndex].location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location, file: file, line: line)
+		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_cell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location,
+					   file: file, line: line)
 	}
 	
 	private func then_examplesTableHeader(atExample exampleIndex: Int, shouldHaveLocation location: Location,
 										  file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.headerLocation, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.headerLocation, location,
+					   file: file, line: line)
 	}
 
 	private func then_examplesTableBody(atExample exampleIndex: Int, shouldHaveLocation location: Location,
 										  file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.bodyLocation, location, file: file, line: line)
+		XCTAssertEqual(scenario(at: 0).examples[exampleIndex].table.bodyLocation, location,
+					   file: file, line: line)
 	}
-
 }

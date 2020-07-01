@@ -32,6 +32,7 @@ class TableScanner {
 	var headerLine = 0
 	var headerColumn = 0
 
+	var hasStartedOnBody = false
 	var bodyLine = 0
 	var bodyColumn = 0
 
@@ -50,7 +51,11 @@ class TableScanner {
 			return nil
 		}
 		
-		var t = Table(columns: columns, headerLocation: Location(column: headerColumn, line: headerLine), bodyLocation: Location(column: bodyColumn, line: bodyColumn))
+		var t = Table(columns: columns,
+					  headerLocation: Location(column: headerColumn,
+											   line: headerLine),
+					  bodyLocation: Location(column: bodyColumn,
+											 line: bodyLine))
 		for row in rows {
 			t = t.addingRow(cells: row)
 		}
@@ -67,6 +72,11 @@ class TableScanner {
 
 	private func addRow(_ line: Line) {
 		rows.append(cells(line))
+		
+		if !hasStartedOnBody {
+			bodyLine = line.number
+			hasStartedOnBody = true
+		}
 	}
 	
 	private func cells(_ line: Line) -> [TableCell] {
