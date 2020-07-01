@@ -52,14 +52,15 @@ class TableScanner {
 			return nil
 		}
 		
-		let headerCells: [String: TableCell] = [:]
+		let headerLocation = Location(column: headerColumn,
+									  line: headerLine)
+		
+		let headerCells: [String: TableCell] = Dictionary(uniqueKeysWithValues: columns.map { ($0, TableCell(value: $0, location: Location.zero()))})
 		return Table(header: TableRow(cells: headerCells,
-									  location: Location(column: headerColumn,
-														 line: headerLine)),
+									  location: headerLocation),
 					 columns: columns,
 					 rows: rows,
-					 headerLocation: Location(column: headerColumn,
-											  line: headerLine))
+					 headerLocation: headerLocation)
 	}
 
 	private func createColumns(_ line: Line) {
