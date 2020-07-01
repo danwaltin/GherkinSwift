@@ -183,8 +183,7 @@ extension TableRow : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		let cellValues = cells.map { $0.value }
-		try container.encode(cellValues, forKey: .cells)
+		try container.encode(cells, forKey: .cells)
 		try container.encode(location, forKey: .location)
 	}
 }
