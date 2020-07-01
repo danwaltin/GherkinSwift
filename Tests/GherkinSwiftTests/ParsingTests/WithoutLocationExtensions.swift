@@ -25,7 +25,7 @@
 
 extension Table {
 	func withoutLocation() -> Table {
-		return Table(columns: columns, rows: rows.map{ $0.withoutLocation()}, headerLocation: Location.zero(), bodyLocation: Location.zero())
+		return Table(columns: columns, rows: rows.map{ $0.withoutLocation()}, headerLocation: Location.zero())
 	}
 }
 

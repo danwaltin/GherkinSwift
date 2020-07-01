@@ -25,46 +25,44 @@ public struct Table : Equatable {
 	public let columns: [String]
 	public let rows: [TableRow]
 	public let headerLocation: Location
-	public let bodyLocation: Location
 
-	public init(columns: [String], headerLocation: Location, bodyLocation: Location) {
-		self.init(columns: columns, rows: [], headerLocation: headerLocation, bodyLocation: bodyLocation)
+	public init(columns: [String], headerLocation: Location) {
+		self.init(columns: columns, rows: [], headerLocation: headerLocation)
 	}
 	
-	init(columns: [String], rows: [TableRow], headerLocation: Location, bodyLocation: Location) {
+	init(columns: [String], rows: [TableRow], headerLocation: Location) {
 		self.columns = columns
 		self.rows = rows
 		self.headerLocation = headerLocation
-		self.bodyLocation = bodyLocation
 	}
 	
 	var header: TableHeader {
 		return TableHeader(location: headerLocation)
 	}
 
-	public func addingRow(cells: [TableCell]) -> Table {
+	public func addingRow(cells: [TableCell], location: Location) -> Table {
 		var copyOfCurrentRows = rows
-		copyOfCurrentRows.append(tableRow(cells))
+		copyOfCurrentRows.append(tableRow(cells, location))
 		
-		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation, bodyLocation: bodyLocation)
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
 	}
 
 	public func addingRow(cells: [String: TableCell]) -> Table {
 		assertValidAddedColumns(Array(cells.keys))
 
 		var copyOfCurrentRows = rows
-		copyOfCurrentRows.append(TableRow(cells: cells, location: bodyLocation))
+		copyOfCurrentRows.append(TableRow(cells: cells, location: Location.zero()))
 
-		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation, bodyLocation: bodyLocation)
+		return Table(columns: columns, rows: copyOfCurrentRows, headerLocation: headerLocation)
 	}
 
-	private func tableRow(_ cells: [TableCell]) -> TableRow {
+	private func tableRow(_ cells: [TableCell], _ location: Location) -> TableRow {
 		var newRowContent = [String: TableCell]()
 		for i in 0...columns.count-1 {
 			newRowContent[columns[i]] = cells[i]
 		}
 		
-		return TableRow(cells: newRowContent, location: bodyLocation)
+		return TableRow(cells: newRowContent, location: location)
 	}
 	
 	private func assertValidAddedColumns(_ addedColumns: [String]) {
@@ -78,6 +76,6 @@ public struct Table : Equatable {
 
 extension Table {
 	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
-		return addingRow(cells: cellValues.map {TableCell(value: $0, location: Location(column: 0, line: 0))})
+		return addingRow(cells: cellValues.map {TableCell(value: $0, location: Location.zero())}, location: Location.zero())
 	}
 }

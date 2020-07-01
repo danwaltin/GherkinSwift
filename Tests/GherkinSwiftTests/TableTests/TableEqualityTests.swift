@@ -76,7 +76,7 @@ class TableEqualityTests : XCTestCase {
 	}
 	
 	private func t(_ columns: [String]) -> Table {
-		return Table(columns: columns, headerLocation: Location.zero(), bodyLocation: Location.zero())
+		return Table(columns: columns, headerLocation: Location.zero())
 	}
 
 }

@@ -53,11 +53,11 @@ class TableScanner {
 		
 		var t = Table(columns: columns,
 					  headerLocation: Location(column: headerColumn,
-											   line: headerLine),
-					  bodyLocation: Location(column: bodyColumn,
-											 line: bodyLine))
+											   line: headerLine))
 		for row in rows {
-			t = t.addingRow(cells: row)
+			t = t.addingRow(cells: row,
+							location: Location(column: bodyColumn,
+											   line: bodyLine))
 		}
 
 		return t
