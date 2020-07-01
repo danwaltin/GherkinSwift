@@ -80,7 +80,7 @@ class TableScanner {
 		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	
-	private func cells(_ line: Line) -> [String: TableCell] {
+	private func cells(_ line: Line) -> [TableCell] {
 		
 		let i = line.text.firstIndex(of: tableSeparator)!
 		let d = line.text.distance(from: line.text.startIndex, to: i)
@@ -89,7 +89,7 @@ class TableScanner {
 		cellValues.removeLast()
 		cellValues.remove(at: 0)
 
-		var cells = [String: TableCell]()
+		var cells = [TableCell]()
 		
 		var previousCellColumn = d + 1 + String(tableSeparator).count // + 1 because index is zero based and columns should be one based
 
@@ -102,7 +102,7 @@ class TableScanner {
 			let cell = TableCell(value: cellValue.trim(),
 								 location: Location(column: col, line: line.number),
 								 header: column)
-			cells[column] = cell
+			cells.append(cell)
 			
 			previousCellColumn += cellValue.count + String(tableSeparator).count
 			columnIndex += 1

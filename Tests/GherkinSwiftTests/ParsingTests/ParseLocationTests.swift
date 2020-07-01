@@ -262,14 +262,14 @@ class ParseLocationTests: TestParseBase {
 	private func then_headerCell(_ headerCell: String, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[0].table.header.cells[headerCell]!.location, location,
+		XCTAssertEqual(scenario(at: 0).examples[0].table.header[headerCell].location, location,
 					   file: file, line: line)
 	}
 
 	private func then_rowCell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
 		
-		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location,
+		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex][column].location, location,
 					   file: file, line: line)
 	}
 	
