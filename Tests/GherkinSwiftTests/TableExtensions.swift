@@ -35,20 +35,20 @@ extension Table {
 	static func withColumns(_ columns: [String]) -> Table {
 		var cells = [String: TableCell]()
 		for column in columns {
-			cells[column] = TableCell(value: column, location: Location.zero())
+			cells[column] = TableCell(value: column, location: Location.zero(), header: column)
 		}
 		let header = TableRow(cells: cells, location: Location.zero())
 		return Table(header: header, columns: columns, rows: [], headerLocation: Location.zero())
 	}
 	
-	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
-		var cells = [TableCell]()
-		for cell in cellValues {
-			cells.append(TableCell(value: cell, location: Location.zero()))
-		}
-		
-		return addingRow(cells: cells, location: Location.zero())
-	}
+//	func addingRowWithCellValues(_ cellValues: [String]) -> Table {
+//		var cells = [TableCell]()
+//		for cell in cellValues {
+//			cells.append(TableCell(value: cell, location: Location.zero(), header: ""))
+//		}
+//		
+//		return addingRow(cells: cells, location: Location.zero())
+//	}
 
 	
 	func addingRow(cells: [TableCell], location: Location) -> Table {

@@ -45,6 +45,6 @@ extension TableRow {
 
 extension TableCell {
 	func withoutLocation() -> TableCell {
-		return TableCell(value: value, location: Location.zero())
+		return TableCell(value: value, location: Location.zero(), header: header)
 	}
 }

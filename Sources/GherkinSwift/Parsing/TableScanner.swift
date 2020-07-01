@@ -99,7 +99,9 @@ class TableScanner {
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
 			
 			let column = columns[columnIndex]
-			let cell = TableCell(value: cellValue.trim(), location: Location(column: col, line: line.number))
+			let cell = TableCell(value: cellValue.trim(),
+								 location: Location(column: col, line: line.number),
+								 header: column)
 			cells[column] = cell
 			
 			previousCellColumn += cellValue.count + String(tableSeparator).count

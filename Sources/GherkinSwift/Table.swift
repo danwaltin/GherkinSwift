@@ -30,6 +30,5 @@ public struct Table : Equatable {
 		self.header = header
 		self.rows = rows
 		self.headerLocation = headerLocation
-	}
-	
+	}	
 }

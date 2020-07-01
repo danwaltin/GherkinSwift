@@ -68,29 +68,33 @@ class TestParseBase: XCTestCase {
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
 		return Table.withColumns([col])
-			.addingRowWithCellValues([r1c1])
+			.addingRow(cells: [cell(r1c1, col)], location: Location.zero())
 	}
 	
 	func table(_ col: String,
 	           _ r1c1: String,
 	           _ r2c1: String) -> Table {
 		return Table.withColumns([col])
-			.addingRowWithCellValues([r1c1])
-			.addingRowWithCellValues([r2c1])
+			.addingRow(cells: [cell(r1c1, col)], location: Location.zero())
+			.addingRow(cells: [cell(r2c1, col)], location: Location.zero())
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String) -> Table {
 		return Table.withColumns([c1, c2])
-			.addingRowWithCellValues([r1c1, r1c2])
+			.addingRow(cells: [cell(r1c1, c1), cell(r1c2, c2)], location: Location.zero())
 	}
 	
 	func table(_ c1: String, _ c2: String,
 	           _ r1c1: String, _ r1c2: String,
 	           _ r2c1: String, _ r2c2: String) -> Table {
 		return Table.withColumns([c1, c2])
-			.addingRowWithCellValues([r1c1, r1c2])
-			.addingRowWithCellValues([r2c1, r2c2])
+			.addingRow(cells: [cell(r1c1, c1), cell(r1c2, c2)], location: Location.zero())
+			.addingRow(cells: [cell(r2c1, c1), cell(r2c2, c2)], location: Location.zero())
+	}
+	
+	private func cell(_ value: String, _ header: String) -> TableCell {
+		return TableCell(value: value, location: Location.zero(), header: header)
 	}
 }
 

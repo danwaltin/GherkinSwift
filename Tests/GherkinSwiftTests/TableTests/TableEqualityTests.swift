@@ -38,40 +38,4 @@ class TableEqualityTests : XCTestCase {
 		
 		XCTAssertNotEqual(one, two)
 	}
-	
-	func test_equalWhenTwoRows() {
-		let one = Table.withColumns(["column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["beta"])
-		
-		let two = Table.withColumns(["column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["beta"])
-		
-		XCTAssertEqual(one, two)
-	}
-	
-	func test_notEqualWhenTwoRows_differentColumnNames() {
-		let one = Table.withColumns(["column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["beta"])
-		
-		let two = Table.withColumns(["another column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["beta"])
-		
-		XCTAssertNotEqual(one, two)
-	}
-	
-	func test_notEqualWhenTwoRows_differentRowValuesSecondRow() {
-		let one = Table.withColumns(["column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["beta"])
-		
-		let two = Table.withColumns(["column"])
-			.addingRowWithCellValues(["alpha"])
-			.addingRowWithCellValues(["gamma"])
-		
-		XCTAssertNotEqual(one, two)
-	}
 }

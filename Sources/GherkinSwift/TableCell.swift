@@ -25,4 +25,6 @@ public struct TableCell : Equatable {
 	public let value: String
 	public let location: Location
 
+	// the header of the column this cell belongs to
+	public let header: String
 }

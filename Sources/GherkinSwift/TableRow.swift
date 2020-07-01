@@ -29,6 +29,6 @@ public struct TableRow : Equatable {
 	public let location: Location
 	
 	public subscript(column: String) -> TableCell {
-		return cells[column]!
+		return cells.values.filter { $0.header == column }[0]
 	}
 }
