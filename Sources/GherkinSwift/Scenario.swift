@@ -42,4 +42,8 @@ public struct Scenario : Equatable, Taggable, HasName {
 		self.steps = steps
 		self.examples = examples
 	}
+	
+	func isOutline() -> Bool {
+		return examples.count > 0
+	}
 }
