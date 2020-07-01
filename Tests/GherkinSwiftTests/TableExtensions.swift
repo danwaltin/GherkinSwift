@@ -25,19 +25,13 @@
 
 extension Table {
 	var columns: [String] {
-		var c = [String]()
-		for cell in header.cells {
-			c.append(cell.value)
-		}
-		return c
+		return header.cells.map {$0.value}
 	}
 
 	static func withColumns(_ columns: [String]) -> Table {
-		var cells = [TableCell]()
-		for column in columns {
-			cells.append(TableCell(value: column, location: Location.zero(), header: column))
-		}
+		let cells = columns.map { TableCell(value: $0, location: Location.zero(), header: $0)}
 		let header = TableRow(cells: cells, location: Location.zero())
+	
 		return Table(header: header, columns: columns, rows: [], headerLocation: Location.zero())
 	}
 	
