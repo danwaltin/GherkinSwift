@@ -161,12 +161,15 @@ class ParseLocationTests: TestParseBase {
 		   | equal|    equal |
 		""")
 		
-		then_cell("foo", atExampleRow: 0, shouldHaveLocation: Location(column: 7, line: 8))
-		then_cell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 17, line: 8))
-		then_cell("foo", atExampleRow: 1, shouldHaveLocation: Location(column: 9, line: 9))
-		then_cell("bar", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
-		then_cell("foo", atExampleRow: 2, shouldHaveLocation: Location(column: 6, line: 10))
-		then_cell("bar", atExampleRow: 2, shouldHaveLocation: Location(column: 16, line: 10))
+		then_headerCell("foo", shouldHaveLocation: Location(column: 6, line: 7))
+		then_headerCell("bar", shouldHaveLocation: Location(column: 14, line: 7))
+
+		then_rowCell("foo", atExampleRow: 0, shouldHaveLocation: Location(column: 7, line: 8))
+		then_rowCell("bar", atExampleRow: 0, shouldHaveLocation: Location(column: 17, line: 8))
+		then_rowCell("foo", atExampleRow: 1, shouldHaveLocation: Location(column: 9, line: 9))
+		then_rowCell("bar", atExampleRow: 1, shouldHaveLocation: Location(column: 17, line: 9))
+		then_rowCell("foo", atExampleRow: 2, shouldHaveLocation: Location(column: 6, line: 10))
+		then_rowCell("bar", atExampleRow: 2, shouldHaveLocation: Location(column: 16, line: 10))
 	}
 
 	func test_Locations_ScenarioOutlineTableBodyAndHeader() {
@@ -256,7 +259,14 @@ class ParseLocationTests: TestParseBase {
 					   file: file, line: line)
 	}
 	
-	private func then_cell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
+	private func then_headerCell(_ headerCell: String, shouldHaveLocation location: Location,
+						   file: StaticString = #file, line: UInt = #line) {
+		
+		XCTAssertEqual(scenario(at: 0).examples[0].table.header.cells[headerCell]!.location, location,
+					   file: file, line: line)
+	}
+
+	private func then_rowCell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
 		
 		XCTAssertEqual(scenario(at: 0).examples[0].table.rows[rowIndex].cells[column]!.location, location,
