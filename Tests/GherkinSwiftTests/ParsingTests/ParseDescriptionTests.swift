@@ -155,7 +155,6 @@ class ParseDescriptionTests: TestParseBase {
 		"""
 		Feature: feature
 		Scenario Outline: one
-		This is a description
 		
 		Examples: Alpha
 		This is a simple description
@@ -165,7 +164,6 @@ class ParseDescriptionTests: TestParseBase {
 		Examples: Beta
 		
 		   This is an indented
-		
 		   description over several
 		
 		   lines
@@ -175,7 +173,7 @@ class ParseDescriptionTests: TestParseBase {
 		""")
 		
 		then_example(0, shouldHaveDescription: "This is a simple description")
-		then_example(1, shouldHaveDescription: "   This is an indented\n   description over several\n   lines")
+		then_example(1, shouldHaveDescription: "   This is an indented\n   description over several\n\n   lines")
 	}
 
 	// MARK: - Givens, whens and thens

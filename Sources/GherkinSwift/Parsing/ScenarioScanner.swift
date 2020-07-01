@@ -23,10 +23,10 @@
 
 class ScenarioScanner {
 	var name = ""
+	var isScanningDescription = false
 	var descriptionLines = [String]()
 	var lineNumber = 0
 	var columnNumber = 0
-	var isScanningDescription = false
 	var isScanningStep = false
 	var currentStepScanner: StepScanner!
 	var stepScanners = [StepScanner]()
