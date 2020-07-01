@@ -48,6 +48,10 @@ struct Line {
 		return text.trim().isEmpty
 	}
 	
+	func columnForKeyword(_ keyword: Character) -> Int {
+		return columnForKeyword(String(keyword))
+	}
+	
 	func columnForKeyword(_ keyword: String) -> Int {
 		let range = text.range(of: keyword)!
 		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)

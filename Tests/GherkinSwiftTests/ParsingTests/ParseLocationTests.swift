@@ -201,8 +201,8 @@ class ParseLocationTests: TestParseBase {
 		then_examplesTableHeader(atExample: 1, shouldHaveLocation: Location(column: 8, line: 12))
 		then_examplesTableBody(atExample: 1, shouldHaveLocation: Location(column: 6, line: 13))
 
-		then_examplesTableHeader(atExample: 2, shouldHaveLocation: Location(column: 6, line: 18))
-		then_examplesTableBody(atExample: 2, shouldHaveLocation: Location(column: 6, line: 20))
+		then_examplesTableHeader(atExample: 2, shouldHaveLocation: Location(column: 7, line: 18))
+		then_examplesTableBody(atExample: 2, shouldHaveLocation: Location(column: 7, line: 20))
 	}
 
 	func test_Locations_Comments() {

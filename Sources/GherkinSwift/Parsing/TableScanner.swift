@@ -67,6 +67,7 @@ class TableScanner {
 		columns = lineItems(line.text)
 		
 		headerLine = line.number
+		headerColumn = line.columnForKeyword(tableSeparator)
 		hasScannedColumns = true
 	}
 
@@ -74,6 +75,7 @@ class TableScanner {
 		rows.append(cells(line))
 		
 		if !hasStartedOnBody {
+			bodyColumn = line.columnForKeyword(tableSeparator)
 			bodyLine = line.number
 			hasStartedOnBody = true
 		}
