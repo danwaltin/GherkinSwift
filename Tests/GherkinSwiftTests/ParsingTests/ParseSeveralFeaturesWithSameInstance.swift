@@ -28,27 +28,33 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
 		
-		let one = parse([
-			"@tagF1",
-			"Feature: f1",
-			"@tagS1",
-			"Scenario: s1",
-			"    Given g1"], parser: instance)
+		let one = parseDocument(
+			"""
+			@tagF1
+			Feature: f1
+			@tagS1
+			Scenario: s1
+			    Given g1
+			""",
+			parser: instance).feature!
 		
-		let two = parse([
-			"@tagF2",
-			"Feature: f2",
-			"@tagS21",
-			"Scenario: s2.1",
-			"    Given g2.1.1",
-			"    Given g2.1.2",
-			"@tagS22",
-			"Scenario: s2.2",
-			"    Given g2.2.1"], parser: instance)
+		let two = parseDocument(
+			"""
+			@tagF2
+			Feature: f2
+			@tagS21
+			Scenario: s2.1
+			    Given g2.1.1
+			    Given g2.1.2
+			@tagS22
+			Scenario: s2.2
+			    Given g2.2.1
+			""",
+			parser: instance).feature!
 		
 		XCTAssertEqual(one,
-		               feature("f1", [t("tagF1")], Location(column: 1, line: 2), [
-						scenario("s1", [t("tagS1")], Location(column: 1, line: 4), [
+					   feature("f1", [Tag(name: "tagF1", location: Location(column: 1, line: 1))], Location(column: 1, line: 2), [
+						scenario("s1", [Tag(name: "tagS1", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
 							given("g1", Location(column: 5, line: 5))
 							])
 						]
@@ -56,11 +62,11 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 		)
 
 		XCTAssertEqual(two,
-		               feature("f2", [t("tagF2")], Location(column: 1, line: 2),[
-						scenario("s2.1", [t("tagS21")], Location(column: 1, line: 4), [
+					   feature("f2", [Tag(name: "tagF2", location: Location(column: 1, line: 1))], Location(column: 1, line: 2),[
+						scenario("s2.1", [Tag(name: "tagS21", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
 							given("g2.1.1", Location(column: 5, line: 5)),
 							given("g2.1.2", Location(column: 5, line: 6))]),
-						scenario("s2.2", [t("tagS22")], Location(column: 1, line: 8), [
+						scenario("s2.2", [Tag(name: "tagS22", location: Location(column: 1, line: 7))], Location(column: 1, line: 8), [
 							given("g2.2.1", Location(column: 5, line: 9))
 							])
 						]
@@ -81,6 +87,6 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	}
 	
 	private func t(_ name: String) -> Tag {
-		return Tag(name: name)
+		return Tag(name: name, location: Location.zero())
 	}
 }

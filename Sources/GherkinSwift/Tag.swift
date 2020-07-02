@@ -23,5 +23,5 @@
 
 public struct Tag : Equatable {
 	public let name: String
-	public let location: Location = Location.zero()
+	public let location: Location
 }
