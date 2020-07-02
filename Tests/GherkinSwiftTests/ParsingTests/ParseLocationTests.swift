@@ -86,14 +86,16 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario: scenario
-		    Given: given
+		    Given: given with table
+		       | alpha |
+		       | beta  |
 		   When: when
 		  Then: then
 		""")
 		
 		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
-		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
-		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 6))
+		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 7))
+		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 8))
 	}
 	
 	func test_Locations_Steps_ScenarioOutline() {

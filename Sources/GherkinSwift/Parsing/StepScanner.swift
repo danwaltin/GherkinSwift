@@ -43,8 +43,6 @@ class StepScanner {
 			return
 		}
 		
-		location = Location(column: 1, line: line.number)
-		
 		if line.isGiven() {
 			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))
