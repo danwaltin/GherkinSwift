@@ -293,22 +293,30 @@ class ParseLocationTests: TestParseBase {
 	
 	private func then_featureTag(_ tagIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualFeature.tags[tagIndex].location, location,
-					   file: file, line: line)
+		let tags = actualFeature.tags
+		assertTag(withIndex: tagIndex, tags, hasLocation: location, file: file, line: line)
 	}
 
 	private func then_scenarioTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: scenarioIndex).tags[tagIndex].location, location,
-					   file: file, line: line)
+		let tags = scenario(at: scenarioIndex).tags
+		assertTag(withIndex: tagIndex, tags, hasLocation: location, file: file, line: line)
 	}
 
 	private func then_examplesTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: scenarioIndex).examples[0].tags[tagIndex].location, location,
-					   file: file, line: line)
+		let tags = scenario(at: scenarioIndex).examples[0].tags
+		assertTag(withIndex: tagIndex, tags, hasLocation: location, file: file, line: line)
 	}
 
+	private func assertTag(withIndex tagIndex: Int, _ tags: [Tag], hasLocation location: Location, file: StaticString = #file, line: UInt = #line) {
+		if (tags.count < tagIndex + 1) {
+			XCTFail("No tag with index \(tagIndex)", file: file, line: line)
+		} else {
+			XCTAssertEqual(tags[tagIndex].location, location, file: file, line: line)
+		}
+	}
+	
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location,
