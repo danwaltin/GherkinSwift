@@ -29,13 +29,13 @@ class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
 		"datatables_with_new_lines",
 		//"datatables",
-		"descriptions",
-		"empty",
-		"incomplete_feature_1",
-		"incomplete_feature_2",
-		"minimal",
-		"scenario_outline_no_newline",
-		"scenario_outline"
+//		"descriptions",
+//		"empty",
+//		"incomplete_feature_1",
+//		"incomplete_feature_2",
+//		"minimal",
+//		"scenario_outline_no_newline",
+//		"scenario_outline"
 	]
 
 	func test_goodTestDataFiles() {
