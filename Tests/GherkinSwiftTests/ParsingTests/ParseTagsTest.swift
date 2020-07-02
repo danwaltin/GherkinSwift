@@ -227,10 +227,12 @@ class ParseTagsTest : TestParseBase {
 	// MARK: - Givens, whens, thens
 
 	private func then_feature(shouldHaveTags tags: [String]) {
-		XCTAssertEqual(actualFeature.tags, tags)
+		let actual = actualFeature.tags.map { $0.name }
+		XCTAssertEqual(actual, tags)
 	}
 
 	func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String]) {
-		XCTAssertEqual(scenario(at: index).tags, tags)
+		let actual = scenario(at: index).tags.map { $0.name }
+		XCTAssertEqual(actual, tags)
 	}
 }

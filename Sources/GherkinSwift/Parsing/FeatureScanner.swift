@@ -23,7 +23,7 @@
 import Foundation
 
 class FeatureScanner {
-	var featureTags = [String]()
+	var featureTags = [Tag]()
 	let tagScanner = TagScanner()
 
 	var name = ""

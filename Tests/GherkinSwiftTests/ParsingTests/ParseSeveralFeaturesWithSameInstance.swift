@@ -47,8 +47,8 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 			"    Given g2.2.1"], parser: instance)
 		
 		XCTAssertEqual(one,
-		               feature("f1", ["tagF1"], Location(column: 1, line: 2), [
-						scenario("s1", ["tagS1"], Location(column: 1, line: 4), [
+		               feature("f1", [t("tagF1")], Location(column: 1, line: 2), [
+						scenario("s1", [t("tagS1")], Location(column: 1, line: 4), [
 							given("g1", Location(column: 5, line: 5))
 							])
 						]
@@ -56,11 +56,11 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 		)
 
 		XCTAssertEqual(two,
-		               feature("f2", ["tagF2"], Location(column: 1, line: 2),[
-						scenario("s2.1", ["tagS21"], Location(column: 1, line: 4), [
+		               feature("f2", [t("tagF2")], Location(column: 1, line: 2),[
+						scenario("s2.1", [t("tagS21")], Location(column: 1, line: 4), [
 							given("g2.1.1", Location(column: 5, line: 5)),
 							given("g2.1.2", Location(column: 5, line: 6))]),
-						scenario("s2.2", ["tagS22"], Location(column: 1, line: 8), [
+						scenario("s2.2", [t("tagS22")], Location(column: 1, line: 8), [
 							given("g2.2.1", Location(column: 5, line: 9))
 							])
 						]
@@ -68,15 +68,19 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 		)
 	}
 	
-	private func feature(_ name: String, _ tags: [String], _ location: Location, _ scenarios: [Scenario]) -> Feature {
+	private func feature(_ name: String, _ tags: [Tag], _ location: Location, _ scenarios: [Scenario]) -> Feature {
 		return Feature(name: name, description: nil, tags: tags, location: location, scenarios:  scenarios)
 	}
 	
-	private func scenario(_ name: String, _ tags: [String], _ location: Location, _ steps: [Step]) -> Scenario {
+	private func scenario(_ name: String, _ tags: [Tag], _ location: Location, _ steps: [Step]) -> Scenario {
 		return Scenario(name: name, description: nil, tags: tags, location: location, steps: steps, examples: [])
 	}
 	
 	private func given(_ text: String, _ location: Location) -> Step {
 		return Step.given(text, location: location)
+	}
+	
+	private func t(_ name: String) -> Tag {
+		return Tag(name: name)
 	}
 }

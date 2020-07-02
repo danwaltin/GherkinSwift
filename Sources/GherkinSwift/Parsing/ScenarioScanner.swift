@@ -31,9 +31,9 @@ class ScenarioScanner {
 	var currentStepScanner: StepScanner!
 	var stepScanners = [StepScanner]()
 	
-	let scenarioTags: [String]
+	let scenarioTags: [Tag]
 	
-	init(scenarioTags: [String]) {
+	init(scenarioTags: [Tag]) {
 		self.scenarioTags = scenarioTags
 	}
 	

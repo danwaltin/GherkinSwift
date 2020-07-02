@@ -282,16 +282,14 @@ class ParseLocationTests: TestParseBase {
 	
 	private func then_featureTag(_ tagIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented")
-//		XCTAssertEqual(actualFeature.tags[tagIndex].location, location,
-//					   file: file, line: line)
+		XCTAssertEqual(actualFeature.tags[tagIndex].location, location,
+					   file: file, line: line)
 	}
 
 	private func then_scenarioTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented")
-//		XCTAssertEqual(scenario(at: scenarioIndex).tags[tagIndex].location, location,
-//					   file: file, line: line)
+		XCTAssertEqual(scenario(at: scenarioIndex).tags[tagIndex].location, location,
+					   file: file, line: line)
 	}
 
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
