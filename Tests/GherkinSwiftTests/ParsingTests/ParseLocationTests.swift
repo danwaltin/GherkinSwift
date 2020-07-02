@@ -214,6 +214,31 @@ class ParseLocationTests: TestParseBase {
 		then_examplesTableRow(1, atExample: 2, shouldHaveLocation: Location(column: 7, line: 22))
 	}
 
+	func test_Locations_Tags() {
+		when_parsingDocument(
+		"""
+		@f1
+		@f2
+		Feature: feature
+		
+		@s1  @s2
+		Scenario: one
+		
+		  @so1
+		 @so2
+		Scenario Outline: two
+		""")
+		
+		then_featureTag(0, shouldHaveLocation: Location(column: 1, line: 1))
+		then_featureTag(1, shouldHaveLocation: Location(column: 1, line: 2))
+		
+		then_scenarioTag(0, forScenario: 0, shouldHaveLocation: Location(column: 1, line: 5))
+		then_scenarioTag(1, forScenario: 0, shouldHaveLocation: Location(column: 6, line: 5))
+		
+		then_scenarioTag(0, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 8))
+		then_scenarioTag(1, forScenario: 0, shouldHaveLocation: Location(column: 2, line: 9))
+	}
+
 	func test_Locations_Comments() {
 		when_parsingDocument(
 		"""
@@ -255,6 +280,20 @@ class ParseLocationTests: TestParseBase {
 					   file: file, line: line)
 	}
 	
+	private func then_featureTag(_ tagIndex: Int, shouldHaveLocation location: Location,
+							  file: StaticString = #file, line: UInt = #line) {
+		XCTFail("not implemented")
+//		XCTAssertEqual(actualFeature.tags[tagIndex].location, location,
+//					   file: file, line: line)
+	}
+
+	private func then_scenarioTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
+							  file: StaticString = #file, line: UInt = #line) {
+		XCTFail("not implemented")
+//		XCTAssertEqual(scenario(at: scenarioIndex).tags[tagIndex].location, location,
+//					   file: file, line: line)
+	}
+
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location,

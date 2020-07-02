@@ -37,7 +37,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"minimal",
 		"scenario_outline_no_newline",
 		"scenario_outline",
-	"tags",
+		"tags",
 	]
 	/*
 	"background",
@@ -65,7 +65,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"several_examples",
 	"spaces_in_language",
 	"tagged_feature_with_scenario_outline",
-	"tags",
 	"very_long",
 	*/
 
