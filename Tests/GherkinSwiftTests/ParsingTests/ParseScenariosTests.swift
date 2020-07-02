@@ -25,9 +25,11 @@ import XCTest
 
 class ParseScenariosTests: TestParseBase {
 	func test_oneScenarioShouldReturnScenarioWithName() {
-		when_parsing([
-			"Feature: feature name  ",
-			"Scenario: scenario name"])
+		when_parsingDocument(
+		"""
+		Feature: feature name
+		Scenario: scenario name
+		""")
 		
 		then_shouldReturnScenariosWithNames([
 			"scenario name"]
@@ -35,11 +37,13 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_twoScenariosShouldReturnScenariosWithNames() {
-		when_parsing([
-			"Feature: feature name",
-			"Scenario: scenario one",
-			"Scenario: scenario two"])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature name
+		Scenario: scenario one
+		Scenario: scenario two
+		""")
+
 		then_shouldReturnScenariosWithNames([
 			"scenario one",
 			"scenario two"]
@@ -47,31 +51,37 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_scenarioWithOneGivenStep() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    Given there is something"])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    Given there is something
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(.Given, "there is something")
 	}
 	
 	func test_scenarioWithOneWhenStep() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    When something happens"])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    When something happens
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(.When, "something happens")
 	}
 	
 	func test_scenarioWithOneThenStep() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    Then something is the result"])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    Then something is the result
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
@@ -79,13 +89,15 @@ class ParseScenariosTests: TestParseBase {
 	// MARK: - Table parameters to steps
 	
 	func test_tableParametersToSteps_oneColumnOneRow() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    Given x ",
-			"        | Column |    ",
-			"        | value  |    "])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    Given x
+		        | Column |
+		        | value  |
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			.Given,
@@ -96,14 +108,16 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_oneColumnTwoRows() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    When y            ",
-			"        | col |       ",
-			"        | v1  |       ",
-			"        | v2  |       "])
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    When y
+		        | col |
+		        | v1  |
+		        | v2  |
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			.When,
@@ -115,13 +129,15 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_twoColumnsOneRow() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    Then z            ",
-			"        | c1   | c2   |",
-			"        | r1c1 | r1c2 |"])
-		
+		when_parsingDocument(
+		"""
+		Feature: featur
+		Scenario: scenario
+		    Then z
+		        | c1   | c2   |
+		        | r1c1 | r1c2 |
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			.Then,
@@ -132,19 +148,21 @@ class ParseScenariosTests: TestParseBase {
 	}
 	
 	func test_tableParametersToSteps_twoColumnsTwoRows() {
-		when_parsing([
-			"Feature: feature  ",
-			"Scenario: scenario",
-			"    When alfa    ",
-			"        | A | B |",
-			"        | c | d |",
-			"        | e | f |",
-			"                 ",
-			"    Then beta    ",
-			"        | G | H |",
-			"        | i | j |",
-			"        | k | l |"])
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    When alfa
+		        | A | B |
+		        | c | d |
+		        | e | f |
 		
+		    Then beta
+		        | G | H |
+		        | i | j |
+		        | k | l |
+		""")
+
 		then_shouldReturnScenarioWith(numberOfSteps: 2)
 		then_shouldReturnScenarioWithStep(
 			atIndex: 0,
