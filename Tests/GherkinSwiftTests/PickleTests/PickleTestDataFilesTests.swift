@@ -27,13 +27,14 @@ import XCTest
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
-		"descriptions",
-		"empty",
-		"incomplete_feature_1",
-		"incomplete_feature_2",
-		"minimal",
-		"scenario_outline_no_newline",
-		"scenario_outline"
+		"datatables_with_new_lines",
+//		"descriptions",
+//		"empty",
+//		"incomplete_feature_1",
+//		"incomplete_feature_2",
+//		"minimal",
+//		"scenario_outline_no_newline",
+//		"scenario_outline"
 	]
 
 	func test_goodTestDataFiles() {

@@ -30,5 +30,13 @@ public struct Table : Equatable {
 		self.header = header
 		self.rows = rows
 		self.headerLocation = headerLocation
-	}	
+	}
+	
+	var headerAndRows: [TableRow] {
+		var combined = [TableRow]()
+		combined.append(header)
+		combined.append(contentsOf: rows)
+		
+		return combined
+	}
 }

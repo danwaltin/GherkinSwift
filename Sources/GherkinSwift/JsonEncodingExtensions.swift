@@ -133,6 +133,7 @@ extension Step : Encodable {
 		case keyword
 		case location
 		case text
+		case dataTable
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -141,6 +142,10 @@ extension Step : Encodable {
 		try container.encode("Given ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
+		
+		if let table = tableParameter {
+			try container.encode(table, forKey: .dataTable)
+		}
 	}
 }
 
@@ -170,6 +175,20 @@ extension ScenarioOutlineExamples : Encodable {
 
 		try container.encode(table.header, forKey: .tableHeader)
 		try container.encode(table.rows, forKey: .tableBody)
+	}
+}
+
+extension Table : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case location
+		case rows
+	}
+	
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		
+		try container.encode(headerLocation, forKey: .location)
+		try container.encode(headerAndRows, forKey: .rows)
 	}
 }
 
