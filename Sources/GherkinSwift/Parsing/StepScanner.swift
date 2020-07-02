@@ -47,18 +47,28 @@ class StepScanner {
 			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}
-		
+
 		if line.isWhen() {
 			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
 			step = Step.when(line.removeKeyword(keywordWhen))
 		}
-		
+
 		if line.isThen() {
 			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
 			step = Step.then(line.removeKeyword(keywordThen))
 		}
-	}
 
+		if line.isAnd() {
+			location = Location(column: line.columnForKeyword(keywordAnd), line: line.number)
+			step = Step.and(line.removeKeyword(keywordAnd))
+		}
+
+		if line.isBut() {
+			location = Location(column: line.columnForKeyword(keywordBut), line: line.number)
+			step = Step.but(line.removeKeyword(keywordBut))
+		}
+	}
+	
 	private func handleTable(line: Line) {
 		if line.isEmpty() {
 			return

@@ -31,6 +31,8 @@ let keywordExamples = "Examples:"
 let keywordGiven = "Given"
 let keywordWhen = "When"
 let keywordThen = "Then"
+let keywordAnd = "And"
+let keywordBut = "But"
 let tableSeparator: Character = "|"
 
 extension String {
@@ -99,8 +101,16 @@ struct Line {
 		return beginsWithKeyword(keywordThen)
 	}
 
+	func isAnd() -> Bool {
+		return beginsWithKeyword(keywordAnd)
+	}
+
+	func isBut() -> Bool {
+		return beginsWithKeyword(keywordBut)
+	}
+
 	func isStep() -> Bool {
-		return isGiven() || isWhen() || isThen()
+		return isGiven() || isWhen() || isThen() || isAnd() || isBut()
 	}
 
 	func isTable() -> Bool {

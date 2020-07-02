@@ -47,4 +47,12 @@ public struct Step : Equatable {
 	static func then(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
 		return Step(type: .Then, text: text, location: location, tableParameter: table)
 	}
+
+	static func and(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .And, text: text, location: location, tableParameter: table)
+	}
+
+	static func but(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .But, text: text, location: location, tableParameter: table)
+	}
 }
