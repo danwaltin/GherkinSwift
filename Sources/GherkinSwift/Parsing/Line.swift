@@ -22,7 +22,7 @@
 // ------------------------------------------------------------------------
 import Foundation
 
-let tagToken = "@"
+let tagToken: Character = "@"
 let commentToken = "#"
 let keywordFeature = "Feature:"
 let keywordScenarioOutline = "Scenario Outline:"
@@ -114,13 +114,21 @@ struct Line {
 	}
 
 	func isTable() -> Bool {
-		return beginsWithKeyword(String(tableSeparator))
+		return beginsWithKeyword(tableSeparator)
+	}
+
+	private func beginsWithKeyword(_ keyword: Character) -> Bool {
+		return hasPrefix(keyword)
 	}
 
 	private func beginsWithKeyword(_ keyword: String) -> Bool {
 		return hasPrefix(keyword)
 	}
 	
+	private func hasPrefix(_ prefix: Character) -> Bool {
+		return hasPrefix(String(prefix))
+	}
+
 	private func hasPrefix(_ prefix: String) -> Bool {
 		return text.trim().hasPrefix(prefix)
 	}

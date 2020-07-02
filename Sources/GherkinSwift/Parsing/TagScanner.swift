@@ -41,8 +41,27 @@ class TagScanner {
 	}
 
 	private func tagsFromLine(_ line: Line) -> [Tag] {
-		let parts = line.text.trim().compactWhitespace().components(separatedBy: .whitespaces)
+		let i = line.text.firstIndex(of: tagToken)!
+		let d = line.text.distance(from: line.text.startIndex, to: i)
 		
-		return parts.map {Tag(name: $0.removeKeyword(tagToken), location: Location(column: line.columnForKeyword(tagToken), line: line.number)) }
+		var tagNames = line.text.components(separatedBy: String(tagToken))
+		tagNames.remove(at: 0)
+
+		var tags = [Tag]()
+
+		var previousTagColumn = d + String(tagToken).count
+
+		for tagName in tagNames {
+			let numberOfColumnsFromSeparatorToNonWhitespace = tagName.count - tagName.trimLeft().count
+			let col = previousTagColumn + numberOfColumnsFromSeparatorToNonWhitespace
+			
+			let tag = Tag(name: tagName.trimSpaces(),
+						  location: Location(column: col, line: line.number))
+			tags.append(tag)
+			
+			previousTagColumn += tagName.count + String(tableSeparator).count
+		}
+
+		return tags
 	}
 }

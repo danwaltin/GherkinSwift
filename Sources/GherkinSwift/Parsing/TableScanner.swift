@@ -68,8 +68,7 @@ class TableScanner {
 		headerColumn = line.columnForKeyword(tableSeparator)
 		
 		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
-		let apa = cells(line)
-		headerRow = TableRow(cells: apa, location: location)
+		headerRow = TableRow(cells: cells(line), location: location)
 		
 		hasScannedColumns = true
 	}
