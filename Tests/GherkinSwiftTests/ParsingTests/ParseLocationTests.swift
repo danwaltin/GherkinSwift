@@ -227,6 +227,13 @@ class ParseLocationTests: TestParseBase {
 		  @so1
 		 @so2
 		Scenario Outline: two
+		   Given <alpha>
+		
+		   @e1 @e2
+		    @e3
+		   Examples:
+		      | alpha |
+		      | beta  |
 		""")
 		
 		then_featureTag(0, shouldHaveLocation: Location(column: 1, line: 1))
@@ -237,6 +244,10 @@ class ParseLocationTests: TestParseBase {
 		
 		then_scenarioTag(0, forScenario: 1, shouldHaveLocation: Location(column: 3, line: 8))
 		then_scenarioTag(1, forScenario: 1, shouldHaveLocation: Location(column: 2, line: 9))
+		
+		then_examplesTag(0, forScenario: 1, shouldHaveLocation: Location(column: 4, line: 12))
+		then_examplesTag(1, forScenario: 1, shouldHaveLocation: Location(column: 8, line: 12))
+		then_examplesTag(2, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 13))
 	}
 
 	func test_Locations_Comments() {
@@ -289,6 +300,12 @@ class ParseLocationTests: TestParseBase {
 	private func then_scenarioTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(scenario(at: scenarioIndex).tags[tagIndex].location, location,
+					   file: file, line: line)
+	}
+
+	private func then_examplesTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
+							  file: StaticString = #file, line: UInt = #line) {
+		XCTAssertEqual(scenario(at: scenarioIndex).examples[0].tags[tagIndex].location, location,
 					   file: file, line: line)
 	}
 

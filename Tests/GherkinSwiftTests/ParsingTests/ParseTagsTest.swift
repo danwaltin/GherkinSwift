@@ -166,12 +166,16 @@ class ParseTagsTest : TestParseBase {
 		@tag
 		Scenario Outline: scenario
 		    Then x
+		
+		@alpha @beta
+		   @gamma
 		 Examples:
 		    | key |
 		    | one |
 		""")
 
 		then_scenario(shouldHaveTags: ["tag"])
+		then_examples(shouldHaveTags: ["alpha", "beta", "gamma"])
 	}
 
 	func test_scenarioOutlineWithOneTagTwoExamples() {
@@ -226,13 +230,25 @@ class ParseTagsTest : TestParseBase {
 	
 	// MARK: - Givens, whens, thens
 
-	private func then_feature(shouldHaveTags tags: [String]) {
-		let actual = actualFeature.tags.map { $0.name }
-		XCTAssertEqual(actual, tags)
+	private func then_feature(shouldHaveTags tags: [String],
+							  file: StaticString = #file, line: UInt = #line) {
+		let actual = tagNames(actualFeature.tags)
+		XCTAssertEqual(actual, tags, file: file, line: line)
+	}
+	
+	private func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String],
+							   file: StaticString = #file, line: UInt = #line) {
+		let actual = tagNames(scenario(at: index).tags)
+		XCTAssertEqual(actual, tags, file: file, line: line)
 	}
 
-	func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String]) {
-		let actual = scenario(at: index).tags.map { $0.name }
-		XCTAssertEqual(actual, tags)
+	private func then_examples(shouldHaveTags tags: [String],
+							   file: StaticString = #file, line: UInt = #line) {
+		let actual = tagNames(scenario(at: 0).examples[0].tags)
+		XCTAssertEqual(actual, tags, file: file, line: line)
+	}
+	
+	private func tagNames(_ tags: [Tag]) -> [String] {
+		return tags.map { $0.name }
 	}
 }
