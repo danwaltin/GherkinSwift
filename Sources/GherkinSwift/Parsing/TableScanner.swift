@@ -99,7 +99,7 @@ class TableScanner {
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
 			
 			let column = columns[columnIndex]
-			let cell = TableCell(value: cellValue.trim(),
+			let cell = TableCell(value: cellValue.trimSpaces(),
 								 location: Location(column: col, line: line.number),
 								 header: column)
 			cells.append(cell)

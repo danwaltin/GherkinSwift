@@ -21,6 +21,8 @@
 //
 // ------------------------------------------------------------------------
 
+import Foundation
+
 public class GherkinFeatureParser : FeatureParser {
 	
 	public init() {
@@ -42,6 +44,13 @@ public class GherkinFeatureParser : FeatureParser {
 			comments: comments,
 			feature: feature,
 			uri: fileUri))
+	}
+
+	public func getAllLinesInFile(url: URL) -> [String] {
+		let data = try! Data(contentsOf: url)
+		let content = String(data: data, encoding: .utf8)!
+		
+		return content.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
 	
 	private func getLines(_ lines:[String]) -> [Line] {

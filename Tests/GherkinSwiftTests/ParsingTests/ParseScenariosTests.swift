@@ -163,7 +163,28 @@ class ParseScenariosTests: TestParseBase {
 				"i", "j",
 				"k", "l"))
 	}
-	
+
+	func test_tableParametersToSteps_withNewLine() {
+		// need to use the parse method taking an array of lines,
+		// we can't use the one taking one string, because one of the lines
+		// contains newlines
+		when_parsing([
+			"Feature: feature",
+			"Scenario: scenario",
+			"   When x",
+			"      | foobar          |",
+			"      | \nalpha\nbeta\n |",
+		])
+		
+		then_shouldReturnScenarioWithStep(
+			atIndex: 0,
+			.When,
+			"x",
+			table(
+				"foobar",
+				"\nalpha\nbeta\n"))
+	}
+
 	// MARK: - Givens, whens, thens
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,

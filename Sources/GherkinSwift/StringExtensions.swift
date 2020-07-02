@@ -33,7 +33,11 @@ public extension String {
 	func trim() -> String {
 		return trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	}
-	
+
+	func trimSpaces() -> String {
+		return trimmingCharacters(in: NSCharacterSet.whitespaces)
+	}
+
 	func trimLeft() -> String {
 		guard let index = firstIndex(where: { !CharacterSet(charactersIn: String($0)).isSubset(of: .whitespaces) }) else {
             return self
