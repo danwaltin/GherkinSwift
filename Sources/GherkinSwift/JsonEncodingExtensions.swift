@@ -139,7 +139,7 @@ extension Step : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode("Given ", forKey: .keyword)
+		try container.encode(keyword + " ", forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
 		
@@ -227,7 +227,9 @@ extension TableCell : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(value, forKey: .value)
+		if value != "" {
+			try container.encode(value, forKey: .value)
+		}
 		try container.encode(location, forKey: .location)
 	}
 }
