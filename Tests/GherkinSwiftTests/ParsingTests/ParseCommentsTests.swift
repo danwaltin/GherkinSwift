@@ -26,15 +26,27 @@ import XCTest
 
 class ParseCommentsTests: TestParseBase {
 	func testScenarioWithComment() {
-		when_parsing([
-			"Feature: feature",
-			"Scenario: scenario one",
-			"# This is a comment!",
-			"Scenario: scenario two",
-			"   # Another comment!"
-		])
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		Scenario: one
+		# This is a comment!
+
+		Scenario: two
+		   # Another comment!
+
+		Scenario: three
+		   Given something
+		      | foo |
+		      # Third comment
+		      | bar |
+		""")
 		
-		then_document(shouldHaveComments: ["# This is a comment!", "   # Another comment!"])
+		then_document(shouldHaveComments: [
+			"# This is a comment!",
+			"   # Another comment!",
+			"      # Third comment"])
 	}
 
 

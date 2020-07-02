@@ -45,6 +45,16 @@ public extension String {
         return String(self[index...])
 	}
 	
+	func trimRight() -> String {
+		var newString = self
+
+		while newString.last?.isWhitespace == true {
+			newString = String(newString.dropLast())
+		}
+
+		return newString
+	}
+	
 	func appendLine() -> String {
 		return self + newLine
 	}

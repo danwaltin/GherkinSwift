@@ -27,4 +27,6 @@ public enum StepType {
 	case Given
 	case When
 	case Then
+	case And
+	case But
 }

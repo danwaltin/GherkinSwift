@@ -36,6 +36,21 @@ public struct Step : Equatable {
 		self.tableParameter = tableParameter
 	}
 	
+	var keyword: String {
+		switch type {
+		case .Given:
+			return keywordGiven
+		case .When:
+			return keywordWhen
+		case .Then:
+			return keywordThen
+		case .And:
+			return keywordAnd
+		case .But:
+			return keywordBut
+		}
+	}
+	
 	static func given(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
 		return Step(type: .Given, text: text, location: location, tableParameter: table)
 	}
@@ -46,5 +61,13 @@ public struct Step : Equatable {
 
 	static func then(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
 		return Step(type: .Then, text: text, location: location, tableParameter: table)
+	}
+
+	static func and(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .And, text: text, location: location, tableParameter: table)
+	}
+
+	static func but(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .But, text: text, location: location, tableParameter: table)
 	}
 }

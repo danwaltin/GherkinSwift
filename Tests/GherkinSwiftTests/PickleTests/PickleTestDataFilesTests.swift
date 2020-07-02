@@ -28,7 +28,7 @@ import XCTest
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
 		"datatables_with_new_lines",
-		//"datatables",
+		"datatables",
 		"descriptions",
 		"empty",
 		"incomplete_feature_1",
