@@ -52,8 +52,7 @@ class TagScanner {
 		var previousTagColumn = d + String(tagToken).count
 
 		for tagName in tagNames {
-			let numberOfColumnsFromSeparatorToNonWhitespace = tagName.count - tagName.trimLeft().count
-			let col = previousTagColumn + numberOfColumnsFromSeparatorToNonWhitespace
+			let col = previousTagColumn
 			
 			let tag = Tag(name: tagName.trimSpaces(),
 						  location: Location(column: col, line: line.number))

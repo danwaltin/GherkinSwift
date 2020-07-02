@@ -90,7 +90,8 @@ class TableScanner {
 
 		var cells = [TableCell]()
 		
-		var previousCellColumn = d + 1 + String(tableSeparator).count // + 1 because index is zero based and columns should be one based
+		// + 1 because tableSeparator is at index zero based, and cell location starts one column to the right:
+		var previousCellColumn = d + 1 + String(tableSeparator).count
 
 		var columnIndex = 0
 		for cellValue in cellValues {
