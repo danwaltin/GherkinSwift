@@ -86,6 +86,34 @@ class ParseScenariosTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
 	
+	func test_scenarioWithGivenAndAndStep() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    Given there is something
+		    And there is something else
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 2)
+		then_shouldReturnScenarioWithStep(.Given, "there is something", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.And, "there is something else", atIndex: 1)
+	}
+
+	func test_scenarioWithThenAndButStep() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    Then something
+		    But not something else
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 2)
+		then_shouldReturnScenarioWithStep(.Then, "something", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.But, "not something else", atIndex: 1)
+	}
+
 	// MARK: - Table parameters to steps
 	
 	func test_tableParametersToSteps_oneColumnOneRow() {
@@ -217,12 +245,20 @@ class ParseScenariosTests: TestParseBase {
 												   _ text: String,
 												   file: StaticString = #file,
 												   line: UInt = #line) {
-		let actual = step(at: 0)
+		then_shouldReturnScenarioWithStep(stepType, text, atIndex: 0, file: file, line: line)
+	}
+
+	private func then_shouldReturnScenarioWithStep(_ stepType: StepType,
+												   _ text: String,
+												   atIndex index: Int,
+												   file: StaticString = #file,
+												   line: UInt = #line) {
+		let actual = step(at: index)
 		
 		XCTAssertEqual(actual.type, stepType, file: file, line: line)
 		XCTAssertEqual(actual.text, text, file: file, line: line)
 	}
-	
+
 	private func then_shouldReturnScenarioWithStep(_ stepType: StepType,
 												   _ text: String,
 												   _ table: Table,
