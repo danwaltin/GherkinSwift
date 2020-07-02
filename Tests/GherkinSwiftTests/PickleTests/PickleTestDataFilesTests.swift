@@ -29,13 +29,13 @@ class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
 		"datatables_with_new_lines",
 		//"datatables",
-//		"descriptions",
-//		"empty",
-//		"incomplete_feature_1",
-//		"incomplete_feature_2",
-//		"minimal",
-//		"scenario_outline_no_newline",
-//		"scenario_outline"
+		"descriptions",
+		"empty",1
+		"incomplete_feature_1",
+		"incomplete_feature_2",
+		"minimal",
+		"scenario_outline_no_newline",
+		"scenario_outline"
 	]
 
 	func test_goodTestDataFiles() {
@@ -83,22 +83,25 @@ class PickleTestDataFilesTests: XCTestCase {
 	private func gherkinFile(path: String, test: String) -> GherkinFile {
 		
 		let file = filePath(path, test + ".feature")
-		let lines = testFileContent(of: file).allLines()
+		let lines = parser().getAllLinesInFile(url: testFileUrl(of: file))
 
 		return parser().pickle(lines: lines, fileUri: file)
 	}
 	
 	private func testFileContent(of file: String) -> String {
-		let thisSourceFile = URL(fileURLWithPath: #file)
-		let currentDirectory = thisSourceFile.deletingLastPathComponent()
-		let parentDirectory = currentDirectory.deletingLastPathComponent()
-		
-		let testFileURL = parentDirectory.appendingPathComponent(file)
-		let data = try! Data(contentsOf: testFileURL)
+		let data = try! Data(contentsOf: testFileUrl(of: file))
 		
 		return String(data: data, encoding: .utf8)!
 	}
 
+	private func testFileUrl(of file: String) -> URL {
+		let thisSourceFile = URL(fileURLWithPath: #file)
+		let currentDirectory = thisSourceFile.deletingLastPathComponent()
+		let parentDirectory = currentDirectory.deletingLastPathComponent()
+		
+		return parentDirectory.appendingPathComponent(file)
+	}
+	
 	private func filePath(_ folder: String, _ file: String) -> String {
 		return folder + "/" + file
 	}
