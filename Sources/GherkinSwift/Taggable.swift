@@ -22,5 +22,5 @@
 // ------------------------------------------------------------------------
 
 public protocol Taggable {
-	var tags: [String] {get}
+	var tags: [Tag] {get}
 }

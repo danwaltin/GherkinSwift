@@ -24,9 +24,9 @@
 
 class TagScanner {
 
-	var tags = [String]()
+	var tags = [Tag]()
 
-	func scan(line: Line) {
+	func scan(_ line: Line) {
 		if line.isTag() {
 			tags.append(contentsOf: tagsFromLine(line))
 		}
@@ -36,12 +36,32 @@ class TagScanner {
 		tags = []
 	}
 	
-	func getTags() -> [String] {
+	func getTags() -> [Tag] {
 		return tags
 	}
 
-	private func tagsFromLine(_ line: Line) -> [String] {
-		let parts = line.text.trim().compactWhitespace().components(separatedBy: .whitespaces)
-		return parts.map{$0.removeKeyword(tagToken)}
+	private func tagsFromLine(_ line: Line) -> [Tag] {
+		let lineText = line.textWithoutComment()
+		let i = lineText.firstIndex(of: tagToken)!
+		let d = lineText.distance(from: lineText.startIndex, to: i)
+		
+		var tagNames = lineText.components(separatedBy: String(tagToken))
+		tagNames.remove(at: 0)
+
+		var tags = [Tag]()
+
+		var previousTagColumn = d + String(tagToken).count
+
+		for tagName in tagNames {
+			let col = previousTagColumn
+			
+			let tag = Tag(name: tagName.trimSpaces(),
+						  location: Location(column: col, line: line.number))
+			tags.append(tag)
+			
+			previousTagColumn += tagName.count + String(tableSeparator).count
+		}
+
+		return tags
 	}
 }

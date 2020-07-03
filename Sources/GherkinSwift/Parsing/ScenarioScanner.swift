@@ -22,67 +22,167 @@
 // ------------------------------------------------------------------------
 
 class ScenarioScanner {
-	var name = ""
-	var isScanningDescription = false
-	var descriptionLines = [String]()
-	var lineNumber = 0
-	var columnNumber = 0
-	var isScanningStep = false
-	var currentStepScanner: StepScanner!
-	var stepScanners = [StepScanner]()
+	enum State {
+		case started
+		case scanningScenario
+		case scanningSteps
+		case scanningExamples
+		case foundNextExamplesTags
+	}
+
+	private var state: State = .started
+	private var location = Location.zero()
+
+	private var name = ""
+	private var descriptionLines = [String]()
 	
-	let scenarioTags: [String]
+	private var examplesTagScanner = TagScanner()
 	
-	init(scenarioTags: [String]) {
-		self.scenarioTags = scenarioTags
+	private var currentStepScanner: StepScanner!
+	private var stepScanners = [StepScanner]()
+	
+	private let tags: [Tag]
+	
+	private var currentExamplesScanner: ScenarioOutlineExamplesScanner!
+	private var examplesScanners = [ScenarioOutlineExamplesScanner]()
+
+	private var isScenarioOutline = false
+	
+	init(tags: [Tag]) {
+		self.tags = tags
 	}
 	
-	func scan(line: Line, _ commentCollector: CommentCollector) {
+	func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
+		if line.isTag(), let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
+			return next.isScenario() || next.isScenarioOutline()
+		}
+		return false
+	}
+	
+	private func nextLineWithKeyword(currentLine: Line, allLines: [Line]) -> Line? {
+		let nextIndex = currentLine.number
+		let lastIndex = allLines.count - 1
 		
-		if line.isScenario() {
-			name = line.removeKeyword(keywordScenario)
-			lineNumber = line.number
-			columnNumber = line.columnForKeyword(keywordScenario)
-			
-		} else if line.isStep() {
-			isScanningDescription = false
-			isScanningStep = true
-			currentStepScanner = StepScanner()
-			stepScanners += [currentStepScanner]
-			
-			currentStepScanner.scan(line: line)
-			
-		} else if line.isComment() {
-			commentCollector.collectComment(line: line)
+		for i in nextIndex...lastIndex {
+			let line = allLines[i]
+			if line.isScenario() || line.isScenarioOutline() || line.isExamples() {
+				return line
+			}
+		}
+		
+		return nil
+	}
+	
+	func scan(_ line: Line, _ commentCollector: CommentCollector) {
+		switch state {
+		case .started:
+			if line.isScenario() || line.isScenarioOutline() {
+				isScenarioOutline = line.isScenarioOutline()
+				let keyword = isScenarioOutline ? keywordScenarioOutline : keywordScenario
+				name = line.removeKeyword(keyword)
+				location = Location(column: line.columnForKeyword(keyword) , line: line.number)
+				examplesTagScanner.clear()
+				state = .scanningScenario
+			}
 
-		} else if isScanningStep {
-			currentStepScanner.scan(line: line)
+		case .scanningScenario:
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+				state = .foundNextExamplesTags
 
-		} else if isScanningDescription {
-			descriptionLines.append(line.text)
+			} else if shouldStartNewStep(line) {
+				startNewStep(line, commentCollector)
+				
+			} else if shouldStartNewExamples(line) {
+				startNewExamples(line, commentCollector)
 
-		} else {
-			if !isScanningDescription &&  !line.isEmpty() {
-				isScanningDescription = true
+			} else if line.isComment() {
+				commentCollector.collectComment(line)
+
+			} else {
 				descriptionLines.append(line.text)
+			}
+
+		case .scanningSteps:
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+				state = .foundNextExamplesTags
+
+			} else if shouldStartNewStep(line) {
+				startNewStep(line, commentCollector)
+
+			} else if shouldStartNewExamples(line) {
+				startNewExamples(line, commentCollector)
+
+			} else {
+				currentStepScanner.scan(line, commentCollector)
+			}
+			
+		case .scanningExamples:
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+				state = .foundNextExamplesTags
+
+			} else if shouldStartNewExamples(line) {
+				startNewExamples(line, commentCollector)
+
+			} else {
+				currentExamplesScanner.scan(line)
+			}
+
+		case .foundNextExamplesTags:
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+
+			} else if shouldStartNewExamples(line) {
+				startNewExamples(line, commentCollector)
+
 			}
 		}
 	}
 	
-	func getScenarios() -> [Scenario] {
-		return [Scenario(name: name,
-						 description: descriptionLines.asDescription(),
-						 tags: scenarioTags,
-						 location: location(),
-						 steps: steps(),
-						 examples: [])]
-	}
-
-	func location() -> Location {
-		return Location(column: columnNumber, line: lineNumber)
+	private func shouldStartNewStep(_ line: Line) -> Bool {
+		return line.isStep()
 	}
 	
-	func steps() -> [Step] {
+	private func startNewStep(_ line: Line, _ commentsCollector: CommentCollector) {
+		currentStepScanner = StepScanner()
+		stepScanners.append(currentStepScanner)
+		
+		currentStepScanner.scan(line, commentsCollector)
+		
+		state = .scanningSteps
+	}
+	
+	private func shouldStartNewExamples(_ line: Line) -> Bool {
+		return line.isExamples()
+	}
+	
+	private func startNewExamples(_ line: Line, _ commentCollector: CommentCollector) {
+		currentExamplesScanner = ScenarioOutlineExamplesScanner(tags: examplesTagScanner.getTags())
+		examplesTagScanner.clear()
+		examplesScanners += [currentExamplesScanner]
+
+		currentExamplesScanner.scan(line)
+
+		state = .scanningExamples
+	}
+	
+	func getScenario() -> Scenario {
+		return Scenario(name: name,
+						description: descriptionLines.asDescription(),
+						tags: tags,
+						location: location,
+						steps: steps(),
+						examples: examples(),
+						isScenarioOutline: isScenarioOutline)
+	}
+
+	private func steps() -> [Step] {
 		return stepScanners.map{$0.getStep()}
+	}
+
+	private func examples() -> [ScenarioOutlineExamples] {
+		return examplesScanners.map{$0.getExamples()}
 	}
 }

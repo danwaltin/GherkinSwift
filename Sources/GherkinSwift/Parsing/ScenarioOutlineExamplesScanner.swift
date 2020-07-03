@@ -33,13 +33,19 @@ class ScenarioOutlineExamplesScanner {
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
-	func scan(line: Line) {
-		handleName(line: line)
-		handleTable(line: line)
-		handleDescription(line: line)
+	private let tags: [Tag]
+	
+	init(tags: [Tag]) {
+		self.tags = tags
 	}
 	
-	private func handleName(line: Line) {
+	func scan(_ line: Line) {
+		handleName(line)
+		handleTable(line)
+		handleDescription(line)
+	}
+	
+	private func handleName(_ line: Line) {
 		if line.isEmpty() {
 			return
 		}
@@ -51,7 +57,7 @@ class ScenarioOutlineExamplesScanner {
 		}
 	}
 	
-	private func handleDescription(line: Line) {
+	private func handleDescription(_ line: Line) {
 		if isScanningDescription && !isScanningTable {
 			descriptionLines.append(line.text)
 		} else if !line.isExamples() && !line.isTable() && !isScanningDescription &&  !line.isEmpty() {
@@ -60,7 +66,7 @@ class ScenarioOutlineExamplesScanner {
 		}
 	}
 	
-	private func handleTable(line: Line) {
+	private func handleTable(_ line: Line) {
 		if line.isEmpty() {
 			return
 		}
@@ -68,13 +74,14 @@ class ScenarioOutlineExamplesScanner {
 		isScanningTable = isScanningTable || line.isTable()
 		
 		if isScanningTable {
-			tableScanner.scan(line: line)
+			tableScanner.scan(line)
 		}
 	}
 
 	func getExamples() -> ScenarioOutlineExamples {
 		return ScenarioOutlineExamples(name: name,
 									   description: descriptionLines.asDescription(),
+									   tags: tags,
 									   location: Location(column: columnNumber, line: lineNumber),
 									   table: tableScanner.getTable()!)
 	}

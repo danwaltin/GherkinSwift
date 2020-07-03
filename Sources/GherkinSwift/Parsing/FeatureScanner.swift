@@ -23,74 +23,104 @@
 import Foundation
 
 class FeatureScanner {
-	var featureTags = [String]()
-	let tagScanner = TagScanner()
+	enum State {
+		case started
+		case scanningFeature
+		case scanningScenario
+		case foundNextScenarioTags
+	}
+	
+	private var state: State = .started
+	private var location = Location.zero()
+	
+	let featureTagScanner = TagScanner()
 
+	let scenarioTagScanner = TagScanner()
+	
 	var name = ""
 	var descriptionLines = [String]()
-	var lineNumber = 0
-	var columnNumber = 0
-	var hasFoundFeature = false
-
-	var isScanningScenarios = false
+	
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	func scan(line: Line, _ commentCollector: CommentCollector) {
-		
-		if line.isTag() {
-			tagScanner.scan(line: line)
-		
-		} else if line.isFeature() {
-			name = line.removeKeyword(keywordFeature)
-			lineNumber = line.number
-			columnNumber = line.columnForKeyword(keywordFeature)
-			hasFoundFeature = true
-			featureTags = tagScanner.getTags()
-			tagScanner.clear()
-			
-		} else if line.isScenarioOutline() {
-			currentScenarioScanner = ScenarioOutlineScanner(scenarioTags: tagScanner.getTags())
-			tagScanner.clear()
-			scenarioScanners += [currentScenarioScanner]
-			
-			isScanningScenarios = true
-			
-			currentScenarioScanner.scan(line: line, commentCollector)
+	func scan(_ line: Line, _ commentCollector: CommentCollector, allLines: [Line]) {
+		switch state {
+		case .started:
+			if line.isTag() {
+				featureTagScanner.scan(line)
+			}
 
-		} else if line.isScenario() {
-			currentScenarioScanner = ScenarioScanner(scenarioTags: tagScanner.getTags())
-			tagScanner.clear()
-			scenarioScanners += [currentScenarioScanner]
-			
-			isScanningScenarios = true
-			
-			currentScenarioScanner.scan(line: line, commentCollector)
+			if line.isFeature() {
+				name = line.removeKeyword(keywordFeature)
+				location = Location(column: line.columnForKeyword(keywordFeature) , line: line.number)
+				state = .scanningFeature
+			}
 
-		} else if isScanningScenarios {
-			currentScenarioScanner.scan(line: line, commentCollector)
+		case .scanningFeature:
+			if line.isTag() {
+				scenarioTagScanner.scan(line)
+
+			} else if shouldStartNewScenario(line) {
+				startNewScenario(line, commentCollector)
+
+			} else {
+				descriptionLines.append(line.text)
+			}
+
+		case .scanningScenario:
+			if false {
 			
-		} else {
-			descriptionLines.append(line.text)
+			} else if line.isTag() && currentScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+				scenarioTagScanner.scan(line)
+				state = .foundNextScenarioTags
+			} else if shouldStartNewScenario(line) {
+				startNewScenario(line, commentCollector)
+			
+			} else {
+				currentScenarioScanner.scan(line, commentCollector)
+			}
+
+		case .foundNextScenarioTags:
+			if line.isTag() {
+				scenarioTagScanner.scan(line)
+			
+			} else if shouldStartNewScenario(line) {
+				startNewScenario(line, commentCollector)
+			}
 		}
+	}
+
+	private func shouldStartNewScenario(_ line: Line) -> Bool {
+		return line.isScenario() || line.isScenarioOutline()
+	}
+	
+	private func startNewScenario(_ line: Line, _ commentCollector: CommentCollector) {
+		currentScenarioScanner = ScenarioScanner(tags: scenarioTagScanner.getTags())
+		scenarioTagScanner.clear()
+		scenarioScanners += [currentScenarioScanner]
+
+		currentScenarioScanner.scan(line, commentCollector)
+
+		state = .scanningScenario
 	}
 	
 	func getFeature() -> Feature? {
-		if !hasFoundFeature {
+		if state == .started {
 			return nil
 		}
+		
 		return Feature(name: name,
 					   description: descriptionLines.asDescription(),
-					   tags: featureTags,
-					   location: Location(column: columnNumber, line: lineNumber),
-					   scenarios: getScenarios())
+					   tags: tags(),
+					   location: location,
+					   scenarios: scenarios())
 	}
 	
-	private func getScenarios() -> [Scenario] {
-		var s = [Scenario]()
-		for scanner in scenarioScanners {
-			s.append(contentsOf: scanner.getScenarios())
-		}
-		return s
+	private func tags() -> [Tag] {
+		return featureTagScanner.getTags()
+	}
+
+	private func scenarios() -> [Scenario] {
+		return scenarioScanners.map { $0.getScenario() }
 	}
 }

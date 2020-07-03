@@ -28,7 +28,7 @@ class TestParseBase: XCTestCase {
 	var actualGherkinDocument: GherkinDocument!
 	
 	func when_parsingDocument(_ document: String) {
-		actualGherkinDocument = parseGherkinDocument(document.allLines(), parser: parser())
+		actualGherkinDocument = parseDocument(document, parser: parser())
 		actualFeature = actualGherkinDocument.feature!
 	}
 
@@ -41,8 +41,9 @@ class TestParseBase: XCTestCase {
 		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
 	}
 
-	func parse(_ lines: [String], parser: GherkinFeatureParser) -> Feature {
-		return parseGherkinDocument(lines, parser: parser).feature!
+	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
+		let lines = document.allLines()
+		return parseGherkinDocument(lines, parser: parser)
 	}
 
 	func then_shouldReturnScenariosWithNames(_ names: [String]) {

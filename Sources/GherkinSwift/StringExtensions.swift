@@ -45,10 +45,10 @@ public extension String {
         return String(self[index...])
 	}
 	
-	func trimRight() -> String {
+	func trimRight(_ s: Character) -> String {
 		var newString = self
 
-		while newString.last?.isWhitespace == true {
+		while newString.last! == s {
 			newString = String(newString.dropLast())
 		}
 
