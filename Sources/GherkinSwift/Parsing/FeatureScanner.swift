@@ -43,7 +43,7 @@ class FeatureScanner {
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	func scan(_ line: Line, _ commentCollector: CommentCollector) {
+	func scan(_ line: Line, _ commentCollector: CommentCollector, allLines: [Line]) {
 		switch state {
 		case .started:
 			if line.isTag() {
@@ -68,10 +68,11 @@ class FeatureScanner {
 			}
 
 		case .scanningScenario:
-			if line.isTag() {
+			if false {
+			
+			} else if line.isTag() && currentScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
-				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
 			

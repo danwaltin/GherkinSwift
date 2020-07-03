@@ -186,10 +186,17 @@ class ParseTagsTest : TestParseBase {
 		 Examples:
 		    | key |
 		    | one |
+		
+		@delta
+		@epsilon
+		Examples: e2
+		   | key |
+		   | two |
 		""")
 
 		then_scenario(shouldHaveTags: ["tag"])
-		then_examples(shouldHaveTags: ["alpha", "beta", "gamma"])
+		then_examples(0, shouldHaveTags: ["alpha", "beta", "gamma"])
+		then_examples(1, shouldHaveTags: ["delta", "epsilon"])
 	}
 
 	func test_scenarioOutlineWithOneTagTwoExamples() {
@@ -233,6 +240,10 @@ class ParseTagsTest : TestParseBase {
 		    | key |
 		    | one |
 		    | two |
+		
+		@s4.1
+		Scenario: s4
+		    Then x
 		""")
 
 		
@@ -240,6 +251,7 @@ class ParseTagsTest : TestParseBase {
 		then_scenario(0, shouldHaveTags: ["s1.1", "s1.2", "s1.3"])
 		then_scenario(1, shouldHaveTags: ["s2.1", "s2.2", "s2.3"])
 		then_scenario(2, shouldHaveTags: ["s3.1", "s3.2", "s3.3"])
+		then_scenario(3, shouldHaveTags: ["s4.1"])
 	}
 	
 	// MARK: - Givens, whens, thens
@@ -256,13 +268,13 @@ class ParseTagsTest : TestParseBase {
 		XCTAssertEqual(actual, tags, file: file, line: line)
 	}
 
-	private func then_examples(shouldHaveTags tags: [String],
+	private func then_examples(_ exampleIndex: Int = 0, shouldHaveTags tags: [String],
 							   file: StaticString = #file, line: UInt = #line) {
 		let examples = scenario(at: 0).examples
-		if examples.count == 0 {
+		if examples.count < exampleIndex + 1 {
 			XCTFail("No examples with index 0", file: file, line: line)
 		} else {
-			let actual = tagNames(examples[0].tags)
+			let actual = tagNames(examples[exampleIndex].tags)
 			XCTAssertEqual(actual, tags, file: file, line: line)
 		}
 	}

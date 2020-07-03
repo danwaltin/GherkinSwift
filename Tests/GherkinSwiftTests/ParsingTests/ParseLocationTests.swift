@@ -245,9 +245,9 @@ class ParseLocationTests: TestParseBase {
 		then_scenarioTag(0, forScenario: 1, shouldHaveLocation: Location(column: 3, line: 8))
 		then_scenarioTag(1, forScenario: 1, shouldHaveLocation: Location(column: 2, line: 9))
 		
-		then_examplesTag(0, forScenario: 1, shouldHaveLocation: Location(column: 4, line: 12))
-		then_examplesTag(1, forScenario: 1, shouldHaveLocation: Location(column: 8, line: 12))
-		then_examplesTag(2, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 13))
+		then_examplesTag(0, forScenario: 1, shouldHaveLocation: Location(column: 4, line: 13))
+		then_examplesTag(1, forScenario: 1, shouldHaveLocation: Location(column: 8, line: 13))
+		then_examplesTag(2, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 14))
 	}
 
 	func test_Locations_Comments() {

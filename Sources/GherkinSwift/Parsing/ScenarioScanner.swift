@@ -52,6 +52,27 @@ class ScenarioScanner {
 		self.tags = tags
 	}
 	
+	func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
+		if line.isTag(), let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
+			return next.isScenario() || next.isScenarioOutline()
+		}
+		return false
+	}
+	
+	private func nextLineWithKeyword(currentLine: Line, allLines: [Line]) -> Line? {
+		let nextIndex = currentLine.number
+		let lastIndex = allLines.count - 1
+		
+		for i in nextIndex...lastIndex {
+			let line = allLines[i]
+			if line.isScenario() || line.isScenarioOutline() || line.isExamples() {
+				return line
+			}
+		}
+		
+		return nil
+	}
+	
 	func scan(_ line: Line, _ commentCollector: CommentCollector) {
 		switch state {
 		case .started:
@@ -83,7 +104,11 @@ class ScenarioScanner {
 			}
 
 		case .scanningSteps:
-			if shouldStartNewStep(line) {
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+				state = .foundNextExamplesTags
+
+			} else if shouldStartNewStep(line) {
 				startNewStep(line, commentCollector)
 
 			} else if shouldStartNewExamples(line) {
@@ -94,7 +119,11 @@ class ScenarioScanner {
 			}
 			
 		case .scanningExamples:
-			if shouldStartNewExamples(line) {
+			if line.isTag() {
+				examplesTagScanner.scan(line)
+				state = .foundNextExamplesTags
+
+			} else if shouldStartNewExamples(line) {
 				startNewExamples(line, commentCollector)
 
 			} else {
