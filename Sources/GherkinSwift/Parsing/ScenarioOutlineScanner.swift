@@ -41,8 +41,7 @@ class ScenarioOutlineScanner : ScenarioScanner {
 			
 			currentExamplesScanner.scan(line: line)
 			
-		} else if isScanningExamples /*&& !line.isEmpty() && line.isTable()*/{
-			//tableScanner.scan(line: line)
+		} else if isScanningExamples {
 			currentExamplesScanner.scan(line: line)
 			
 		} else {

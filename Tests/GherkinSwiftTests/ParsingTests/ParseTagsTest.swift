@@ -159,7 +159,7 @@ class ParseTagsTest : TestParseBase {
 	}
 
 	// MARK: - Scenario Outline tags
-	func test_scenarioOutlineWithOneTag() {
+	func test_scenarioOutlineWithExamplesTags() {
 		when_parsingDocument(
 		"""
 		Feature: feature

@@ -267,6 +267,7 @@ class ParseLocationTests: TestParseBase {
 		then_comment(2, shouldHaveLocation: Location(column: 1, line: 7))
 	}
 	
+	// MARK: - Givens whens and thens
 	private func then_feature(shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.location, location,
