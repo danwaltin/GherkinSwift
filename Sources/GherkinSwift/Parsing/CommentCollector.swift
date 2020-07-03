@@ -29,7 +29,7 @@ class CommentCollector {
 	
 	func collectComment(_ line: Line) {
 		let location = Location(column: 1, line: line.number)
-		comments.append(Comment(text: line.text.trimRight(), location: location))
+		comments.append(Comment(text: line.text.trimRight("\r"), location: location))
 	}
 	
 	func getComments() -> [Comment] {
