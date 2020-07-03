@@ -33,7 +33,7 @@ class StepScanner {
 		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
 	}
 	
-	func scan(line: Line) {
+	func scan(_ line: Line) {
 		handleStepText(line: line)
 		handleTable(line: line)
 	}
@@ -77,7 +77,7 @@ class StepScanner {
 		isScanningTable = isScanningTable || line.isTable()
 
 		if isScanningTable {
-			tableScanner.scan(line: line)
+			tableScanner.scan(line)
 		}
 	}
 }

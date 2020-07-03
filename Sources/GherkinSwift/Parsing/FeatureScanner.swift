@@ -33,39 +33,33 @@ class FeatureScanner {
 	var state: State = .started
 	var featureLocation = Location.zero()
 	
-	var featureTags = [Tag]()
 	let featureTagScanner = TagScanner()
 
 	let scenarioTagScanner = TagScanner()
 	
 	var name = ""
 	var descriptionLines = [String]()
-	var lineNumber = 0
-	var columnNumber = 0
-	var hasFoundFeature = false
-
-	var isScanningScenarios = false
+	
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
 	
-	func scan(line: Line, _ commentCollector: CommentCollector) {
+	func scan(_ line: Line, _ commentCollector: CommentCollector) {
 		switch state {
 		case .started:
 			if line.isTag() {
-				featureTagScanner.scan(line: line)
+				featureTagScanner.scan(line)
 			}
 
 			if line.isFeature() {
 				name = line.removeKeyword(keywordFeature)
 				featureLocation = Location(column: line.columnForKeyword(keywordFeature) , line: line.number)
 				state = .scanningFeature
-				featureTags = featureTagScanner.getTags()
-				hasFoundFeature = true
+				//hasFoundFeature = true
 			}
 
 		case .scanningFeature:
 			if line.isTag() {
-				scenarioTagScanner.scan(line: line)
+				scenarioTagScanner.scan(line)
 
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
@@ -76,19 +70,19 @@ class FeatureScanner {
 
 		case .scanningScenario:
 			if line.isTag() {
-				scenarioTagScanner.scan(line: line)
+				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
 			
 			} else {
-				currentScenarioScanner.scan(line: line, commentCollector)
+				currentScenarioScanner.scan(line, commentCollector)
 			}
 
 		case .foundNextScenarioTags:
 			if line.isTag() {
-				scenarioTagScanner.scan(line: line)
+				scenarioTagScanner.scan(line)
 			
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
@@ -105,13 +99,13 @@ class FeatureScanner {
 		scenarioTagScanner.clear()
 		scenarioScanners += [currentScenarioScanner]
 
-		currentScenarioScanner.scan(line: line, commentCollector)
+		currentScenarioScanner.scan(line, commentCollector)
 
 		state = .scanningScenario
 	}
 	
 	func getFeature() -> Feature? {
-		if !hasFoundFeature {
+		if state == .started {
 			return nil
 		}
 		
@@ -123,7 +117,7 @@ class FeatureScanner {
 	}
 	
 	private func tags() -> [Tag] {
-		return featureTagScanner.getTags() //featureTags
+		return featureTagScanner.getTags()
 	}
 
 	private func scenarios() -> [Scenario] {

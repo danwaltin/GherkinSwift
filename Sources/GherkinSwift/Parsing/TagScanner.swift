@@ -26,7 +26,7 @@ class TagScanner {
 
 	var tags = [Tag]()
 
-	func scan(line: Line) {
+	func scan(_ line: Line) {
 		if line.isTag() {
 			tags.append(contentsOf: tagsFromLine(line))
 		}

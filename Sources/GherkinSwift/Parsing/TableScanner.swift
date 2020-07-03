@@ -37,7 +37,7 @@ class TableScanner {
 	var bodyLine = 0
 	var bodyColumn = 0
 
-	func scan(line: Line) {
+	func scan(_ line: Line) {
 		hasTable = true
 		
 		if hasScannedColumns {

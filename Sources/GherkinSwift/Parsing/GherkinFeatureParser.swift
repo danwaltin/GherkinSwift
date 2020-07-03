@@ -34,7 +34,7 @@ public class GherkinFeatureParser : FeatureParser {
 		
 		let theLines = getLines(lines)
 		for line in theLines {
-			featureScanner.scan(line: line, commentCollector)
+			featureScanner.scan(line, commentCollector)
 		}
 		
 		let feature = featureScanner.getFeature()

@@ -43,7 +43,7 @@ class ScenarioScanner {
 		self.scenarioTags = scenarioTags
 	}
 	
-	func scan(line: Line, _ commentCollector: CommentCollector) {
+	func scan(_ line: Line, _ commentCollector: CommentCollector) {
 		
 		if line.isScenario() {
 			name = line.removeKeyword(keywordScenario)
@@ -62,23 +62,23 @@ class ScenarioScanner {
 			currentStepScanner = StepScanner()
 			stepScanners += [currentStepScanner]
 			
-			currentStepScanner.scan(line: line)
+			currentStepScanner.scan(line)
 			
 		} else if line.isExamples() {
 			isScanningExamples = true
 			currentExamplesScanner = ScenarioOutlineExamplesScanner()
 			examplesScanners += [currentExamplesScanner]
 			
-			currentExamplesScanner.scan(line: line)
+			currentExamplesScanner.scan(line)
 			
 		} else if isScanningExamples {
-			currentExamplesScanner.scan(line: line)
+			currentExamplesScanner.scan(line)
 			
 		} else if line.isComment() {
-			commentCollector.collectComment(line: line)
+			commentCollector.collectComment(line)
 
 		} else if isScanningStep {
-			currentStepScanner.scan(line: line)
+			currentStepScanner.scan(line)
 
 		} else if isScanningDescription {
 			descriptionLines.append(line.text)
