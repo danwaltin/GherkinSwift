@@ -87,8 +87,10 @@ extension Feature : Encodable {
 		try container.encode("Feature", forKey: .keyword)
 		try container.encode("en", forKey: .language)
 		try container.encode(location, forKey: .location)
-		try container.encode(name, forKey: .name)
-
+		if name.count > 0 {
+			try container.encode(name, forKey: .name)
+		}
+		
 		if let description = description {
 			try container.encode(description, forKey: .description)
 		}
@@ -120,7 +122,9 @@ extension Scenario : Encodable {
 		let keyword = isScenarioOutline ? "Scenario Outline" : "Scenario"
 		try container.encode(keyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
-		try container.encode(name, forKey: .name)
+		if name.count > 0 {
+			try container.encode(name, forKey: .name)
+		}
 
 		if let description = description {
 			try container.encode(description, forKey: .description)

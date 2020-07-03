@@ -36,6 +36,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"incomplete_feature_2",
 		"minimal",
 		"padded_example",
+		"readme_example",
 		"scenario_outline_no_newline",
 		"scenario_outline",
 		"several_examples",
