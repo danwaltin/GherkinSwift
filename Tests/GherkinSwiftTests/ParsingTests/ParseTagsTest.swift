@@ -258,8 +258,13 @@ class ParseTagsTest : TestParseBase {
 
 	private func then_examples(shouldHaveTags tags: [String],
 							   file: StaticString = #file, line: UInt = #line) {
-		let actual = tagNames(scenario(at: 0).examples[0].tags)
-		XCTAssertEqual(actual, tags, file: file, line: line)
+		let examples = scenario(at: 0).examples
+		if examples.count == 0 {
+			XCTFail("No examples with index 0", file: file, line: line)
+		} else {
+			let actual = tagNames(examples[0].tags)
+			XCTAssertEqual(actual, tags, file: file, line: line)
+		}
 	}
 	
 	private func tagNames(_ tags: [Tag]) -> [String] {

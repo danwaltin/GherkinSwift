@@ -306,8 +306,14 @@ class ParseLocationTests: TestParseBase {
 
 	private func then_examplesTag(_ tagIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		let tags = scenario(at: scenarioIndex).examples[0].tags
-		assertTag(withIndex: tagIndex, tags, hasLocation: location, file: file, line: line)
+		let examples = scenario(at: scenarioIndex).examples
+		
+		if (examples.count == 0) {
+			XCTFail("No examples with index \(0)", file: file, line: line)
+		} else {
+			let tags = examples[0].tags
+			assertTag(withIndex: tagIndex, tags, hasLocation: location, file: file, line: line)
+		}
 	}
 
 	private func assertTag(withIndex tagIndex: Int, _ tags: [Tag], hasLocation location: Location, file: StaticString = #file, line: UInt = #line) {
