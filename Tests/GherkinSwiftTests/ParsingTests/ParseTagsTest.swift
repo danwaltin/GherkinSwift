@@ -254,6 +254,25 @@ class ParseTagsTest : TestParseBase {
 		then_scenario(3, shouldHaveTags: ["s4.1"])
 	}
 	
+	// MARK: - Tag with a comment
+	func test_tagsWithComments() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		@tag1.1 @tag1.2 #comment
+		Scenario Outline: one
+		@tag#2 #another comment
+		Scenario: two
+		@tag3 #third comment for @tagThree
+		Scenario: three
+		""")
+
+		
+		then_scenario(0, shouldHaveTags: ["tag1.1", "tag1.2"])
+		then_scenario(1, shouldHaveTags: ["tag#2"])
+		then_scenario(2, shouldHaveTags: ["tag3"])
+	}
+
 	// MARK: - Givens, whens, thens
 
 	private func then_feature(shouldHaveTags tags: [String],

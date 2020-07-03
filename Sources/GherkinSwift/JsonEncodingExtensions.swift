@@ -181,6 +181,7 @@ extension ScenarioOutlineExamples : Encodable {
 		case description
 		case tableHeader
 		case tableBody
+		case tags
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -195,6 +196,10 @@ extension ScenarioOutlineExamples : Encodable {
 		
 		if let description = description {
 			try container.encode(description, forKey: .description)
+		}
+
+		if tags.count > 0 {
+			try container.encode(tags, forKey: .tags)
 		}
 
 		try container.encode(table.header, forKey: .tableHeader)
