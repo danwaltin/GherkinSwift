@@ -53,10 +53,6 @@ class ScenarioScanner {
 	}
 	
 	func scan(_ line: Line, _ commentCollector: CommentCollector) {
-		scanNewWay(line, commentCollector)
-	}
-
-	private func scanNewWay(_ line: Line, _ commentCollector: CommentCollector) {
 		switch state {
 		case .started:
 			if line.isScenario() || line.isScenarioOutline() {
