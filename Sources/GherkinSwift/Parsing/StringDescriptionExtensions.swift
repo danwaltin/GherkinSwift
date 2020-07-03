@@ -30,7 +30,7 @@ extension Array where Element == String {
 			return nil
 		}
 		
-		let description = joined(separator: newLine).withoutEndingNewLines()
+		let description = joined(separator: newLine).withoutLeadingNewLines().withoutEndingNewLines()
 
 		return description.trim().count > 0 ? description : nil
 	}
@@ -38,6 +38,16 @@ extension Array where Element == String {
 }
 
 extension String {
+	func withoutLeadingNewLines() -> String {
+		var s = self
+		
+		while s.first?.isNewline == true {
+			s = String(s.dropFirst())
+		}
+		
+		return s
+	}
+
 	func withoutEndingNewLines() -> String {
 		var s = self
 		
@@ -47,5 +57,4 @@ extension String {
 		
 		return s
 	}
-
 }

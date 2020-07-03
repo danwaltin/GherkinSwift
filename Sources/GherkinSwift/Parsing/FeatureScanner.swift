@@ -30,8 +30,8 @@ class FeatureScanner {
 		case foundNextScenarioTags
 	}
 	
-	var state: State = .started
-	var featureLocation = Location.zero()
+	private var state: State = .started
+	private var location = Location.zero()
 	
 	let featureTagScanner = TagScanner()
 
@@ -52,9 +52,8 @@ class FeatureScanner {
 
 			if line.isFeature() {
 				name = line.removeKeyword(keywordFeature)
-				featureLocation = Location(column: line.columnForKeyword(keywordFeature) , line: line.number)
+				location = Location(column: line.columnForKeyword(keywordFeature) , line: line.number)
 				state = .scanningFeature
-				//hasFoundFeature = true
 			}
 
 		case .scanningFeature:
@@ -112,7 +111,7 @@ class FeatureScanner {
 		return Feature(name: name,
 					   description: descriptionLines.asDescription(),
 					   tags: tags(),
-					   location: featureLocation,
+					   location: location,
 					   scenarios: scenarios())
 	}
 	
