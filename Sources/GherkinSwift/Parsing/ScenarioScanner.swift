@@ -41,15 +41,15 @@ class ScenarioScanner {
 	private var currentStepScanner: StepScanner!
 	private var stepScanners = [StepScanner]()
 	
-	private let scenarioTags: [Tag]
+	private let tags: [Tag]
 	
 	private var currentExamplesScanner: ScenarioOutlineExamplesScanner!
 	private var examplesScanners = [ScenarioOutlineExamplesScanner]()
 
 	private var isScenarioOutline = false
 	
-	init(scenarioTags: [Tag]) {
-		self.scenarioTags = scenarioTags
+	init(tags: [Tag]) {
+		self.tags = tags
 	}
 	
 	func scan(_ line: Line, _ commentCollector: CommentCollector) {
@@ -130,7 +130,7 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line, _ commentCollector: CommentCollector) {
-		currentExamplesScanner = ScenarioOutlineExamplesScanner()
+		currentExamplesScanner = ScenarioOutlineExamplesScanner(tags: examplesTagScanner.getTags())
 		examplesTagScanner.clear()
 		examplesScanners += [currentExamplesScanner]
 
@@ -142,15 +142,11 @@ class ScenarioScanner {
 	func getScenario() -> Scenario {
 		return Scenario(name: name,
 						description: descriptionLines.asDescription(),
-						tags: tags(),
+						tags: tags,
 						location: location,
 						steps: steps(),
 						examples: examples(),
 						isScenarioOutline: isScenarioOutline)
-	}
-
-	private func tags() -> [Tag] {
-		return scenarioTags
 	}
 
 	private func steps() -> [Step] {

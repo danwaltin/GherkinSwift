@@ -94,7 +94,7 @@ class FeatureScanner {
 	}
 	
 	private func startNewScenario(_ line: Line, _ commentCollector: CommentCollector) {
-		currentScenarioScanner = ScenarioScanner(scenarioTags: scenarioTagScanner.getTags())
+		currentScenarioScanner = ScenarioScanner(tags: scenarioTagScanner.getTags())
 		scenarioTagScanner.clear()
 		scenarioScanners += [currentScenarioScanner]
 

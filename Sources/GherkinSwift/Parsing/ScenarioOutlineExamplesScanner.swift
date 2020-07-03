@@ -33,6 +33,12 @@ class ScenarioOutlineExamplesScanner {
 	var isScanningTable = false
 	let tableScanner = TableScanner()
 
+	private let tags: [Tag]
+	
+	init(tags: [Tag]) {
+		self.tags = tags
+	}
+	
 	func scan(_ line: Line) {
 		handleName(line)
 		handleTable(line)
@@ -75,6 +81,7 @@ class ScenarioOutlineExamplesScanner {
 	func getExamples() -> ScenarioOutlineExamples {
 		return ScenarioOutlineExamples(name: name,
 									   description: descriptionLines.asDescription(),
+									   tags: tags,
 									   location: Location(column: columnNumber, line: lineNumber),
 									   table: tableScanner.getTable()!)
 	}
