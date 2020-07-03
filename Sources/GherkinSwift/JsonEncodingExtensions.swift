@@ -126,7 +126,9 @@ extension Scenario : Encodable {
 			try container.encode(description, forKey: .description)
 		}
 
-		try container.encode(steps, forKey: .steps)
+		if steps.count > 0 {
+			try container.encode(steps, forKey: .steps)
+		}
 		
 		if tags.count > 0 {
 			try container.encode(tags, forKey: .tags)
