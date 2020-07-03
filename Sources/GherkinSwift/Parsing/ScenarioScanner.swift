@@ -33,6 +33,12 @@ class ScenarioScanner {
 	
 	let scenarioTags: [Tag]
 	
+	var isScanningExamples = false
+	var currentExamplesScanner: ScenarioOutlineExamplesScanner!
+	var examplesScanners = [ScenarioOutlineExamplesScanner]()
+
+	var isScenarioOutline = false
+	
 	init(scenarioTags: [Tag]) {
 		self.scenarioTags = scenarioTags
 	}
@@ -44,6 +50,12 @@ class ScenarioScanner {
 			lineNumber = line.number
 			columnNumber = line.columnForKeyword(keywordScenario)
 			
+		} else if line.isScenarioOutline() {
+			isScenarioOutline = true
+			name = line.removeKeyword(keywordScenarioOutline)
+			lineNumber = line.number
+			columnNumber = line.columnForKeyword(keywordScenarioOutline)
+
 		} else if line.isStep() {
 			isScanningDescription = false
 			isScanningStep = true
@@ -51,6 +63,16 @@ class ScenarioScanner {
 			stepScanners += [currentStepScanner]
 			
 			currentStepScanner.scan(line: line)
+			
+		} else if line.isExamples() {
+			isScanningExamples = true
+			currentExamplesScanner = ScenarioOutlineExamplesScanner()
+			examplesScanners += [currentExamplesScanner]
+			
+			currentExamplesScanner.scan(line: line)
+			
+		} else if isScanningExamples {
+			currentExamplesScanner.scan(line: line)
 			
 		} else if line.isComment() {
 			commentCollector.collectComment(line: line)
@@ -69,20 +91,29 @@ class ScenarioScanner {
 		}
 	}
 	
-	func getScenarios() -> [Scenario] {
-		return [Scenario(name: name,
-						 description: descriptionLines.asDescription(),
-						 tags: scenarioTags,
-						 location: location(),
-						 steps: steps(),
-						 examples: [])]
+	func getScenario() -> Scenario {
+		return Scenario(name: name,
+						description: descriptionLines.asDescription(),
+						tags: tags(),
+						location: location(),
+						steps: steps(),
+						examples: examples(),
+						isScenarioOutline: isScenarioOutline)
 	}
 
-	func location() -> Location {
+	private func tags() -> [Tag] {
+		return scenarioTags
+	}
+
+	private func location() -> Location {
 		return Location(column: columnNumber, line: lineNumber)
 	}
-	
-	func steps() -> [Step] {
+
+	private func steps() -> [Step] {
 		return stepScanners.map{$0.getStep()}
+	}
+
+	private func examples() -> [ScenarioOutlineExamples] {
+		return examplesScanners.map{$0.getExamples()}
 	}
 }

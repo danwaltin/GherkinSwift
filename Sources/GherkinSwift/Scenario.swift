@@ -28,22 +28,21 @@ public struct Scenario : Equatable, Taggable, HasName {
 	public let steps: [Step]
 	public let location: Location
 	public let examples: [ScenarioOutlineExamples]
-
+	public let isScenarioOutline: Bool
+	
 	public init(name: String,
 				description: String?,
 				tags: [Tag],
 				location: Location,
 				steps: [Step],
-				examples: [ScenarioOutlineExamples]) {
+				examples: [ScenarioOutlineExamples],
+				isScenarioOutline: Bool = false) {
 		self.name = name
 		self.description = description
 		self.tags = tags
 		self.location = location
 		self.steps = steps
 		self.examples = examples
-	}
-	
-	func isOutline() -> Bool {
-		return examples.count > 0
+		self.isScenarioOutline = isScenarioOutline
 	}
 }

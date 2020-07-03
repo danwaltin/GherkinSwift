@@ -117,7 +117,7 @@ extension Scenario : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		let keyword = isOutline() ? "Scenario Outline" : "Scenario"
+		let keyword = isScenarioOutline ? "Scenario Outline" : "Scenario"
 		try container.encode(keyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(name, forKey: .name)

@@ -49,16 +49,7 @@ class FeatureScanner {
 			featureTags = tagScanner.getTags()
 			tagScanner.clear()
 			
-		} else if line.isScenarioOutline() {
-			currentScenarioScanner = ScenarioOutlineScanner(scenarioTags: tagScanner.getTags())
-			tagScanner.clear()
-			scenarioScanners += [currentScenarioScanner]
-			
-			isScanningScenarios = true
-			
-			currentScenarioScanner.scan(line: line, commentCollector)
-
-		} else if line.isScenario() {
+		} else if shouldStartScenario(line) {
 			currentScenarioScanner = ScenarioScanner(scenarioTags: tagScanner.getTags())
 			tagScanner.clear()
 			scenarioScanners += [currentScenarioScanner]
@@ -75,22 +66,30 @@ class FeatureScanner {
 		}
 	}
 	
+	private func shouldStartScenario(_ line: Line) -> Bool {
+		return line.isScenario() || line.isScenarioOutline()
+	}
+	
 	func getFeature() -> Feature? {
 		if !hasFoundFeature {
 			return nil
 		}
 		return Feature(name: name,
 					   description: descriptionLines.asDescription(),
-					   tags: featureTags,
-					   location: Location(column: columnNumber, line: lineNumber),
-					   scenarios: getScenarios())
+					   tags: tags(),
+					   location: location(),
+					   scenarios: scenarios())
 	}
 	
-	private func getScenarios() -> [Scenario] {
-		var s = [Scenario]()
-		for scanner in scenarioScanners {
-			s.append(contentsOf: scanner.getScenarios())
-		}
-		return s
+	private func tags() -> [Tag] {
+		return featureTags
+	}
+
+	private func location() -> Location {
+		return Location(column: columnNumber, line: lineNumber)
+	}
+
+	private func scenarios() -> [Scenario] {
+		return scenarioScanners.map { $0.getScenario() }
 	}
 }

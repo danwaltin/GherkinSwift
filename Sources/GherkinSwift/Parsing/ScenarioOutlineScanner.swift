@@ -22,48 +22,47 @@
 // ------------------------------------------------------------------------
 
 class ScenarioOutlineScanner : ScenarioScanner {
-	var isScanningExamples = false
-	let tableScanner = TableScanner()
-	var currentExamplesScanner: ScenarioOutlineExamplesScanner!
-	var examplesScanners = [ScenarioOutlineExamplesScanner]()
+//	var isScanningExamples = false
+//	var currentExamplesScanner: ScenarioOutlineExamplesScanner!
+//	var examplesScanners = [ScenarioOutlineExamplesScanner]()
+//
+//	override func scan(line: Line, _ commentCollector: CommentCollector) {
+//		if line.isScenarioOutline() {
+//			name = line.removeKeyword(keywordScenarioOutline)
+//			lineNumber = line.number
+//			columnNumber = line.columnForKeyword(keywordScenarioOutline)
+//
+//
+//		} else if line.isExamples() {
+//			isScanningExamples = true
+//			currentExamplesScanner = ScenarioOutlineExamplesScanner()
+//			examplesScanners += [currentExamplesScanner]
+//
+//			currentExamplesScanner.scan(line: line)
+//
+//		} else if isScanningExamples {
+//			currentExamplesScanner.scan(line: line)
+//
+//		} else {
+//			super.scan(line: line, commentCollector)
+//		}
+//	}
+//
+//	override func getScenarios() -> [Scenario] {
+//		var scenarios = [Scenario]()
+//		scenarios.append(Scenario(name: name,
+//								  description: descriptionLines.asDescription(),
+//								  tags: scenarioTags,
+//								  location: location(),
+//								  steps: steps(),
+//								  examples: examples()))
+//
+//		return scenarios
+//	}
 	
-	override func scan(line: Line, _ commentCollector: CommentCollector) {
-		if line.isScenarioOutline() {
-			name = line.removeKeyword(keywordScenarioOutline)
-			lineNumber = line.number
-			columnNumber = line.columnForKeyword(keywordScenarioOutline)
-			
-			
-		} else if line.isExamples() {
-			isScanningExamples = true
-			currentExamplesScanner = ScenarioOutlineExamplesScanner()
-			examplesScanners += [currentExamplesScanner]
-			
-			currentExamplesScanner.scan(line: line)
-			
-		} else if isScanningExamples {
-			currentExamplesScanner.scan(line: line)
-			
-		} else {
-			super.scan(line: line, commentCollector)
-		}
-	}
-	
-	override func getScenarios() -> [Scenario] {
-		var scenarios = [Scenario]()
-		scenarios.append(Scenario(name: name,
-								  description: descriptionLines.asDescription(),
-								  tags: scenarioTags,
-								  location: location(),
-								  steps: steps(),
-								  examples: examples()))
-		
-		return scenarios
-	}
-	
-	func examples() -> [ScenarioOutlineExamples] {
-		return examplesScanners.map{$0.getExamples()}
-	}
+//	func examples() -> [ScenarioOutlineExamples] {
+//		return examplesScanners.map{$0.getExamples()}
+//	}
 	
 //	private func replacePlaceHolders(_ step: Step, _ examplesRow: TableRow) -> Step {
 //		return Step(
