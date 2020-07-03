@@ -41,10 +41,11 @@ class TagScanner {
 	}
 
 	private func tagsFromLine(_ line: Line) -> [Tag] {
-		let i = line.text.firstIndex(of: tagToken)!
-		let d = line.text.distance(from: line.text.startIndex, to: i)
+		let lineText = line.textWithoutComment()
+		let i = lineText.firstIndex(of: tagToken)!
+		let d = lineText.distance(from: lineText.startIndex, to: i)
 		
-		var tagNames = line.text.components(separatedBy: String(tagToken))
+		var tagNames = lineText.components(separatedBy: String(tagToken))
 		tagNames.remove(at: 0)
 
 		var tags = [Tag]()

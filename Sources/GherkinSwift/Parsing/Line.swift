@@ -46,6 +46,10 @@ struct Line {
 	let text: String
 	let number: Int
 	
+	func textWithoutComment() -> String {
+		return text.components(separatedBy: " #").first!
+	}
+	
 	func isEmpty() -> Bool {
 		return text.trim().isEmpty
 	}

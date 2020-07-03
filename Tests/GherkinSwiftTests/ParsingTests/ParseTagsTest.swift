@@ -265,12 +265,15 @@ class ParseTagsTest : TestParseBase {
 		Scenario: two
 		@tag3 #third comment for @tagThree
 		Scenario: three
+		@tag4 #comment #with comment
+		Scenario: four
 		""")
 
 		
 		then_scenario(0, shouldHaveTags: ["tag1.1", "tag1.2"])
 		then_scenario(1, shouldHaveTags: ["tag#2"])
 		then_scenario(2, shouldHaveTags: ["tag3"])
+		then_scenario(3, shouldHaveTags: ["tag4"])
 	}
 
 	// MARK: - Givens, whens, thens
