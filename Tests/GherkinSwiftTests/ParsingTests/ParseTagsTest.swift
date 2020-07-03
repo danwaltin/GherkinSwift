@@ -158,6 +158,20 @@ class ParseTagsTest : TestParseBase {
 		then_scenario(shouldHaveTags: ["one", "two"])
 	}
 
+	func test_twoScenarioWithOneTagEach() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		@one
+		Scenario: s1
+		@two
+		Scenario: s2
+		""")
+
+		then_scenario(0, shouldHaveTags: ["one"])
+		then_scenario(1, shouldHaveTags: ["two"])
+	}
+
 	// MARK: - Scenario Outline tags
 	func test_scenarioOutlineWithExamplesTags() {
 		when_parsingDocument(
