@@ -29,6 +29,7 @@ let keywordBackground = "Background:"
 let keywordScenarioOutline = "Scenario Outline:"
 let keywordScenario = "Scenario:"
 let keywordExamples = "Examples:"
+let keywordAsterisk = "*"
 let keywordGiven = "Given"
 let keywordWhen = "When"
 let keywordThen = "Then"
@@ -98,6 +99,10 @@ struct Line {
 		return beginsWithKeyword(keywordExamples)
 	}
 	
+	func isAsterisk() -> Bool {
+		return beginsWithKeyword(keywordAsterisk)
+	}
+
 	func isGiven() -> Bool {
 		return beginsWithKeyword(keywordGiven)
 	}
@@ -119,7 +124,7 @@ struct Line {
 	}
 
 	func isStep() -> Bool {
-		return isGiven() || isWhen() || isThen() || isAnd() || isBut()
+		return isAsterisk() || isGiven() || isWhen() || isThen() || isAnd() || isBut()
 	}
 
 	func isTable() -> Bool {
