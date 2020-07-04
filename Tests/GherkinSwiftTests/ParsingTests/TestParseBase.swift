@@ -97,5 +97,29 @@ class TestParseBase: XCTestCase {
 	private func cell(_ value: String, _ header: String) -> TableCell {
 		return TableCell(value: value, location: Location.zero(), header: header)
 	}
+	
+	// MARK: - Assertions
+	func assertBackground(_ file: StaticString, _ line: UInt, assertBackground: (Background) -> Void ) {
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		assertBackground(actualBackground)
+	}
+
+	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
+		assertBackground(file, line) {
+			if $0.steps.count <= index {
+				XCTFail("No step at index \(index)", file: file, line: line)
+				return
+			}
+			
+			let actualStep = $0.steps[index]
+			
+			assertStep(actualStep)
+		}
+	}
+
 }
 

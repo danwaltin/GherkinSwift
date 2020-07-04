@@ -105,29 +105,6 @@ class ParseBackgroundTests: TestParseBase {
 	}
 
 	// MARK: - Givens, whens and thens
-	
-	private func assertBackground(_ file: StaticString, _ line: UInt, assertBackground: (Background) -> Void ) {
-		guard let actualBackground = actualFeature.background else {
-			XCTFail("No background found", file: file, line: line)
-			return
-		}
-		
-		assertBackground(actualBackground)
-	}
-
-	private func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
-		assertBackground(file, line) {
-			if $0.steps.count <= index {
-				XCTFail("No step at index \(index)", file: file, line: line)
-				return
-			}
-			
-			let actualStep = $0.steps[index]
-			
-			assertStep(actualStep)
-		}
-	}
-
 	private func then_shouldReturnFeatureWithoutBackground(file: StaticString = #file, line: UInt = #line) {
 		XCTAssertNil(actualFeature.background, file: file, line: line)
 	}

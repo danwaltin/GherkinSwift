@@ -24,4 +24,6 @@
 public struct Background : Equatable {
 	public let name: String
 	public let steps: [Step]
+	public let description: String?
+	public let location: Location
 }

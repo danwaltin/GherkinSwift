@@ -199,9 +199,9 @@ class ParseDescriptionTests: TestParseBase {
 
 	private func then_background(shouldHaveDescription description: String,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
-//
-//		XCTAssertEqual(actualFeature.background.description, description, file: file, line: line)
+		assertBackground(file, line) {
+			XCTAssertEqual($0.description, description, file: file, line: line)
+		}
 	}
 
 	private func then_scenario(_ index: Int, shouldHaveDescription description: String,

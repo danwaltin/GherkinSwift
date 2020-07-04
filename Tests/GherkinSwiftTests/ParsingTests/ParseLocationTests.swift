@@ -288,9 +288,9 @@ class ParseLocationTests: TestParseBase {
 
 	private func then_background(shouldHaveLocation location: Location,
 								 file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
-//		XCTAssertEqual(actualFeature.background.location, location,
-//					   file: file, line: line)
+		assertBackground(file, line) {
+			XCTAssertEqual($0.location, location, file: file, line: line)
+		}
 	}
 
 	private func then_scenario(_ index: Int, shouldHaveLocation location: Location,
