@@ -97,5 +97,71 @@ class TestParseBase: XCTestCase {
 	private func cell(_ value: String, _ header: String) -> TableCell {
 		return TableCell(value: value, location: Location.zero(), header: header)
 	}
+	
+	// MARK: - Assertions
+	func assertBackground(_ file: StaticString, _ line: UInt, assertBackground: (Background) -> Void ) {
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		assertBackground(actualBackground)
+	}
+
+	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
+		assertBackground(file, line) {
+			let steps = $0.steps
+			if steps.count <= index {
+				XCTFail("No step at index \(index). Number of steps: \(steps.count)", file: file, line: line)
+				return
+			}
+			
+			let actualStep = steps[index]
+			
+			assertStep(actualStep)
+		}
+	}
+
+	func assertScenario(_ scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Scenario) -> Void) {
+		let scenarios = actualFeature.scenarios
+		if scenarios.count <= scenarioIndex {
+			XCTFail("No scenario at index \(scenarioIndex). Number of scenarios: \(scenarios.count)", file: file, line: line)
+			return
+		}
+		
+		assert(scenarios[scenarioIndex])
+	}
+	
+	func assertStep(_ stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Step) -> Void) {
+		assertScenario(scenarioIndex, file, line) {
+			let steps = $0.steps
+			if steps.count <= stepIndex {
+				XCTFail("No step at index \(stepIndex). Number of steps: \(steps.count)", file: file, line: line)
+				return
+			}
+			
+			let actualStep = steps[stepIndex]
+			
+			assert(actualStep)
+		}
+	}
+
+	func assertExamples(_ examplesIndex: Int,
+						forScenario scenarioIndex: Int,
+						_ file: StaticString,
+						_ line: UInt,
+						assert: (ScenarioOutlineExamples) -> Void) {
+		assertScenario(scenarioIndex, file, line) {
+			let examples = $0.examples
+			if examples.count <= examplesIndex {
+				XCTFail("No examples at index \(examplesIndex). Number of examples: \(examples.count)", file: file, line: line)
+				return
+			}
+			
+			let actualExamples = examples[examplesIndex]
+			
+			assert(actualExamples)
+		}
+	}
 }
 

@@ -27,6 +27,7 @@ import XCTest
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
+		"background",
 		"datatables_with_new_lines",
 		"datatables",
 		"descriptions",
@@ -42,9 +43,9 @@ class PickleTestDataFilesTests: XCTestCase {
 		"several_examples",
 		"tagged_feature_with_scenario_outline",
 		"tags",
+		"very_long",
 	]
 	/*
-	"background",
 	"complex_background",
 	"docstrings",
 	"escaped_pipes",
@@ -66,7 +67,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"scenario_outline_with_value_with_dollar_sign",
 	"scenario_outlines_with_tags",
 	"spaces_in_language",
-	"very_long",
 	*/
 
 	func test_goodTestDataFiles() {

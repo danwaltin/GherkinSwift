@@ -52,14 +52,14 @@ class ScenarioScanner {
 		self.tags = tags
 	}
 	
-	func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
+	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
 		if line.isTag(), let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
 			return next.isScenario() || next.isScenarioOutline()
 		}
 		return false
 	}
 	
-	private func nextLineWithKeyword(currentLine: Line, allLines: [Line]) -> Line? {
+	private class func nextLineWithKeyword(currentLine: Line, allLines: [Line]) -> Line? {
 		let nextIndex = currentLine.number
 		let lastIndex = allLines.count - 1
 		
@@ -145,11 +145,11 @@ class ScenarioScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, _ commentsCollector: CommentCollector) {
+	private func startNewStep(_ line: Line, _ commentCollector: CommentCollector) {
 		currentStepScanner = StepScanner()
 		stepScanners.append(currentStepScanner)
 		
-		currentStepScanner.scan(line, commentsCollector)
+		currentStepScanner.scan(line, commentCollector)
 		
 		state = .scanningSteps
 	}
