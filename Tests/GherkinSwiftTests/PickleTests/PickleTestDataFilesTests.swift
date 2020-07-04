@@ -27,6 +27,7 @@ import XCTest
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
 	let goodTests = [
+		"background",
 		"datatables_with_new_lines",
 		"datatables",
 		"descriptions",
@@ -44,7 +45,6 @@ class PickleTestDataFilesTests: XCTestCase {
 		"tags",
 	]
 	/*
-	"background",
 	"complex_background",
 	"docstrings",
 	"escaped_pipes",

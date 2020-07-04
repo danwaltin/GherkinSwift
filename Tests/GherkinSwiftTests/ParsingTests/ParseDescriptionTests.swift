@@ -92,6 +92,21 @@ class ParseDescriptionTests: TestParseBase {
 
 		then_feature(shouldHaveDescription: "First\n\nSecond")
 	}
+	
+	// MARK: - background
+	func testBackgroundWithDescription() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   This is a description
+		   With two lines
+
+		Scenario: scenario
+		""")
+
+		then_background(shouldHaveDescription: "   This is a description\n   With two lines")
+	}
 
 	// MARK: - scenario
 	func testScenariosWithDescription() {
@@ -180,6 +195,13 @@ class ParseDescriptionTests: TestParseBase {
 	private func then_feature(shouldHaveDescription description: String,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.description, description, file: file, line: line)
+	}
+
+	private func then_background(shouldHaveDescription description: String,
+							  file: StaticString = #file, line: UInt = #line) {
+		XCTFail("not implemented yet")
+//
+//		XCTAssertEqual(actualFeature.background.description, description, file: file, line: line)
 	}
 
 	private func then_scenario(_ index: Int, shouldHaveDescription description: String,

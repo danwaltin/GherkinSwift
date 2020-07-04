@@ -266,14 +266,33 @@ class ParseLocationTests: TestParseBase {
 		then_comment(1, shouldHaveLocation: Location(column: 1, line: 5))
 		then_comment(2, shouldHaveLocation: Location(column: 1, line: 7))
 	}
-	
+
+	func test_Locations_Background() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+
+		   Background:
+		      Given something
+		""")
+		
+		then_background(shouldHaveLocation: Location(column: 7, line: 4))
+	}
+
 	// MARK: - Givens whens and thens
 	private func then_feature(shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(actualFeature.location, location,
 					   file: file, line: line)
 	}
-	
+
+	private func then_background(shouldHaveLocation location: Location,
+								 file: StaticString = #file, line: UInt = #line) {
+		XCTFail("not implemented yet")
+//		XCTAssertEqual(actualFeature.background.location, location,
+//					   file: file, line: line)
+	}
+
 	private func then_scenario(_ index: Int, shouldHaveLocation location: Location,
 							   file: StaticString = #file, line: UInt = #line) {
 		XCTAssertEqual(scenario(at: index).location, location,
