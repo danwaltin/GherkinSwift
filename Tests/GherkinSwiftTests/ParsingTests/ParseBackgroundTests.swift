@@ -25,6 +25,16 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseBackgroundTests: TestParseBase {
+	// MARK: - No background
+	func test_featureWithoutBackground() {
+		when_parsingDocument(
+		"""
+		Feature: feature name
+		""")
+		
+		then_shouldReturnFeatureWithoutBackground()
+	}
+
 	// MARK: - Name
 	func test_backgroundWithName() {
 		when_parsingDocument(
@@ -95,32 +105,58 @@ class ParseBackgroundTests: TestParseBase {
 	}
 
 	// MARK: - Givens, whens and thens
+	private func then_shouldReturnFeatureWithoutBackground(file: StaticString = #file, line: UInt = #line) {
+		XCTAssertNil(actualFeature.background, file: file, line: line)
+	}
+
 	private func then_shouldReturnBackgroundWithName(_ name: String,
 													 file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+
+		XCTAssertEqual(actualBackground.name, name, file: file, line: line)
 	}
 
 	private func then_shouldReturnBackgroundWithoutName(file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		XCTAssertEqual(actualBackground.name, "", file: file, line: line)
 	}
 
 	private func then_shouldReturnBackgroundWith(numberOfSteps expected: Int,
 												 file: StaticString = #file, line: UInt = #line) {
 		
-		XCTFail("not implemented yet")
-//		let s = scenario(at: 0)
-//		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		XCTAssertEqual(actualBackground.steps.count, expected, file: file, line: line)
 	}
 	
 	private func then_shouldReturnBackgroundWithStep(_ stepType: StepType,
 													 _ text: String,
 													 atIndex index: Int = 0,
 													 file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
-//		let actual = step(at: index)
-//
-//		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-//		XCTAssertEqual(actual.text, text, file: file, line: line)
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		if actualBackground.steps.count <= index {
+			XCTFail("No step at index \(index)", file: file, line: line)
+			return
+		}
+		
+		let actual = actualBackground.steps[index]
+
+		XCTAssertEqual(actual.type, stepType, file: file, line: line)
+		XCTAssertEqual(actual.text, text, file: file, line: line)
 	}
 
 	private func then_shouldReturnBackgroundWithStep(atIndex index: Int = 0,
@@ -128,20 +164,22 @@ class ParseBackgroundTests: TestParseBase {
 													 _ text: String,
 													 _ table: Table,
 													 file: StaticString = #file, line: UInt = #line) {
-		XCTFail("not implemented yet")
-//		let actual = step(at: 0)
-//
-//		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-//		XCTAssertEqual(actual.text, text, file: file, line: line)
-//
-//		let actualTable = actual.tableParameter!.withoutLocation()
-//		XCTAssertEqual(actualTable, table, file: file, line: line)
-	}
-	
-	private func step(at index: Int) -> Step {
-		XCTFail("not implemented yet")
-		return scenario(at: 0).steps[index]
-	}
+		guard let actualBackground = actualFeature.background else {
+			XCTFail("No background found", file: file, line: line)
+			return
+		}
+		
+		if actualBackground.steps.count <= index {
+			XCTFail("No step at index \(index)", file: file, line: line)
+			return
+		}
+		
+		let actual = actualBackground.steps[index]
 
-
+		XCTAssertEqual(actual.type, stepType, file: file, line: line)
+		XCTAssertEqual(actual.text, text, file: file, line: line)
+		
+		let actualTable = actual.tableParameter!.withoutLocation()
+		XCTAssertEqual(actualTable, table, file: file, line: line)
+	}
 }

@@ -14,28 +14,14 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Feature.swift
+//  Background.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-07-04.
 //
 // ------------------------------------------------------------------------
 
-public struct Feature : Equatable, Taggable, HasName {
+public struct Background : Equatable {
 	public let name: String
-	public let description: String?
-	public let background: Background?
-	public let tags: [Tag]
-	public let scenarios: [Scenario]
-	public let location: Location
-	
-	public init(name: String, description: String?, tags: [Tag] = [], location: Location, scenarios: [Scenario] = []) {
-		self.name = name
-		self.description = description
-		self.background = nil
-		self.tags = tags
-		self.scenarios = scenarios
-		
-		self.location = location
-	}
+	public let steps: [Step]
 }
