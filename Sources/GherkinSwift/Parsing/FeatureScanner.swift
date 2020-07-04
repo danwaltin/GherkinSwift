@@ -26,6 +26,7 @@ class FeatureScanner {
 	enum State {
 		case started
 		case scanningFeature
+		case scanningBackground
 		case scanningScenario
 		case foundNextScenarioTags
 	}
@@ -42,6 +43,8 @@ class FeatureScanner {
 	
 	var currentScenarioScanner: ScenarioScanner!
 	var scenarioScanners: [ScenarioScanner] = []
+	
+	let backgroundScanner = BackgroundScanner()
 	
 	func scan(_ line: Line, _ commentCollector: CommentCollector, allLines: [Line]) {
 		switch state {
@@ -60,6 +63,9 @@ class FeatureScanner {
 			if line.isTag() {
 				scenarioTagScanner.scan(line)
 
+			} else if shouldStartBackground(line) {
+				startBackground(line, commentCollector)
+				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
 
@@ -67,12 +73,22 @@ class FeatureScanner {
 				descriptionLines.append(line.text)
 			}
 
-		case .scanningScenario:
-			if false {
-			
-			} else if line.isTag() && currentScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+		case .scanningBackground:
+			if line.isTag() && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
+			} else if shouldStartNewScenario(line) {
+				startNewScenario(line, commentCollector)
+			
+			} else {
+				backgroundScanner.scan(line, commentCollector)
+			}
+			
+		case .scanningScenario:
+			if line.isTag() && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+				scenarioTagScanner.scan(line)
+				state = .foundNextScenarioTags
+				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, commentCollector)
 			
@@ -90,10 +106,19 @@ class FeatureScanner {
 		}
 	}
 
+	private func shouldStartBackground(_ line: Line) -> Bool {
+		return line.isBackground()
+	}
+	
+	private func startBackground(_ line: Line, _ commentCollector: CommentCollector) {
+		backgroundScanner.scan(line, commentCollector)
+		state = .scanningBackground
+	}
+	
 	private func shouldStartNewScenario(_ line: Line) -> Bool {
 		return line.isScenario() || line.isScenarioOutline()
 	}
-	
+
 	private func startNewScenario(_ line: Line, _ commentCollector: CommentCollector) {
 		currentScenarioScanner = ScenarioScanner(tags: scenarioTagScanner.getTags())
 		scenarioTagScanner.clear()
@@ -111,6 +136,7 @@ class FeatureScanner {
 		
 		return Feature(name: name,
 					   description: descriptionLines.asDescription(),
+					   background: backgroundScanner.getBackground(),
 					   tags: tags(),
 					   location: location,
 					   scenarios: scenarios())

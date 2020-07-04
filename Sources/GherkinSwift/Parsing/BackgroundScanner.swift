@@ -77,7 +77,11 @@ class BackgroundScanner {
 		state = .scanningSteps
 	}
 	
-	func getBackground() -> Background {
+	func getBackground() -> Background? {
+		if state == .started {
+			return nil
+		}
+
 		return Background(name: name,
 						  steps: steps(),
 						  description: descriptionLines.asDescription(),

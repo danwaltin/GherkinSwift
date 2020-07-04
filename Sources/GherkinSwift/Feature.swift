@@ -29,10 +29,10 @@ public struct Feature : Equatable, Taggable, HasName {
 	public let scenarios: [Scenario]
 	public let location: Location
 	
-	public init(name: String, description: String?, tags: [Tag] = [], location: Location, scenarios: [Scenario] = []) {
+	public init(name: String, description: String?, background: Background?, tags: [Tag] = [], location: Location, scenarios: [Scenario] = []) {
 		self.name = name
 		self.description = description
-		self.background = nil
+		self.background = background
 		self.tags = tags
 		self.scenarios = scenarios
 		
