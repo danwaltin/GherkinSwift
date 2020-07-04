@@ -278,27 +278,25 @@ class ParseTagsTest : TestParseBase {
 
 	// MARK: - Givens, whens, thens
 
-	private func then_feature(shouldHaveTags tags: [String],
-							  file: StaticString = #file, line: UInt = #line) {
-		let actual = tagNames(actualFeature.tags)
-		XCTAssertEqual(actual, tags, file: file, line: line)
+	private func then_feature(shouldHaveTags tags: [String], file: StaticString = #file, line: UInt = #line) {
+		assert(actualFeature, haveTags: tags, file, line)
 	}
 	
-	private func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String],
-							   file: StaticString = #file, line: UInt = #line) {
-		let actual = tagNames(scenario(at: index).tags)
-		XCTAssertEqual(actual, tags, file: file, line: line)
+	private func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String], file: StaticString = #file, line: UInt = #line) {
+		assertScenario(index, file, line) {
+			assert($0, haveTags: tags, file, line)
+		}
 	}
 
-	private func then_examples(_ exampleIndex: Int = 0, shouldHaveTags tags: [String],
-							   file: StaticString = #file, line: UInt = #line) {
-		let examples = scenario(at: 0).examples
-		if examples.count < exampleIndex + 1 {
-			XCTFail("No examples with index 0", file: file, line: line)
-		} else {
-			let actual = tagNames(examples[exampleIndex].tags)
-			XCTAssertEqual(actual, tags, file: file, line: line)
+	private func then_examples(_ exampleIndex: Int = 0, shouldHaveTags tags: [String], file: StaticString = #file, line: UInt = #line) {
+		assertExamples(exampleIndex, forScenario: 0, file, line) {
+			assert($0, haveTags: tags, file, line)
 		}
+	}
+	
+	private func assert(_ taggable: Taggable, haveTags tags: [String], _ file: StaticString, _ line: UInt) {
+		let actual = tagNames(taggable.tags)
+		XCTAssertEqual(actual, tags, file: file, line: line)
 	}
 	
 	private func tagNames(_ tags: [Tag]) -> [String] {

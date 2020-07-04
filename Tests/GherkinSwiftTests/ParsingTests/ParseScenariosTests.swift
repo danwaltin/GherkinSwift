@@ -235,19 +235,20 @@ class ParseScenariosTests: TestParseBase {
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
-		
-		let s = scenario(at: 0)
-		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
+		assertScenario(0, file, line) {
+			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
+		}
 	}
 	
 	private func then_shouldReturnScenarioWithStep(_ stepType: StepType,
 												   _ text: String,
 												   atIndex index: Int = 0,
-												   file: StaticString = #file, line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
+												   file: StaticString = #file, line: UInt = #line) {		
+		assertStep(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.type, stepType, file: file, line: line)
+			XCTAssertEqual($0.text, text, file: file, line: line)
+		}
+
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int = 0,
@@ -255,13 +256,13 @@ class ParseScenariosTests: TestParseBase {
 												   _ text: String,
 												   _ table: Table,
 												   file: StaticString = #file, line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
+		assertStep(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.type, stepType, file: file, line: line)
+			XCTAssertEqual($0.text, text, file: file, line: line)
 
-		let actualTable = actual.tableParameter!.withoutLocation()
-		XCTAssertEqual(actualTable, table, file: file, line: line)
+			let actualTable = $0.tableParameter!.withoutLocation()
+			XCTAssertEqual(actualTable, table, file: file, line: line)
+		}
 	}
 	
 	private func step(at index: Int) -> Step {

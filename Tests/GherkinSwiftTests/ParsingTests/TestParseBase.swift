@@ -122,17 +122,17 @@ class TestParseBase: XCTestCase {
 		}
 	}
 
-	func assertScenario(_ scenarioIndex: Int, _ file: StaticString = #file, _ line: UInt = #line, assertScenario: (Scenario) -> Void) {
+	func assertScenario(_ scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Scenario) -> Void) {
 		let scenarios = actualFeature.scenarios
 		if scenarios.count <= scenarioIndex {
 			XCTFail("No scenario at index \(scenarioIndex). Number of scenarios: \(scenarios.count)", file: file, line: line)
 			return
 		}
 		
-		assertScenario(scenarios[scenarioIndex])
+		assert(scenarios[scenarioIndex])
 	}
 	
-	func assertStep(_ stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString = #file, _ line: UInt = #line, assertStep: (Step) -> Void) {
+	func assertStep(_ stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Step) -> Void) {
 		assertScenario(scenarioIndex, file, line) {
 			let steps = $0.steps
 			if steps.count <= stepIndex {
@@ -142,7 +142,25 @@ class TestParseBase: XCTestCase {
 			
 			let actualStep = steps[stepIndex]
 			
-			assertStep(actualStep)
+			assert(actualStep)
+		}
+	}
+
+	func assertExamples(_ examplesIndex: Int,
+						forScenario scenarioIndex: Int,
+						_ file: StaticString,
+						_ line: UInt,
+						assert: (ScenarioOutlineExamples) -> Void) {
+		assertScenario(scenarioIndex, file, line) {
+			let examples = $0.examples
+			if examples.count <= examplesIndex {
+				XCTFail("No examples at index \(examplesIndex). Number of examples: \(examples.count)", file: file, line: line)
+				return
+			}
+			
+			let actualExamples = examples[examplesIndex]
+			
+			assert(actualExamples)
 		}
 	}
 }
