@@ -25,6 +25,7 @@ import Foundation
 let tagToken: Character = "@"
 let commentToken = "#"
 let keywordFeature = "Feature:"
+let keywordBackground = "Background:"
 let keywordScenarioOutline = "Scenario Outline:"
 let keywordScenario = "Scenario:"
 let keywordExamples = "Examples:"
@@ -79,6 +80,10 @@ struct Line {
 	
 	func isFeature() -> Bool {
 		return beginsWithKeyword(keywordFeature)
+	}
+
+	func isBackground() -> Bool {
+		return beginsWithKeyword(keywordBackground)
 	}
 
 	func isScenarioOutline() -> Bool {

@@ -145,11 +145,11 @@ class ScenarioScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, _ commentsCollector: CommentCollector) {
+	private func startNewStep(_ line: Line, _ commentCollector: CommentCollector) {
 		currentStepScanner = StepScanner()
 		stepScanners.append(currentStepScanner)
 		
-		currentStepScanner.scan(line, commentsCollector)
+		currentStepScanner.scan(line, commentCollector)
 		
 		state = .scanningSteps
 	}

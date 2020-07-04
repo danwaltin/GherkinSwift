@@ -33,9 +33,9 @@ class StepScanner {
 		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
 	}
 	
-	func scan(_ line: Line, _ commentsCollector: CommentCollector) {
+	func scan(_ line: Line, _ commentCollector: CommentCollector) {
 		if line.isComment() {
-			commentsCollector.collectComment(line)
+			commentCollector.collectComment(line)
 		} else {
 			handleStepText(line: line)
 			handleTable(line: line)
