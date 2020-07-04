@@ -38,6 +38,8 @@ public struct Step : Equatable {
 	
 	var keyword: String {
 		switch type {
+		case .Asterisk:
+			return keywordAsterisk
 		case .Given:
 			return keywordGiven
 		case .When:
@@ -51,6 +53,10 @@ public struct Step : Equatable {
 		}
 	}
 	
+	static func asterisk(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
+		return Step(type: .Asterisk, text: text, location: location, tableParameter: table)
+	}
+
 	static func given(_ text: String, location: Location = Location.zero(), _ table: Table? = nil) -> Step {
 		return Step(type: .Given, text: text, location: location, tableParameter: table)
 	}

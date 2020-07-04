@@ -85,7 +85,19 @@ class ParseScenariosTests: TestParseBase {
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(.Then, "something is the result")
 	}
-	
+
+	func test_scenarioWithOneAsteriskStep() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		    * something is the result
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(.Asterisk, "something is the result")
+	}
+
 	func test_scenarioWithGivenAndAndStep() {
 		when_parsingDocument(
 		"""

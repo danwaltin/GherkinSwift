@@ -47,6 +47,11 @@ class StepScanner {
 			return
 		}
 		
+		if line.isAsterisk() {
+			location = Location(column: line.columnForKeyword(keywordAsterisk), line: line.number)
+			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
+		}
+
 		if line.isGiven() {
 			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))

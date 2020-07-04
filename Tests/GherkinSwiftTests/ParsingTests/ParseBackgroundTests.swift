@@ -69,6 +69,18 @@ class ParseBackgroundTests: TestParseBase {
 		then_shouldReturnBackgroundWithStep(.Given, "there is something")
 	}
 
+	func test_backgroundWithOneAsteriskStep() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		    * there is something
+		""")
+
+		then_shouldReturnBackgroundWith(numberOfSteps: 1)
+		then_shouldReturnBackgroundWithStep(.Asterisk, "there is something")
+	}
+
 	func test_backgroundWithGivenAndButStep() {
 		when_parsingDocument(
 		"""

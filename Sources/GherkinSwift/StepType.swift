@@ -24,6 +24,7 @@
 import Foundation
 
 public enum StepType {
+	case Asterisk
 	case Given
 	case When
 	case Then
