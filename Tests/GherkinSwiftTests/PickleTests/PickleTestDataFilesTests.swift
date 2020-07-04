@@ -43,6 +43,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"several_examples",
 		"tagged_feature_with_scenario_outline",
 		"tags",
+		"very_long",
 	]
 	/*
 	"complex_background",
@@ -66,7 +67,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"scenario_outline_with_value_with_dollar_sign",
 	"scenario_outlines_with_tags",
 	"spaces_in_language",
-	"very_long",
 	*/
 
 	func test_goodTestDataFiles() {
