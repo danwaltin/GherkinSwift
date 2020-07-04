@@ -23,14 +23,40 @@
 import Foundation
 
 struct FeatureChild : Encodable {
-	let scenario: Scenario
+	enum CodingKeys: String, CodingKey {
+		case scenario
+		case background
+	}
+
+	let scenario: Scenario?
+	let background: Background?
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		
+		if let scenario = scenario {
+			try container.encode(scenario, forKey: .scenario)
+		}
+
+		if let background = background {
+			try container.encode(background, forKey: .background)
+		}
+	}
 }
 
 
 extension Feature {
 	var children: [FeatureChild] {
 		get {
-			return scenarios.map {FeatureChild(scenario: $0)}
+			var backgroundAndScenarios = [FeatureChild]()
+			
+			if let background = background {
+				backgroundAndScenarios.append(FeatureChild(scenario: nil, background: background))
+			}
+
+			backgroundAndScenarios.append(contentsOf: scenarios.map {FeatureChild(scenario: $0, background: nil)})
+			
+			return backgroundAndScenarios
 		}
 	}
 }

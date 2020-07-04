@@ -276,7 +276,7 @@ class ParseLocationTests: TestParseBase {
 		      Given something
 		""")
 		
-		then_background(shouldHaveLocation: Location(column: 7, line: 4))
+		then_background(shouldHaveLocation: Location(column: 4, line: 3))
 	}
 
 	// MARK: - Givens whens and thens

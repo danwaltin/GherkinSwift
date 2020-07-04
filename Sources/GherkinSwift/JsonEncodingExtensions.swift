@@ -105,6 +105,34 @@ extension Feature : Encodable {
 	}
 }
 
+extension Background : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case keyword
+		case location
+		case name
+		case description
+		case steps
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode("Background", forKey: .keyword)
+		try container.encode(location, forKey: .location)
+		if name.count > 0 {
+			try container.encode(name, forKey: .name)
+		}
+
+		if let description = description {
+			try container.encode(description, forKey: .description)
+		}
+
+		if steps.count > 0 {
+			try container.encode(steps, forKey: .steps)
+		}
+	}
+}
+
 extension Scenario : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case keyword
