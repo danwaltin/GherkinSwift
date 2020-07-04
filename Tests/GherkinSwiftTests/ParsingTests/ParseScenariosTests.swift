@@ -264,9 +264,5 @@ class ParseScenariosTests: TestParseBase {
 			XCTAssertEqual(actualTable, table, file: file, line: line)
 		}
 	}
-	
-	private func step(at index: Int) -> Step {
-		return scenario(at: 0).steps[index]
-	}
 }
 
