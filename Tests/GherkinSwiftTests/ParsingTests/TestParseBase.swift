@@ -110,16 +110,40 @@ class TestParseBase: XCTestCase {
 
 	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
 		assertBackground(file, line) {
-			if $0.steps.count <= index {
-				XCTFail("No step at index \(index)", file: file, line: line)
+			let steps = $0.steps
+			if steps.count <= index {
+				XCTFail("No step at index \(index). Number of steps: \(steps.count)", file: file, line: line)
 				return
 			}
 			
-			let actualStep = $0.steps[index]
+			let actualStep = steps[index]
 			
 			assertStep(actualStep)
 		}
 	}
 
+	func assertScenario(_ scenarioIndex: Int, _ file: StaticString = #file, _ line: UInt = #line, assertScenario: (Scenario) -> Void) {
+		let scenarios = actualFeature.scenarios
+		if scenarios.count <= scenarioIndex {
+			XCTFail("No scenario at index \(scenarioIndex). Number of scenarios: \(scenarios.count)", file: file, line: line)
+			return
+		}
+		
+		assertScenario(scenarios[scenarioIndex])
+	}
+	
+	func assertStep(_ stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString = #file, _ line: UInt = #line, assertStep: (Step) -> Void) {
+		assertScenario(scenarioIndex, file, line) {
+			let steps = $0.steps
+			if steps.count <= stepIndex {
+				XCTFail("No step at index \(stepIndex). Number of steps: \(steps.count)", file: file, line: line)
+				return
+			}
+			
+			let actualStep = steps[stepIndex]
+			
+			assertStep(actualStep)
+		}
+	}
 }
 

@@ -206,7 +206,9 @@ class ParseDescriptionTests: TestParseBase {
 
 	private func then_scenario(_ index: Int, shouldHaveDescription description: String,
 							   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualFeature.scenarios[index].description, description, file: file, line: line)
+		assertScenario(index, file, line) {
+			XCTAssertEqual($0.description, description, file: file, line: line)
+		}
 	}
 
 	private func then_example(_ index: Int, shouldHaveDescription description: String,

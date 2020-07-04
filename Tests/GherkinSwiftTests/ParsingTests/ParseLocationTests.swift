@@ -295,14 +295,16 @@ class ParseLocationTests: TestParseBase {
 
 	private func then_scenario(_ index: Int, shouldHaveLocation location: Location,
 							   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: index).location, location,
-					   file: file, line: line)
+		assertScenario(index, file, line) {
+			XCTAssertEqual($0.location, location, file: file, line: line)
+		}
 	}
 	
 	private func then_step(_ stepIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 						   file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: scenarioIndex).steps[stepIndex].location, location,
-					   file: file, line: line)
+		assertStep(stepIndex, forScenario: scenarioIndex, file, line) {
+			XCTAssertEqual($0.location, location, file: file, line: line)
+		}
 	}
 	
 	private func then_examples(_ examplesIndex: Int, forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
