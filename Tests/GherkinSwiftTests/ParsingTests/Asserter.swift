@@ -35,6 +35,15 @@ struct Asserter {
 		assert(feature)
 	}
 	
+	func scenarios(withNames names: [String], _ file: StaticString, _ line: UInt) {
+		feature(file, line) {
+			let actualNames = $0.scenarios.map{ s in
+				s.name
+			}
+			XCTAssertEqual(actualNames, names)
+		}
+	}
+
 	func background(_ file: StaticString, _ line: UInt, assert: (Background) -> Void ) {
 		feature(file, line) {
 			guard let actualBackground = $0.background else {

@@ -105,6 +105,11 @@ class ParseScenarioOutlinesTests: TestParseBase {
 
 	// MARK: - Givens, whens, thens
 	
+	func then_shouldReturnScenariosWithNames(_ names: [String],
+											 file: StaticString = #file, line: UInt = #line) {
+		assert.scenarios(withNames: names, file, line)
+	}
+
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
 		assert.scenario(0, file, line) {

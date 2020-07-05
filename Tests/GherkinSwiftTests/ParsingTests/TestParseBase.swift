@@ -47,25 +47,10 @@ class TestParseBase: XCTestCase {
 		return parseGherkinDocument(lines, parser: parser)
 	}
 
-	func then_shouldReturnScenariosWithNames(_ names: [String]) {
-		let actualNames = scenarios().map{ s in
-			s.name
-		}
-		XCTAssertEqual(actualNames, names)
-	}
-
 	func parser() -> GherkinFeatureParser {
 		return GherkinFeatureParser()
 	}
-	
-	func scenarios() -> [Scenario] {
-		return actualFeature.scenarios
-	}
-	
-	func scenario(at index: Int) -> Scenario {
-		return scenarios()[index]
-	}
-
+		
 	// MARK: - Factory methods
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
