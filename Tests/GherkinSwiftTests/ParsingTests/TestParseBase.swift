@@ -25,6 +25,13 @@ import XCTest
 
 class TestParseBase: XCTestCase {
 	var actualGherkinDocument: GherkinDocument!
+	var docStringSeparator: String = "..."
+	var alternativeDocStringSeparator: String = ",,,"
+
+	func given_docStringSeparator(_ separator: String, alternative: String) {
+		docStringSeparator = separator
+		alternativeDocStringSeparator = alternative
+	}
 	
 	func when_parsingDocument(_ document: String) {
 		actualGherkinDocument = parseDocument(document, parser: parser())
@@ -44,7 +51,8 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser()
+		return GherkinFeatureParser(docStringSeparator: docStringSeparator,
+									alternativeDocStringSeparator: alternativeDocStringSeparator)
 	}
 		
 	// MARK: - Factory methods

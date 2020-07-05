@@ -25,7 +25,7 @@ import Foundation
 
 public class GherkinFeatureParser : FeatureParser {
 	
-	public init() {
+	public init(docStringSeparator: String = "\"\"\"", alternativeDocStringSeparator: String = "'''") {
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {

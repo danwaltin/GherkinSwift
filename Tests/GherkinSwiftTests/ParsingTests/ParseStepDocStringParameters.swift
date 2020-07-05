@@ -25,14 +25,16 @@ import XCTest
 
 class ParseStepDocStringParameters: TestParseBase {
 	func test_docStringParametersToScenarioStep_oneRow() {
+		given_docStringSeparator("===", alternative: "---")
+		
 		when_parsingDocument(
 		"""
 		Feature: feature
 		Scenario: scenario
 			Given something
-			  \"""
+			  ===
 			  one line
-			  \"""
+			  ===
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
@@ -44,14 +46,16 @@ class ParseStepDocStringParameters: TestParseBase {
 	}
 
 	func test_docStringParametersToScenarioOulineStep_oneRow() {
+		given_docStringSeparator("===", alternative: "---")
+
 		when_parsingDocument(
 		"""
 		Feature: feature
 		Scenario Outline: scenario
 			Given something
-			  \"\"\"
+			  ===
 			  one line
-			  \"\"\"
+			  ===
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
