@@ -118,7 +118,9 @@ class ParseBackgroundTests: TestParseBase {
 
 	// MARK: - Givens, whens and thens
 	private func then_shouldReturnFeatureWithoutBackground(file: StaticString = #file, line: UInt = #line) {
-		XCTAssertNil(actualFeature.background, file: file, line: line)
+		assert.feature(file, line) {
+			XCTAssertNil($0.background, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnBackgroundWithName(_ name: String,

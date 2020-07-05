@@ -24,10 +24,6 @@ import XCTest
 @testable import GherkinSwift
 
 class TestParseBase: XCTestCase {
-	var actualFeature: Feature {
-		return actualGherkinDocument.feature!
-	}
-	
 	var actualGherkinDocument: GherkinDocument!
 	
 	func when_parsingDocument(_ document: String) {
@@ -35,16 +31,16 @@ class TestParseBase: XCTestCase {
 	}
 
 	func when_parsing(_ lines: [String]) {
-		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
+		actualGherkinDocument = parse(lines, parser: parser())
 	}
 
-	func parseGherkinDocument(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
+	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
 		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
 	}
 
 	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
 		let lines = document.allLines()
-		return parseGherkinDocument(lines, parser: parser)
+		return parse(lines, parser: parser)
 	}
 
 	func parser() -> GherkinFeatureParser {

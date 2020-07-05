@@ -295,7 +295,9 @@ class ParseTagsTest : TestParseBase {
 	// MARK: - Givens, whens, thens
 
 	private func then_feature(shouldHaveTags tags: [String], file: StaticString = #file, line: UInt = #line) {
-		assert(actualFeature, haveTags: tags, file, line)
+		assert.feature(file, line) {
+			assert($0, haveTags: tags, file, line)
+		}
 	}
 	
 	private func then_scenario(_ index: Int = 0, shouldHaveTags tags: [String], file: StaticString = #file, line: UInt = #line) {
