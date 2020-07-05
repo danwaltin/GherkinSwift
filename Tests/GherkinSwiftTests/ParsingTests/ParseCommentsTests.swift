@@ -49,10 +49,44 @@ class ParseCommentsTests: TestParseBase {
 			"      # Third comment"])
 	}
 
+	func testCommentsInTheFeatureAndTheBackground() {
+		when_parsingDocument(
+		"""
+		# This is a comment!
+		Feature: feature
+		  # Another comment!
+
+		Background:
+		   # Third comment
+		   Given something
+		      | foo |
+		      # Fourth comment
+		      | bar |
+
+		Scenario: scenario
+
+		""")
+		
+		then_document(shouldHaveComments: [
+			"# This is a comment!",
+			"  # Another comment!",
+			"   # Third comment",
+			"      # Fourth comment"])
+	}
+
+	func testDocumentWithNothingButAComment() {
+		when_parsingDocument(
+		"""
+		  # This is the only thing
+		""")
+		
+		then_document(shouldHaveComments: [
+			"  # This is the only thing"])
+	}
+
 
 	private func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
 		let actual = actualGherkinDocument.comments.map{c in c.text}
 		XCTAssertEqual(actual, expected, file: file, line: line)
 	}
-
 }

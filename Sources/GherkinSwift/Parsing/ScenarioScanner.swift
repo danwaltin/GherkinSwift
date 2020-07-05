@@ -73,7 +73,7 @@ class ScenarioScanner {
 		return nil
 	}
 	
-	func scan(_ line: Line, _ commentCollector: CommentCollector) {
+	func scan(_ line: Line) {
 		switch state {
 		case .started:
 			if line.isScenario() || line.isScenarioOutline() {
@@ -91,13 +91,10 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewStep(line) {
-				startNewStep(line, commentCollector)
+				startNewStep(line)
 				
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, commentCollector)
-
-			} else if line.isComment() {
-				commentCollector.collectComment(line)
+				startNewExamples(line)
 
 			} else {
 				descriptionLines.append(line.text)
@@ -109,13 +106,13 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewStep(line) {
-				startNewStep(line, commentCollector)
+				startNewStep(line)
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, commentCollector)
+				startNewExamples(line)
 
 			} else {
-				currentStepScanner.scan(line, commentCollector)
+				currentStepScanner.scan(line)
 			}
 			
 		case .scanningExamples:
@@ -124,7 +121,7 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, commentCollector)
+				startNewExamples(line)
 
 			} else {
 				currentExamplesScanner.scan(line)
@@ -135,7 +132,7 @@ class ScenarioScanner {
 				examplesTagScanner.scan(line)
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, commentCollector)
+				startNewExamples(line)
 
 			}
 		}
@@ -145,11 +142,11 @@ class ScenarioScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, _ commentCollector: CommentCollector) {
+	private func startNewStep(_ line: Line) {
 		currentStepScanner = StepScanner()
 		stepScanners.append(currentStepScanner)
 		
-		currentStepScanner.scan(line, commentCollector)
+		currentStepScanner.scan(line)
 		
 		state = .scanningSteps
 	}
@@ -158,7 +155,7 @@ class ScenarioScanner {
 		return line.isExamples()
 	}
 	
-	private func startNewExamples(_ line: Line, _ commentCollector: CommentCollector) {
+	private func startNewExamples(_ line: Line) {
 		currentExamplesScanner = ScenarioOutlineExamplesScanner(tags: examplesTagScanner.getTags())
 		examplesTagScanner.clear()
 		examplesScanners += [currentExamplesScanner]

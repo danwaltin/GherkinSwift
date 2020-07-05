@@ -37,7 +37,7 @@ class BackgroundScanner {
 	private var currentStepScanner: StepScanner!
 	private var stepScanners = [StepScanner]()
 	
-	func scan(_ line: Line, _ commentCollector: CommentCollector) {
+	func scan(_ line: Line) {
 		switch state {
 		case .started:
 			if line.isBackground() {
@@ -48,7 +48,7 @@ class BackgroundScanner {
 
 		case .scanningBackground:
 			if shouldStartNewStep(line) {
-				startNewStep(line, commentCollector)
+				startNewStep(line)
 				
 			} else {
 				descriptionLines.append(line.text)
@@ -56,10 +56,10 @@ class BackgroundScanner {
 
 		case .scanningSteps:
 			if shouldStartNewStep(line) {
-				startNewStep(line, commentCollector)
+				startNewStep(line)
 
 			} else {
-				currentStepScanner.scan(line, commentCollector)
+				currentStepScanner.scan(line)
 			}
 		}
 	}
@@ -68,11 +68,11 @@ class BackgroundScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, _ commentCollector: CommentCollector) {
+	private func startNewStep(_ line: Line) {
 		currentStepScanner = StepScanner()
 		stepScanners.append(currentStepScanner)
 		
-		currentStepScanner.scan(line, commentCollector)
+		currentStepScanner.scan(line)
 		
 		state = .scanningSteps
 	}
