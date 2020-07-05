@@ -24,11 +24,30 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseStepDocStringParameters: TestParseBase {
-	func test_docStringParametersToStep_oneRow() {
+	func test_docStringParametersToScenarioStep_oneRow() {
 		when_parsingDocument(
 		"""
 		Feature: feature
 		Scenario: scenario
+			Given something
+			  \"\"\"
+			  one line
+			  \"\"\"
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Given,
+			"something",
+			docString([
+				"one line"]))
+	}
+
+	func test_docStringParametersToScenarioOulineStep_oneRow() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: scenario
 			Given something
 			  \"\"\"
 			  one line
