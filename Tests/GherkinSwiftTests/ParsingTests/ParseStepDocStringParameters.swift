@@ -61,12 +61,6 @@ class ParseStepDocStringParameters: TestParseBase {
 												   _ text: String,
 												   _ docString: DocString,
 												   file: StaticString = #file, line: UInt = #line) {
-		assertStep(index, forScenario: 0, file, line) {
-			XCTAssertEqual($0.type, stepType, file: file, line: line)
-			XCTAssertEqual($0.text, text, file: file, line: line)
-
-			let actualDocString = $0.docStringParameter!
-			XCTAssertEqual(actualDocString, docString, file: file, line: line)
-		}
+		assertStep(stepType, text, docString, atIndex: index, forScenario: 0, file, line)
 	}
 }

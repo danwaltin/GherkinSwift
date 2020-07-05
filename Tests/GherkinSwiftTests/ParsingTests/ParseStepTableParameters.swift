@@ -153,12 +153,6 @@ class ParseStepTableParameters: TestParseBase {
 												   _ text: String,
 												   _ table: Table,
 												   file: StaticString = #file, line: UInt = #line) {
-		assertStep(index, forScenario: 0, file, line) {
-			XCTAssertEqual($0.type, stepType, file: file, line: line)
-			XCTAssertEqual($0.text, text, file: file, line: line)
-
-			let actualTable = $0.tableParameter!.withoutLocation()
-			XCTAssertEqual(actualTable, table, file: file, line: line)
-		}
+		assertStep(stepType, text, table, atIndex: index, forScenario: 0, file, line)
 	}
 }

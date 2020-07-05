@@ -139,11 +139,7 @@ class ParseScenariosTests: TestParseBase {
 												   _ text: String,
 												   atIndex index: Int = 0,
 												   file: StaticString = #file, line: UInt = #line) {		
-		assertStep(index, forScenario: 0, file, line) {
-			XCTAssertEqual($0.type, stepType, file: file, line: line)
-			XCTAssertEqual($0.text, text, file: file, line: line)
-		}
-
+		assertStep(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
 }
 

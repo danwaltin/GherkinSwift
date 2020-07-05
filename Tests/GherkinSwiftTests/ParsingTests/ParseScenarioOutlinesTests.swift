@@ -106,71 +106,43 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	// MARK: - Givens, whens, thens
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
-											   file: StaticString = #file,
-											   line: UInt = #line) {
-		
-		let s = scenario(at: 0)
-		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
+											   file: StaticString = #file, line: UInt = #line) {
+		assertScenario(0, file, line) {
+			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
-											   file: StaticString = #file,
-											   line: UInt = #line) {
+											   file: StaticString = #file, line: UInt = #line) {
 		
-		let s = scenario(at: 0)
-		XCTAssertEqual(s.examples.count, expected, file: file, line: line)
+		assertScenario(0, file, line) {
+			XCTAssertEqual($0.examples.count, expected, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWithExamples(atIndex index: Int,
-												   name: String,
-												   _ table: Table,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = examples(at: index)
-		
-		XCTAssertEqual(actual.name, name, file: file, line: line)
-		XCTAssertEqual(actual.table.withoutLocation(), table, file: file, line: line)
+													   name: String,
+													   _ table: Table,
+													   file: StaticString = #file, line: UInt = #line) {
+		assertExamples(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.name, name, file: file, line: line)
+			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
+												   file: StaticString = #file, line: UInt = #line) {
+		assertStep(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
 												   _ table: Table,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!.withoutLocation(), table, file: file, line: line)
-	}
-
-	func then_shouldReturnScenarioWithSteps(_ steps: [Step], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: 0).steps, steps, file: file, line: line)
-	}
-
-	func then_shouldReturnTwoScenariosWithSteps(_ stepsScenarioOne: [Step], _ stepsScenarioTwo: [Step], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: 0).steps, stepsScenarioOne, file: file, line: line)
-		XCTAssertEqual(scenario(at: 1).steps, stepsScenarioTwo, file: file, line: line)
-	}
-
-	private func step(at index: Int) -> Step {
-		return scenario(at: 0).steps[index]
-	}
-
-	private func examples(at index: Int) -> ScenarioOutlineExamples {
-		return scenario(at: 0).examples[index]
+												   file: StaticString = #file, line: UInt = #line) {
+		assertStep(stepType, text, table, atIndex: index, forScenario: 0, file, line)
 	}
 }
 

@@ -27,6 +27,7 @@ class TestParseBase: XCTestCase {
 	var actualFeature: Feature {
 		return actualGherkinDocument.feature!
 	}
+	
 	var actualGherkinDocument: GherkinDocument!
 	
 	func when_parsingDocument(_ document: String) {
@@ -143,6 +144,53 @@ class TestParseBase: XCTestCase {
 			let actualStep = steps[stepIndex]
 			
 			assert(actualStep)
+		}
+	}
+
+	func assertStep(_ stepType: StepType,
+					_ text: String,
+					atIndex stepIndex: Int = 0,
+					forScenario scenarioIndex: Int = 0,
+					_ file: StaticString, _ line: UInt) {
+		assertStep(stepIndex, forScenario: scenarioIndex, file, line) {
+			XCTAssertEqual($0.type, stepType, file: file, line: line)
+			XCTAssertEqual($0.text, text, file: file, line: line)
+		}
+	}
+
+	func assertStep(_ stepType: StepType,
+					_ text: String,
+					_ table: Table,
+					atIndex stepIndex: Int = 0,
+					forScenario scenarioIndex: Int = 0,
+					_ file: StaticString, _ line: UInt) {
+		assertStep(stepIndex, forScenario: scenarioIndex, file, line) {
+			XCTAssertEqual($0.type, stepType, file: file, line: line)
+			XCTAssertEqual($0.text, text, file: file, line: line)
+
+			if let actualTable = $0.tableParameter {
+				XCTAssertEqual(actualTable.withoutLocation(), table, file: file, line: line)
+			} else {
+				XCTFail("No table parameter", file: file, line: line)
+			}
+		}
+	}
+
+	func assertStep(_ stepType: StepType,
+					_ text: String,
+					_ docString: DocString,
+					atIndex stepIndex: Int = 0,
+					forScenario scenarioIndex: Int = 0,
+					_ file: StaticString, _ line: UInt) {
+		assertStep(stepIndex, forScenario: scenarioIndex, file, line) {
+			XCTAssertEqual($0.type, stepType, file: file, line: line)
+			XCTAssertEqual($0.text, text, file: file, line: line)
+
+			if let actualDocSring = $0.docStringParameter {
+				XCTAssertEqual(actualDocSring, docString, file: file, line: line)
+			} else {
+				XCTFail("No docString parameter", file: file, line: line)
+			}
 		}
 	}
 
