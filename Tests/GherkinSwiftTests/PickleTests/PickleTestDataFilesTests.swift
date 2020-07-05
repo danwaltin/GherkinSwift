@@ -43,6 +43,8 @@ class PickleTestDataFilesTests: XCTestCase {
 		"padded_example",
 		"readme_example",
 		"scenario_outline_no_newline",
+		"scenario_outline_with_value_with_dollar_sign",
+		"scenario_outlines_with_tags",
 		"scenario_outline",
 		"several_examples",
 		"tagged_feature_with_scenario_outline",
@@ -60,12 +62,9 @@ class PickleTestDataFilesTests: XCTestCase {
 	"incomplete_scenario_outline",
 	"language",
 	"minimal-example",
-	"readme_example",
 	"rule_without_name_and_description",
 	"rule",
 	"scenario_outline_with_docstring",
-	"scenario_outline_with_value_with_dollar_sign",
-	"scenario_outlines_with_tags",
 	"spaces_in_language",
 	*/
 
