@@ -27,6 +27,7 @@ public struct Step : Equatable {
 	public let type: StepType
 	public let text: String
 	public let tableParameter: Table?
+	public let docStringParameter: DocString? = nil
 	public let location: Location
 
 	public init(type: StepType, text: String, location: Location, tableParameter: Table?) {

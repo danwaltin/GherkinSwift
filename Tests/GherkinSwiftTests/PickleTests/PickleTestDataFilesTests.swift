@@ -31,7 +31,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"datatables_with_new_lines",
 		"datatables",
 		"descriptions",
-		//"docstrings",
+		"docstrings",
 		"empty",
 		"example_token_multiple",
 		"incomplete_background_1",
