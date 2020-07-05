@@ -100,16 +100,25 @@ class TestParseBase: XCTestCase {
 	}
 	
 	// MARK: - Assertions
-	func assertBackground(_ file: StaticString, _ line: UInt, assertBackground: (Background) -> Void ) {
+	func assertFeature(_ file: StaticString, _ line: UInt, assert: (Feature) -> Void ) {
+		guard let feature = actualGherkinDocument.feature else {
+			XCTFail("No feature found", file: file, line: line)
+			return
+		}
+		
+		assert(feature)
+	}
+	
+	func assertBackground(_ file: StaticString, _ line: UInt, assert: (Background) -> Void ) {
 		guard let actualBackground = actualFeature.background else {
 			XCTFail("No background found", file: file, line: line)
 			return
 		}
 		
-		assertBackground(actualBackground)
+		assert(actualBackground)
 	}
 
-	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
+	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assert: (Step) -> Void ) {
 		assertBackground(file, line) {
 			let steps = $0.steps
 			if steps.count <= index {
@@ -119,7 +128,7 @@ class TestParseBase: XCTestCase {
 			
 			let actualStep = steps[index]
 			
-			assertStep(actualStep)
+			assert(actualStep)
 		}
 	}
 
