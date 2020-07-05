@@ -6,3 +6,4 @@ Currently does not handle
 * docstrings
 * rule
 * example directly under a feature
+* errors when parsing
