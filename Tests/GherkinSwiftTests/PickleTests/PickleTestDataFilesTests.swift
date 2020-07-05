@@ -137,7 +137,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	}
 	
 	private func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser()
+		return GherkinFeatureParser(configuration: ParseConfiguration())
 	}
 }
 

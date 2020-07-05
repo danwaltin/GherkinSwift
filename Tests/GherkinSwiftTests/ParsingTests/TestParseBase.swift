@@ -51,8 +51,8 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser(docStringSeparator: docStringSeparator,
-									alternativeDocStringSeparator: alternativeDocStringSeparator)
+		return GherkinFeatureParser(configuration: ParseConfiguration(docStringSeparator: docStringSeparator,
+																	  alternativeDocStringSeparator: alternativeDocStringSeparator))
 	}
 		
 	// MARK: - Factory methods
