@@ -123,20 +123,20 @@ class ParseBackgroundTests: TestParseBase {
 
 	private func then_shouldReturnBackgroundWithName(_ name: String,
 													 file: StaticString = #file, line: UInt = #line) {
-		assertBackground(file, line) {
+		assert.background(file, line) {
 			XCTAssertEqual($0.name, name, file: file, line: line)
 		}
 	}
 
 	private func then_shouldReturnBackgroundWithoutName(file: StaticString = #file, line: UInt = #line) {
-		assertBackground(file, line) {
+		assert.background(file, line) {
 			XCTAssertEqual($0.name, "", file: file, line: line)
 		}
 	}
 
 	private func then_shouldReturnBackgroundWith(numberOfSteps expected: Int,
 												 file: StaticString = #file, line: UInt = #line) {
-		assertBackground(file, line) {
+		assert.background(file, line) {
 			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
 		}
 	}
@@ -145,7 +145,7 @@ class ParseBackgroundTests: TestParseBase {
 													 _ text: String,
 													 atIndex index: Int = 0,
 													 file: StaticString = #file, line: UInt = #line) {
-		assertBackgroundStep(atIndex: index, file, line) {
+		assert.backgroundStep(atIndex: index, file, line) {
 			XCTAssertEqual($0.type, stepType, file: file, line: line)
 			XCTAssertEqual($0.text, text, file: file, line: line)
 		}
@@ -156,7 +156,7 @@ class ParseBackgroundTests: TestParseBase {
 													 _ text: String,
 													 _ table: Table,
 													 file: StaticString = #file, line: UInt = #line) {
-		assertBackgroundStep(atIndex: index, file, line) {
+		assert.backgroundStep(atIndex: index, file, line) {
 			XCTAssertEqual($0.type, stepType, file: file, line: line)
 			XCTAssertEqual($0.text, text, file: file, line: line)
 

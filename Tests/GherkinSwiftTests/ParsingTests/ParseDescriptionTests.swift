@@ -194,28 +194,28 @@ class ParseDescriptionTests: TestParseBase {
 	// MARK: - Givens, whens and thens
 	private func then_feature(shouldHaveDescription description: String,
 							  file: StaticString = #file, line: UInt = #line) {
-		assertFeature(file, line) {
+		assert.feature(file, line) {
 			XCTAssertEqual($0.description, description, file: file, line: line)
 		}
 	}
 
 	private func then_background(shouldHaveDescription description: String,
 							  file: StaticString = #file, line: UInt = #line) {
-		assertBackground(file, line) {
+		assert.background(file, line) {
 			XCTAssertEqual($0.description, description, file: file, line: line)
 		}
 	}
 
 	private func then_scenario(_ index: Int, shouldHaveDescription description: String,
 							   file: StaticString = #file, line: UInt = #line) {
-		assertScenario(index, file, line) {
+		assert.scenario(index, file, line) {
 			XCTAssertEqual($0.description, description, file: file, line: line)
 		}
 	}
 
 	private func then_example(_ index: Int, shouldHaveDescription description: String,
 							   file: StaticString = #file, line: UInt = #line) {
-		assertExamples(index, forScenario: 0, file, line) {
+		assert.examples(index, forScenario: 0, file, line) {
 			XCTAssertEqual($0.description, description, file: file, line: line)
 		}
 	}

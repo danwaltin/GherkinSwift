@@ -130,7 +130,7 @@ class ParseScenariosTests: TestParseBase {
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
-		assertScenario(0, file, line) {
+		assert.scenario(0, file, line) {
 			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
 		}
 	}
@@ -139,7 +139,7 @@ class ParseScenariosTests: TestParseBase {
 												   _ text: String,
 												   atIndex index: Int = 0,
 												   file: StaticString = #file, line: UInt = #line) {		
-		assertStep(stepType, text, atIndex: index, forScenario: 0, file, line)
+		assert.step(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
 }
 

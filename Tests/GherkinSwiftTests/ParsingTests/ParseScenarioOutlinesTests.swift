@@ -107,7 +107,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
-		assertScenario(0, file, line) {
+		assert.scenario(0, file, line) {
 			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
 		}
 	}
@@ -115,7 +115,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
 		
-		assertScenario(0, file, line) {
+		assert.scenario(0, file, line) {
 			XCTAssertEqual($0.examples.count, expected, file: file, line: line)
 		}
 	}
@@ -124,7 +124,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 													   name: String,
 													   _ table: Table,
 													   file: StaticString = #file, line: UInt = #line) {
-		assertExamples(index, forScenario: 0, file, line) {
+		assert.examples(index, forScenario: 0, file, line) {
 			XCTAssertEqual($0.name, name, file: file, line: line)
 			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
 		}
@@ -134,7 +134,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 												   _ stepType: StepType,
 												   _ text: String,
 												   file: StaticString = #file, line: UInt = #line) {
-		assertStep(stepType, text, atIndex: index, forScenario: 0, file, line)
+		assert.step(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
@@ -142,7 +142,7 @@ class ParseScenarioOutlinesTests: TestParseBase {
 												   _ text: String,
 												   _ table: Table,
 												   file: StaticString = #file, line: UInt = #line) {
-		assertStep(stepType, text, table, atIndex: index, forScenario: 0, file, line)
+		assert.step(stepType, text, table, atIndex: index, forScenario: 0, file, line)
 	}
 }
 
