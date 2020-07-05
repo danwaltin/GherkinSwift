@@ -50,9 +50,13 @@ public class GherkinFeatureParser : FeatureParser {
 		let data = try! Data(contentsOf: url)
 		let content = String(data: data, encoding: .utf8)!
 		
-		return content.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
+		return getAllLinesInDocument(document: content)
 	}
-	
+
+	public func getAllLinesInDocument(document: String) -> [String] {
+		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
+	}
+
 	private func getLines(_ lines:[String]) -> [Line] {
 		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
 	}

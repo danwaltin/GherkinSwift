@@ -39,7 +39,7 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
-		let lines = document.allLines()
+		let lines = parser.getAllLinesInDocument(document: document)
 		return parse(lines, parser: parser)
 	}
 

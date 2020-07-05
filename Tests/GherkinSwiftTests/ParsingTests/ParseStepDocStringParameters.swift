@@ -30,9 +30,9 @@ class ParseStepDocStringParameters: TestParseBase {
 		Feature: feature
 		Scenario: scenario
 			Given something
-			  \"\"\"
+			  \"""
 			  one line
-			  \"\"\"
+			  \"""
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
