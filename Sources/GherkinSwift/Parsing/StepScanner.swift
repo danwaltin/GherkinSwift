@@ -26,6 +26,7 @@ class StepScanner {
 		case started
 		case scanningStep
 		case scanningTableParameter
+		case scanningDocString
 	}
 
 	var state: State = .started
@@ -35,7 +36,8 @@ class StepScanner {
 	var step: Step!
 	
 	let tableScanner = TableScanner()
-
+	let docStringScanner = DocStringScanner()
+	
 	func getStep() -> Step {
 		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
 	}
@@ -53,10 +55,16 @@ class StepScanner {
 				handleTable(line)
 				state = .scanningTableParameter
 			}
+			if shouldStartScanDocString(line) {
+				handleDocString(line)
+				state = .scanningDocString
+			}
 
 		case .scanningTableParameter:
 			handleTable(line)
 
+		case .scanningDocString:
+			handleDocString(line)
 		}
 	}
 	
@@ -96,9 +104,17 @@ class StepScanner {
 		return line.isTable()
 	}
 
+	private func shouldStartScanDocString(_ line: Line) -> Bool {
+		return false
+	}
+
 	private func handleTable(_ line: Line) {
 		if line.isTable() {
 			tableScanner.scan(line)
 		}
+	}
+
+	private func handleDocString(_ line: Line) {
+		docStringScanner.scan(line)
 	}
 }
