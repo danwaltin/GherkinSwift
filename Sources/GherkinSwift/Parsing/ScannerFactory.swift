@@ -72,6 +72,6 @@ struct StepScannerFactory {
 
 struct ExamplesScannerFactory {
 	func examplesScanner(tags: [Tag]) -> ExamplesScanner {
-		return ExamplesScanner(tags: tags)
+		return ExamplesScanner(tags: tags, tableScanner: TableScanner())
 	}
 }

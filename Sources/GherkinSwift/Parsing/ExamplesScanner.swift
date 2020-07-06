@@ -31,12 +31,13 @@ class ExamplesScanner {
 	var columnNumber = 0
 
 	var isScanningTable = false
-	let tableScanner = TableScanner()
+	let tableScanner: TableScanner
 
 	private let tags: [Tag]
 	
-	init(tags: [Tag]) {
+	init(tags: [Tag], tableScanner: TableScanner) {
 		self.tags = tags
+		self.tableScanner = tableScanner
 	}
 	
 	func scan(_ line: Line) {
