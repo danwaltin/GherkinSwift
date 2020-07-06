@@ -25,4 +25,5 @@ public struct DocString : Equatable {
 	public let separator: String
 	public let content: String
 	public let location: Location
+	public let mediaType: String? = nil
 }

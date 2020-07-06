@@ -120,6 +120,38 @@ class ParseStepDocStringParameters: TestParseBase {
 			docString("one line", "---"))
 	}
 
+	func test_docStringParametersToScenarioStep_mediaType() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+			Given something
+			  ===xml
+			  <one>line</one>
+			  ===
+		""")
+
+		then_shouldReturnDocString(withMediaType: "xml");
+	}
+
+	func test_docStringParametersToScenarioStep_withoutMediaType() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+			Given something
+			  ===xml
+			  <one>line</one>
+			  ===
+		""")
+
+		then_shouldReturnDocString(withMediaType: nil);
+	}
+
 	// MARK: - Scenario Outline
 	func test_docStringParametersToScenarioOulineStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
@@ -161,5 +193,12 @@ class ParseStepDocStringParameters: TestParseBase {
 												   _ docString: DocString,
 												   file: StaticString = #file, line: UInt = #line) {
 		assert.step(stepType, text, docString, atIndex: index, forScenario: scenarioIndex, file, line)
+	}
+	
+	private func then_shouldReturnDocString(withMediaType mediaType: String?,
+											file: StaticString = #file, line: UInt = #line) {
+		assert.step(0, forScenario: 0, file, line) {
+			XCTAssertEqual($0.docStringParameter!.mediaType, mediaType, file: file, line: line)
+		}
 	}
 }
