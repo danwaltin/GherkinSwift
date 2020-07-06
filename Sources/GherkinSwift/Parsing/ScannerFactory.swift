@@ -58,12 +58,19 @@ struct ScenarioScannerFactory {
 	func scenarioScanner(tags: [Tag]) -> ScenarioScanner {
 		return ScenarioScanner(tags: tags,
 							   stepScannerFactory: StepScannerFactory(),
-							   examplesTagScanner: TagScanner())
+							   examplesTagScanner: TagScanner(),
+							   examplesScannerFactory: ExamplesScannerFactory())
 	}
 }
 
 struct StepScannerFactory {
 	func stepScanner() -> StepScanner {
 		return StepScanner()
+	}
+}
+
+struct ExamplesScannerFactory {
+	func examplesScanner(tags: [Tag]) -> ExamplesScanner {
+		return ExamplesScanner(tags: tags)
 	}
 }

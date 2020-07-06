@@ -39,6 +39,7 @@ class ScenarioScanner {
 	private let examplesTagScanner: TagScanner
 	private let stepScannerFactory: StepScannerFactory
 	private var stepScanners = [StepScanner]()
+	private let examplesScannerFactory: ExamplesScannerFactory
 	private var examplesScanners = [ExamplesScanner]()
 
 	private let tags: [Tag]
@@ -47,11 +48,13 @@ class ScenarioScanner {
 	
 	init(tags: [Tag],
 		 stepScannerFactory: StepScannerFactory,
-		 examplesTagScanner: TagScanner) {
+		 examplesTagScanner: TagScanner,
+		 examplesScannerFactory: ExamplesScannerFactory) {
 		
 		self.tags = tags
 		self.stepScannerFactory = stepScannerFactory
 		self.examplesTagScanner = examplesTagScanner
+		self.examplesScannerFactory = examplesScannerFactory
 	}
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
@@ -165,8 +168,8 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line) {
-		let currentExamplesScanner = ExamplesScanner(tags: examplesTagScanner.getTags())
-		examplesScanners.append(currentExamplesScanner)
+		let scanner = examplesScannerFactory.examplesScanner(tags: examplesTagScanner.getTags())
+		examplesScanners.append(scanner)
 		examplesTagScanner.clear()
 
 		scanExamples(line)
