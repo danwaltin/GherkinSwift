@@ -39,7 +39,7 @@ class ScenarioScanner {
 	private let examplesTagScanner: TagScanner
 	private let stepScannerFactory: StepScannerFactory
 	private var stepScanners = [StepScanner]()
-	private var examplesScanners = [ScenarioOutlineExamplesScanner]()
+	private var examplesScanners = [ExamplesScanner]()
 
 	private let tags: [Tag]
 
@@ -165,7 +165,7 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line) {
-		let currentExamplesScanner = ScenarioOutlineExamplesScanner(tags: examplesTagScanner.getTags())
+		let currentExamplesScanner = ExamplesScanner(tags: examplesTagScanner.getTags())
 		examplesScanners.append(currentExamplesScanner)
 		examplesTagScanner.clear()
 
