@@ -522,7 +522,7 @@ class ParseLocationTests: TestParseBase {
 	// MARK: - docString locations
 	private func then_docString(forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
 								file: StaticString = #file, line: UInt = #line) {
-		assert.stepDocStringParameter(stepIndex: 0, forScenario: 0, file, line) {
+		assert.stepDocStringParameter(stepIndex: 0, forScenario: scenarioIndex, file, line) {
 			XCTAssertEqual($0.location, location,file: file, line: line)
 		}
 	}
