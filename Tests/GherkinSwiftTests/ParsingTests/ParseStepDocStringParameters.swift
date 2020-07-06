@@ -24,6 +24,7 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseStepDocStringParameters: TestParseBase {
+	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
 		
@@ -41,8 +42,50 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString([
-				"one line"]))
+			docString("one line"))
+	}
+
+	func test_docStringParametersToScenarioStep_twoRows_withIndentation() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		   Given something
+		     ===
+		     first line
+		       second line indented two spaces
+		     ===
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Given,
+			"something",
+			docString("first line\n  second line indented two spaces"))
+	}
+
+	func test_docStringParametersToScenarioStep_threeRows_middleEmpty() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		   Given something
+		     ===
+		     first line
+
+		     third line
+		     ===
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Given,
+			"something",
+			docString("first line\n\nthird line"))
 	}
 
 	func test_docStringParametersToScenarioStep_usingAlternateSeparator() {
@@ -62,11 +105,10 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString([
-				"one line"]))
+			docString("one line"))
 	}
 
-	
+	// MARK: - Scenario Outline
 	func test_docStringParametersToScenarioOulineStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
 
@@ -84,14 +126,13 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString([
-				"one line"]))
+			docString("one line"))
 	}
 
 	// MARK: - Givens, whens, thens
 
-	private func docString(_ lines: [String]) -> DocString {
-		return DocString(lines: lines)
+	private func docString(_ content: String) -> DocString {
+		return DocString(content: content)
 	}
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,

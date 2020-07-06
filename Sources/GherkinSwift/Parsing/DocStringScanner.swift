@@ -48,7 +48,7 @@ class DocStringScanner {
 			if isDocString(line) {
 				state = .done
 			} else {
-				docStringLines.append(line.text)
+				docStringLines.append(line.text.trim())
 			}
 			
 		case .done:
@@ -62,7 +62,7 @@ class DocStringScanner {
 			return nil
 		}
 		
-		return DocString(lines: docStringLines)
+		return DocString(content: docStringLines.joined(separator: newLine))
 	}
 	
 	func isDocString(_ line: Line) -> Bool {
