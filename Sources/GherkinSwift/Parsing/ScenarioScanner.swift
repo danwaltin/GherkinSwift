@@ -36,9 +36,8 @@ class ScenarioScanner {
 	private var name = ""
 	private var descriptionLines = [String]()
 	
-	private var examplesTagScanner = TagScanner()
-	
-	private var currentStepScanner: StepScanner!
+	private let examplesTagScanner: TagScanner
+	private let stepScannerFactory: StepScannerFactory
 	private var stepScanners = [StepScanner]()
 	
 	private let tags: [Tag]
@@ -48,8 +47,13 @@ class ScenarioScanner {
 
 	private var isScenarioOutline = false
 	
-	init(tags: [Tag]) {
+	init(tags: [Tag],
+		 stepScannerFactory: StepScannerFactory,
+		 examplesTagScanner: TagScanner) {
+		
 		self.tags = tags
+		self.stepScannerFactory = stepScannerFactory
+		self.examplesTagScanner = examplesTagScanner
 	}
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
@@ -112,7 +116,7 @@ class ScenarioScanner {
 				startNewExamples(line)
 
 			} else {
-				currentStepScanner.scan(line)
+				scanStep(line)
 			}
 			
 		case .scanningExamples:
@@ -143,12 +147,15 @@ class ScenarioScanner {
 	}
 	
 	private func startNewStep(_ line: Line) {
-		currentStepScanner = StepScanner()
-		stepScanners.append(currentStepScanner)
+		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		currentStepScanner.scan(line)
+		scanStep(line)
 		
 		state = .scanningSteps
+	}
+	
+	private func scanStep(_ line: Line) {
+		stepScanners.last!.scan(line)
 	}
 	
 	private func shouldStartNewExamples(_ line: Line) -> Bool {
