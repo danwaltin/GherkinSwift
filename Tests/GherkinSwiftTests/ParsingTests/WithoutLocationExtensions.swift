@@ -25,7 +25,7 @@
 
 extension DocString {
 	func withoutLocation() -> DocString {
-		return DocString(separator: separator, content: content, location: Location.zero())
+		return DocString(separator: separator, content: content, location: Location.zero(), mediaType: mediaType)
 	}
 }
 

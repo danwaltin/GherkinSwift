@@ -149,7 +149,7 @@ class ParseStepDocStringParameters: TestParseBase {
 			  ===
 		""")
 
-		then_shouldReturnDocString(withMediaType: nil);
+		then_shouldReturnDocString(withMediaType: "xml");
 	}
 
 	// MARK: - Scenario Outline
@@ -176,7 +176,7 @@ class ParseStepDocStringParameters: TestParseBase {
 	// MARK: - Givens, whens, thens
 
 	private func docString(_ content: String, _ separator: String) -> DocString {
-		return DocString(separator: separator, content: content, location: Location.zero())
+		return DocString(separator: separator, content: content, location: Location.zero(), mediaType: nil)
 	}
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,

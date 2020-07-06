@@ -251,6 +251,7 @@ extension DocString : Encodable {
 		case delimiter
 		case content
 		case location
+		case mediaType
 	}
 
 	public func encode(to encoder: Encoder) throws {
@@ -259,6 +260,9 @@ extension DocString : Encodable {
 		try container.encode(separator, forKey: .delimiter)
 		try container.encode(content, forKey: .content)
 		try container.encode(location, forKey: .location)
+		if let mediaType = mediaType {
+			try container.encode(mediaType, forKey: .mediaType)
+		}
 	}
 }
 

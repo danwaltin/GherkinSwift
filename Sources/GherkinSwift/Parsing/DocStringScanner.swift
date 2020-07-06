@@ -34,7 +34,7 @@ class DocStringScanner {
 	private var separator = ""
 	private var docStringLines = [String]()
 	private var location = Location.zero()
-	
+	private var mediaType: String? = nil
 	init(configuration: ParseConfiguration) {
 		self.configuration = configuration
 	}
@@ -44,6 +44,9 @@ class DocStringScanner {
 		case .started:
 			if isDocString(line) {
 				separator = whichSeparator(line)
+				if line.text.trim().count > separator.count {
+					mediaType = line.text.trim().replacingOccurrences(of: separator, with: "")
+				}
 				location = Location(column: line.columnForKeyword(separator), line: line.number)
 				state = .scanningDocString
 			}
@@ -68,7 +71,8 @@ class DocStringScanner {
 		
 		return DocString(separator: separator,
 						 content: docStringLines.joined(separator: newLine),
-						 location: location)
+						 location: location,
+						 mediaType: mediaType)
 	}
 	
 	func isDocString(_ line: Line) -> Bool {
