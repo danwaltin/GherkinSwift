@@ -91,7 +91,7 @@ class ParseStepDocStringParameters: TestParseBase {
 	// MARK: - Givens, whens, thens
 
 	private func docString(_ lines: [String]) -> DocString {
-		return DocString()
+		return DocString(lines: lines)
 	}
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,

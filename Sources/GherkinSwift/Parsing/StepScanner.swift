@@ -44,7 +44,11 @@ class StepScanner {
 	}
 
 	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
+		return Step(type: step.type,
+					text: step.text,
+					location: location,
+					tableParameter: tableScanner.getTable(),
+					docStringParameter: docStringScanner.getDocString())
 	}
 	
 	func scan(_ line: Line) {
@@ -110,7 +114,7 @@ class StepScanner {
 	}
 
 	private func shouldStartScanDocString(_ line: Line) -> Bool {
-		return false
+		return docStringScanner.isDocString(line)
 	}
 
 	private func handleTable(_ line: Line) {

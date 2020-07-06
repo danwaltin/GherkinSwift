@@ -22,8 +22,10 @@
 // ------------------------------------------------------------------------
 
 struct ScannerFactory {
+	private let configuration: ParseConfiguration
+
 	init(configuration: ParseConfiguration) {
-		
+		self.configuration = configuration
 	}
 	
 	func featureScanner() -> FeatureScanner {
@@ -46,27 +48,39 @@ struct ScannerFactory {
 	}
 	
 	private func scenarioScannerFactory() -> ScenarioScannerFactory {
-		return ScenarioScannerFactory()
+		return ScenarioScannerFactory(configuration: configuration)
 	}
 
 	private func stepScannerFactory() -> StepScannerFactory {
-		return StepScannerFactory()
+		return StepScannerFactory(configuration: configuration)
 	}
 }
 
 struct ScenarioScannerFactory {
+	private let configuration: ParseConfiguration
+
+	init(configuration: ParseConfiguration) {
+		self.configuration = configuration
+	}
+
 	func scenarioScanner(tags: [Tag]) -> ScenarioScanner {
 		return ScenarioScanner(tags: tags,
-							   stepScannerFactory: StepScannerFactory(),
+							   stepScannerFactory: StepScannerFactory(configuration: configuration),
 							   examplesTagScanner: TagScanner(),
 							   examplesScannerFactory: ExamplesScannerFactory())
 	}
 }
 
 struct StepScannerFactory {
+	private let configuration: ParseConfiguration
+
+	init(configuration: ParseConfiguration) {
+		self.configuration = configuration
+	}
+
 	func stepScanner() -> StepScanner {
 		return StepScanner(tableScanner: TableScanner(),
-						   docStringScanner: DocStringScanner())
+						   docStringScanner: DocStringScanner(configuration: configuration))
 	}
 }
 

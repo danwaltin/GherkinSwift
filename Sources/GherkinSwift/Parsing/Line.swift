@@ -143,7 +143,7 @@ struct Line {
 		return hasPrefix(String(prefix))
 	}
 
-	private func hasPrefix(_ prefix: String) -> Bool {
+	func hasPrefix(_ prefix: String) -> Bool {
 		return text.trim().hasPrefix(prefix)
 	}
 }

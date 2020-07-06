@@ -22,4 +22,9 @@
 // ------------------------------------------------------------------------
 
 public struct DocString : Equatable {
+	//public let content: String
+	
+	init(lines: [String]) {
+		
+	}
 }

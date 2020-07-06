@@ -22,11 +22,50 @@
 // ------------------------------------------------------------------------
 
 class DocStringScanner {
+	enum State {
+		case started
+		case scanningDocString
+		case done
+	}
+	
+	private var state: State = .started
+	private let configuration: ParseConfiguration
+	
+	private var docStringLines = [String]()
+	
+	init(configuration: ParseConfiguration) {
+		self.configuration = configuration
+	}
+	
 	func scan(_ line: Line) {
-		
+		switch state {
+		case .started:
+			if isDocString(line) {
+				state = .scanningDocString
+			}
+			
+		case .scanningDocString:
+			if isDocString(line) {
+				state = .done
+			} else {
+				docStringLines.append(line.text)
+			}
+			
+		case .done:
+			// ignore...
+			break
+		}
 	}
 	
 	func getDocString() -> DocString? {
-		return nil
+		if state == .started {
+			return nil
+		}
+		
+		return DocString(lines: docStringLines)
+	}
+	
+	func isDocString(_ line: Line) -> Bool {
+		return line.hasPrefix(configuration.docStringSeparator)
 	}
 }
