@@ -45,6 +45,28 @@ class ParseStepDocStringParameters: TestParseBase {
 				"one line"]))
 	}
 
+	func test_docStringParametersToScenarioStep_usingAlternateSeparator() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+			Given something
+			  ---
+			  one line
+			  ---
+		""")
+
+		then_shouldReturnScenarioWith(numberOfSteps: 1)
+		then_shouldReturnScenarioWithStep(
+			.Given,
+			"something",
+			docString([
+				"one line"]))
+	}
+
+	
 	func test_docStringParametersToScenarioOulineStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
 

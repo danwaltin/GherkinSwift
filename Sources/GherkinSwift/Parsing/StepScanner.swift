@@ -22,11 +22,18 @@
 // ------------------------------------------------------------------------
 
 class StepScanner {
+	enum State {
+		case started
+		case scanningStep
+		case scanningTableParameter
+	}
+
+	var state: State = .started
+	
 	var text = ""
 	var location = Location(column: 0, line: 0)
 	var step: Step!
 	
-	var isScanningTable = false
 	let tableScanner = TableScanner()
 
 	func getStep() -> Step {
@@ -34,15 +41,26 @@ class StepScanner {
 	}
 	
 	func scan(_ line: Line) {
-		handleStepText(line: line)
-		handleTable(line: line)
+		switch state {
+		case .started:
+			if !line.isEmpty() {
+				handleStepText(line)
+				state = .scanningStep
+			}
+			
+		case .scanningStep:
+			if shouldStartScanTable(line) {
+				handleTable(line)
+				state = .scanningTableParameter
+			}
+
+		case .scanningTableParameter:
+			handleTable(line)
+
+		}
 	}
 	
-	private func handleStepText(line: Line) {
-		if line.isEmpty() {
-			return
-		}
-		
+	private func handleStepText(_ line: Line) {
 		if line.isAsterisk() {
 			location = Location(column: line.columnForKeyword(keywordAsterisk), line: line.number)
 			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
@@ -74,14 +92,12 @@ class StepScanner {
 		}
 	}
 	
-	private func handleTable(line: Line) {
-		if line.isEmpty() {
-			return
-		}
+	private func shouldStartScanTable(_ line: Line) -> Bool {
+		return line.isTable()
+	}
 
-		isScanningTable = isScanningTable || line.isTable()
-
-		if isScanningTable {
+	private func handleTable(_ line: Line) {
+		if line.isTable() {
 			tableScanner.scan(line)
 		}
 	}
