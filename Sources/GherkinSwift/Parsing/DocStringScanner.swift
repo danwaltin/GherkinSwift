@@ -66,6 +66,6 @@ class DocStringScanner {
 	}
 	
 	func isDocString(_ line: Line) -> Bool {
-		return line.hasPrefix(configuration.docStringSeparator)
+		return line.hasPrefix(configuration.docStringSeparator) || line.hasPrefix(configuration.alternativeDocStringSeparator)
 	}
 }
