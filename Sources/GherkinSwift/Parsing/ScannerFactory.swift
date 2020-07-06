@@ -65,7 +65,8 @@ struct ScenarioScannerFactory {
 
 struct StepScannerFactory {
 	func stepScanner() -> StepScanner {
-		return StepScanner()
+		return StepScanner(tableScanner: TableScanner(),
+						   docStringScanner: DocStringScanner())
 	}
 }
 

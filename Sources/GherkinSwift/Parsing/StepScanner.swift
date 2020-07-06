@@ -35,9 +35,14 @@ class StepScanner {
 	var location = Location(column: 0, line: 0)
 	var step: Step!
 	
-	let tableScanner = TableScanner()
-	let docStringScanner = DocStringScanner()
-	
+	let tableScanner: TableScanner
+	let docStringScanner: DocStringScanner
+
+	init(tableScanner: TableScanner, docStringScanner: DocStringScanner) {
+		self.tableScanner = tableScanner
+		self.docStringScanner = docStringScanner
+	}
+
 	func getStep() -> Step {
 		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
 	}
