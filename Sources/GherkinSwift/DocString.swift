@@ -23,7 +23,8 @@
 
 public struct DocString : Equatable {
 	public let content: String
-	
+	public let location: Location = Location.zero()
+
 	init(content: String) {
 		self.content = content
 	}

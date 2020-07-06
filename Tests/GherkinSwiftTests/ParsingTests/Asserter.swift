@@ -106,6 +106,17 @@ struct Asserter {
 		}
 	}
 
+	func stepDocStringParameter(stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString, _ line: UInt, assertDocStringParameter: (DocString) -> Void) {
+		step(stepIndex, forScenario: scenarioIndex, file, line) {
+			guard let docString = $0.docStringParameter else {
+				XCTFail("No docStringParameter for step \(stepIndex).", file: file, line: line)
+				return
+			}
+			
+			assertDocStringParameter(docString)
+		}
+	}
+
 	func step(_ stepType: StepType,
 			  _ text: String,
 			  atIndex stepIndex: Int = 0,

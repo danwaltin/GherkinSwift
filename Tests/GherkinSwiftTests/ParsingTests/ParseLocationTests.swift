@@ -25,6 +25,8 @@ import XCTest
 @testable import GherkinSwift
 
 class ParseLocationTests: TestParseBase {
+	// MARK: - feature
+	
 	func test_location_feature_at_1_1() {
 		when_parsingDocument(
 			"""
@@ -44,40 +46,20 @@ class ParseLocationTests: TestParseBase {
 		then_feature(shouldHaveLocation: Location(column: 2, line: 2))
 	}
 	
-	func test_locations_scenarios() {
-		when_parsingDocument(
-			"""
-		Feature: feature
-
-		 Scenario: scenario 1
-
-		   Scenario: scenario 2
-		""")
-		
-		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
-		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
-	}
+	// MARK: - scenario
 	
-	func test_locations_scenarioOutlines() {
+	func test_locations_scenarios() {
 		when_parsingDocument(
 			"""
 			Feature: feature
 
-			 Scenario Outline: scenario 1
+			 Scenario: scenario 1
 
-			   Examples:
-			      |foo|
-			      |bar|
-
-			   Scenario Outline: scenario 2
-
-			   Examples:
-			      |foo|
-			      |bar|
+			   Scenario: scenario 2
 			""")
 		
 		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
-		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 9))
+		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 5))
 	}
 	
 	func test_locations_steps_scenario() {
@@ -97,7 +79,7 @@ class ParseLocationTests: TestParseBase {
 		then_step(1, forScenario: 0, shouldHaveLocation: Location(column: 4, line: 7))
 		then_step(2, forScenario: 0, shouldHaveLocation: Location(column: 3, line: 8))
 	}
-
+	
 	func test_locations_stepsTableBodyAndHeader_scenario() {
 		when_parsingDocument(
 			"""
@@ -114,7 +96,7 @@ class ParseLocationTests: TestParseBase {
 		then_stepTableRow(0, shouldHaveLocation: Location(column: 7, line: 6))
 		then_stepTableRow(1, shouldHaveLocation: Location(column: 10, line: 7))
 	}
-
+	
 	func test_locations_stepsTableCells_scenario() {
 		when_parsingDocument(
 			"""
@@ -138,7 +120,57 @@ class ParseLocationTests: TestParseBase {
 		then_stepRowCell("foo", atStepRow: 2, shouldHaveLocation: Location(column: 11, line: 8))
 		then_stepRowCell("bar", atStepRow: 2, shouldHaveLocation: Location(column: 20, line: 8))
 	}
+	
+	func test_locations_docString_scenario() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+			"""
+		Feature: feature
 
+		Scenario: one
+		   Given: given with docString
+		   ===
+		   alpha, beta
+		   gamma
+		   ===
+
+		Scenario: two
+		   Given: given with docString
+		      ===
+		      alpha, beta
+		      gamma
+		      ===
+		""")
+		
+		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 9, line: 5))
+		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 9, line: 5))
+	}
+	
+	// MARK: - scenario outline
+	
+	func test_locations_scenarioOutlines() {
+		when_parsingDocument(
+			"""
+			Feature: feature
+
+			 Scenario Outline: scenario 1
+
+			   Examples:
+			      |foo|
+			      |bar|
+
+			   Scenario Outline: scenario 2
+
+			   Examples:
+			      |foo|
+			      |bar|
+			""")
+		
+		then_scenario(0, shouldHaveLocation: Location(column: 2, line: 3))
+		then_scenario(1, shouldHaveLocation: Location(column: 4, line: 9))
+	}
+	
 	func test_locations_steps_scenarioOutline() {
 		when_parsingDocument(
 			"""
@@ -255,6 +287,39 @@ class ParseLocationTests: TestParseBase {
 		then_examplesTableRow(1, atExample: 2, shouldHaveLocation: Location(column: 7, line: 22))
 	}
 	
+	func test_locations_docString_scenarioOutline() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+			"""
+		Feature: feature
+
+		Scenario Outline: one
+		   Given: given with docString
+		   ===
+		   alpha, beta
+		   gamma
+		   ===
+
+		   Examples:
+		     | alpha |
+
+		Scenario Outline: two
+		   Given: given with docString
+		      ===
+		      alpha, beta
+		      gamma
+		      ===
+
+		   Examples:
+		      | beta |
+		""")
+		
+		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 9, line: 5))
+		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 9, line: 5))
+	}
+	
+	// MARK: - tags
 	func test_locations_tags() {
 		when_parsingDocument(
 			"""
@@ -291,6 +356,8 @@ class ParseLocationTests: TestParseBase {
 		then_examplesTag(2, forScenario: 1, shouldHaveLocation: Location(column: 5, line: 14))
 	}
 	
+	// MARK: - comments
+	
 	func test_locations_comments() {
 		when_parsingDocument(
 			"""
@@ -307,6 +374,8 @@ class ParseLocationTests: TestParseBase {
 		then_comment(1, shouldHaveLocation: Location(column: 1, line: 5))
 		then_comment(2, shouldHaveLocation: Location(column: 1, line: 7))
 	}
+	
+	// MARK: - background
 	
 	func test_locations_background() {
 		when_parsingDocument(
@@ -447,6 +516,14 @@ class ParseLocationTests: TestParseBase {
 									   file: StaticString = #file, line: UInt = #line) {
 		assert.examples(exampleIndex, forScenario: 0, file, line) {
 			XCTAssertEqual($0.table.rows[rowIndex].location, location,file: file, line: line)
+		}
+	}
+	
+	// MARK: - docString locations
+	private func then_docString(forScenario scenarioIndex: Int, shouldHaveLocation location: Location,
+								file: StaticString = #file, line: UInt = #line) {
+		assert.stepDocStringParameter(stepIndex: 0, forScenario: 0, file, line) {
+			XCTAssertEqual($0.location, location,file: file, line: line)
 		}
 	}
 }
