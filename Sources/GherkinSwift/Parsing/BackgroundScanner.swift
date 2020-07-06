@@ -34,8 +34,12 @@ class BackgroundScanner {
 	private var name = ""
 	private var descriptionLines = [String]()
 	
-	private var currentStepScanner: StepScanner!
+	let stepScannerFactory: StepScannerFactory
 	private var stepScanners = [StepScanner]()
+	
+	init(stepScannerFactory: StepScannerFactory) {
+		self.stepScannerFactory = stepScannerFactory
+	}
 	
 	func scan(_ line: Line) {
 		switch state {
@@ -59,7 +63,7 @@ class BackgroundScanner {
 				startNewStep(line)
 
 			} else {
-				currentStepScanner.scan(line)
+				scanStep(line)
 			}
 		}
 	}
@@ -69,12 +73,15 @@ class BackgroundScanner {
 	}
 	
 	private func startNewStep(_ line: Line) {
-		currentStepScanner = StepScanner()
-		stepScanners.append(currentStepScanner)
+		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		currentStepScanner.scan(line)
+		scanStep(line)
 		
 		state = .scanningSteps
+	}
+	
+	private func scanStep(_ line: Line) {
+		stepScanners.last!.scan(line)
 	}
 	
 	func getBackground() -> Background? {

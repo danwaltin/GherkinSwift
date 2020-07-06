@@ -34,24 +34,27 @@ class FeatureScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 	
-	let featureTagScanner = TagScanner()
+	let featureTagScanner: TagScanner
+	let backgroundScanner: BackgroundScanner
+	let scenarioTagScanner: TagScanner
+	let scenarioScannerFactory: ScenarioScannerFactory
+	var scenarioScanners: [ScenarioScanner] = []
 
-	let scenarioTagScanner = TagScanner()
-	
 	var name = ""
 	var descriptionLines = [String]()
 	
-	var currentScenarioScanner: ScenarioScanner!
-	var scenarioScanners: [ScenarioScanner] = []
+	init(featureTagScanner: TagScanner,
+		 backgroundScanner: BackgroundScanner,
+		 scenarioTagScanner: TagScanner,
+		 scenarioScannerFactory: ScenarioScannerFactory) {
+		
+		self.featureTagScanner = featureTagScanner
+		self.backgroundScanner = backgroundScanner
+		self.scenarioTagScanner = scenarioTagScanner
+		self.scenarioScannerFactory = scenarioScannerFactory
+	}
 	
-	let backgroundScanner = BackgroundScanner()
-	
-	func scan(_ line: Line, _ commentCollector: CommentCollector, allLines: [Line]) {
-		if line.isComment() {
-			commentCollector.collectComment(line)
-			return
-		}
-
+	func scan(_ line: Line, allLines: [Line]) {
 		switch state {
 		case .started:
 			if line.isTag() {
@@ -98,7 +101,7 @@ class FeatureScanner {
 				startNewScenario(line)
 			
 			} else {
-				currentScenarioScanner.scan(line)
+				scanScenario(line)
 			}
 
 		case .foundNextScenarioTags:
@@ -125,13 +128,16 @@ class FeatureScanner {
 	}
 
 	private func startNewScenario(_ line: Line) {
-		currentScenarioScanner = ScenarioScanner(tags: scenarioTagScanner.getTags())
+		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
 		scenarioTagScanner.clear()
-		scenarioScanners += [currentScenarioScanner]
 
-		currentScenarioScanner.scan(line)
+		scanScenario(line)
 
 		state = .scanningScenario
+	}
+	
+	private func scanScenario(_ line: Line) {
+		scenarioScanners.last!.scan(line)
 	}
 	
 	func getFeature() -> Feature? {
