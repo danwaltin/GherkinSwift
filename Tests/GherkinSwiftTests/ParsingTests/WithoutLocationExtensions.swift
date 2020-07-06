@@ -23,6 +23,12 @@
 
 @testable import GherkinSwift
 
+extension DocString {
+	func withoutLocation() -> DocString {
+		return DocString(content: content, location: Location.zero())
+	}
+}
+
 extension Table {
 	func withoutLocation() -> Table {
 		var newRows = [TableRow]()

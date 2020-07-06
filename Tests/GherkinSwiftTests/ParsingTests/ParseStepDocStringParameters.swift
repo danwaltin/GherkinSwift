@@ -31,18 +31,30 @@ class ParseStepDocStringParameters: TestParseBase {
 		when_parsingDocument(
 		"""
 		Feature: feature
-		Scenario: scenario
+		Scenario: regular
 			Given something
 			  ===
-			  one line
+			  Ada Lovelace
 			  ===
+		Scenario: alternative
+			Then something
+			  ---
+			  Alan Turing
+			  ---
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
 			.Given,
 			"something",
-			docString("one line"))
+			docString("Ada Lovelace"))
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 1,
+			.Then,
+			"something",
+			docString("Alan Turing"))
 	}
 
 	func test_docStringParametersToScenarioStep_twoRows_withIndentation() {
@@ -132,7 +144,7 @@ class ParseStepDocStringParameters: TestParseBase {
 	// MARK: - Givens, whens, thens
 
 	private func docString(_ content: String) -> DocString {
-		return DocString(content: content)
+		return DocString(content: content, location: Location.zero())
 	}
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
@@ -143,10 +155,11 @@ class ParseStepDocStringParameters: TestParseBase {
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int = 0,
+												   forScenario scenarioIndex: Int = 0,
 												   _ stepType: StepType,
 												   _ text: String,
 												   _ docString: DocString,
 												   file: StaticString = #file, line: UInt = #line) {
-		assert.step(stepType, text, docString, atIndex: index, forScenario: 0, file, line)
+		assert.step(stepType, text, docString, atIndex: index, forScenario: scenarioIndex, file, line)
 	}
 }

@@ -32,6 +32,7 @@ class DocStringScanner {
 	private let configuration: ParseConfiguration
 	
 	private var docStringLines = [String]()
+	private var location = Location.zero()
 	
 	init(configuration: ParseConfiguration) {
 		self.configuration = configuration
@@ -41,6 +42,8 @@ class DocStringScanner {
 		switch state {
 		case .started:
 			if isDocString(line) {
+				let separator = whichSeparator(line)
+				location = Location(column: line.columnForKeyword(separator), line: line.number)
 				state = .scanningDocString
 			}
 			
@@ -62,10 +65,18 @@ class DocStringScanner {
 			return nil
 		}
 		
-		return DocString(content: docStringLines.joined(separator: newLine))
+		return DocString(content: docStringLines.joined(separator: newLine), location: location)
 	}
 	
 	func isDocString(_ line: Line) -> Bool {
 		return line.hasPrefix(configuration.docStringSeparator) || line.hasPrefix(configuration.alternativeDocStringSeparator)
+	}
+	
+	private func whichSeparator(_ line: Line) -> String {
+		if line.hasPrefix(configuration.docStringSeparator) {
+			return configuration.docStringSeparator
+		}
+		
+		return configuration.alternativeDocStringSeparator
 	}
 }

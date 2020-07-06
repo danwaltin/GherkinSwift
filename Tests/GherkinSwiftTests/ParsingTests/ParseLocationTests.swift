@@ -128,25 +128,25 @@ class ParseLocationTests: TestParseBase {
 			"""
 		Feature: feature
 
-		Scenario: one
+		Scenario: regular separator
 		   Given: given with docString
 		   ===
 		   alpha, beta
 		   gamma
 		   ===
 
-		Scenario: two
+		Scenario: alternative separator
 		   Given: given with docString
-		      ===
+		      ---
 		      alpha, beta
 		      gamma
-		      ===
+		      ---
 		""")
 		
-		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 9, line: 5))
-		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 9, line: 5))
+		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
+		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 7, line: 12))
 	}
-	
+
 	// MARK: - scenario outline
 	
 	func test_locations_scenarioOutlines() {
@@ -291,7 +291,7 @@ class ParseLocationTests: TestParseBase {
 		given_docStringSeparator("===", alternative: "---")
 		
 		when_parsingDocument(
-			"""
+		"""
 		Feature: feature
 
 		Scenario Outline: one
@@ -315,8 +315,8 @@ class ParseLocationTests: TestParseBase {
 		      | beta |
 		""")
 		
-		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 9, line: 5))
-		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 9, line: 5))
+		then_docString(forScenario: 0, shouldHaveLocation: Location(column: 4, line: 5))
+		then_docString(forScenario: 1, shouldHaveLocation: Location(column: 7, line: 15))
 	}
 	
 	// MARK: - tags

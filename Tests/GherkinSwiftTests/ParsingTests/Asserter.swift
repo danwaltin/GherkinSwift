@@ -157,7 +157,7 @@ struct Asserter {
 			XCTAssertEqual($0.text, text, file: file, line: line)
 			
 			if let actualDocSring = $0.docStringParameter {
-				XCTAssertEqual(actualDocSring, docString, file: file, line: line)
+				XCTAssertEqual(actualDocSring.withoutLocation(), docString, file: file, line: line)
 			} else {
 				XCTFail("No docString parameter", file: file, line: line)
 			}
