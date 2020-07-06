@@ -248,6 +248,7 @@ extension ScenarioOutlineExamples : Encodable {
 
 extension DocString : Encodable {
 	enum CodingKeys: String, CodingKey {
+		case delimiter
 		case content
 		case location
 	}
@@ -255,6 +256,7 @@ extension DocString : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		
+		try container.encode(separator, forKey: .delimiter)
 		try container.encode(content, forKey: .content)
 		try container.encode(location, forKey: .location)
 	}

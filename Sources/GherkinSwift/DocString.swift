@@ -22,6 +22,7 @@
 // ------------------------------------------------------------------------
 
 public struct DocString : Equatable {
+	public let separator: String
 	public let content: String
 	public let location: Location
 }

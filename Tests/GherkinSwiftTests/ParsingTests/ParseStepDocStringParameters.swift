@@ -48,13 +48,13 @@ class ParseStepDocStringParameters: TestParseBase {
 			forScenario: 0,
 			.Given,
 			"something",
-			docString("Ada Lovelace"))
+			docString("Ada Lovelace", "==="))
 
 		then_shouldReturnScenarioWithStep(
 			forScenario: 1,
 			.Then,
 			"something",
-			docString("Alan Turing"))
+			docString("Alan Turing", "---"))
 	}
 
 	func test_docStringParametersToScenarioStep_twoRows_withIndentation() {
@@ -75,7 +75,7 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString("first line\n  second line indented two spaces"))
+			docString("first line\n  second line indented two spaces", "==="))
 	}
 
 	func test_docStringParametersToScenarioStep_threeRows_middleEmpty() {
@@ -97,7 +97,7 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString("first line\n\nthird line"))
+			docString("first line\n\nthird line", "==="))
 	}
 
 	func test_docStringParametersToScenarioStep_usingAlternateSeparator() {
@@ -117,7 +117,7 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString("one line"))
+			docString("one line", "---"))
 	}
 
 	// MARK: - Scenario Outline
@@ -138,13 +138,13 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWithStep(
 			.Given,
 			"something",
-			docString("one line"))
+			docString("one line", "==="))
 	}
 
 	// MARK: - Givens, whens, thens
 
-	private func docString(_ content: String) -> DocString {
-		return DocString(content: content, location: Location.zero())
+	private func docString(_ content: String, _ separator: String) -> DocString {
+		return DocString(separator: separator, content: content, location: Location.zero())
 	}
 	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
