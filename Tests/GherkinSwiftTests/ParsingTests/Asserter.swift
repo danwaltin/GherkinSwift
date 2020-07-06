@@ -94,7 +94,18 @@ struct Asserter {
 			assertStep(actualStep)
 		}
 	}
-	
+
+	func stepTableParameter(stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString, _ line: UInt, assertTableParameter: (Table) -> Void) {
+		step(stepIndex, forScenario: scenarioIndex, file, line) {
+			guard let table = $0.tableParameter else {
+				XCTFail("No tableParameter for step \(stepIndex).", file: file, line: line)
+				return
+			}
+			
+			assertTableParameter(table)
+		}
+	}
+
 	func step(_ stepType: StepType,
 			  _ text: String,
 			  atIndex stepIndex: Int = 0,
