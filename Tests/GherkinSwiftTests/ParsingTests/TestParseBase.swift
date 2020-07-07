@@ -28,6 +28,10 @@ class TestParseBase: XCTestCase {
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
 
+	func given_defaultLanguage(_ languageCode: String) {
+		
+	}
+
 	func given_docStringSeparator(_ separator: String, alternative: String) {
 		docStringSeparator = separator
 		alternativeDocStringSeparator = alternative
