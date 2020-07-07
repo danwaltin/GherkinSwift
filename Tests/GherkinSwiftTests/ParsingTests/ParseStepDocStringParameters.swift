@@ -160,8 +160,8 @@ class ParseStepDocStringParameters: TestParseBase {
 		Feature: feature
 		Scenario: scenario
 			Given something
-			  ===
-			  one
+		      ===
+		      one
 		      ---
 		      two
 			  ===

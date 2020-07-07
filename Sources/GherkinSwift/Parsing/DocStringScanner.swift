@@ -57,7 +57,7 @@ class DocStringScanner {
 			}
 			
 		case .scanningDocString:
-			if isDocString(line) {
+			if isEndSeparator(line) {
 				state = .done
 			} else {
 				docStringLines.append(correctlyIndented(line))
@@ -93,6 +93,10 @@ class DocStringScanner {
 	
 	func isDocString(_ line: Line) -> Bool {
 		return line.hasPrefix(configuration.docStringSeparator) || line.hasPrefix(configuration.alternativeDocStringSeparator)
+	}
+	
+	private func isEndSeparator(_ line: Line) -> Bool {
+		return line.hasPrefix(separator)
 	}
 	
 	private func whichSeparator(_ line: Line) -> String {
