@@ -69,23 +69,7 @@ class ParseLanguages: TestParseBase {
 		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
 	}
 	
-	private func given_languages(_ languages: [String: Language]) {
-		
-	}
-
 	// MARK: - Givens, whens, thens
-	private func L(feature: [String],
-				   scenario: [String] = [],
-				   given: [String] = [],
-				   when: [String] = [],
-				   then: [String] = []) -> Language {
-		return Language(name: "name", native: "native",
-						feature: feature,
-						given: given,
-						scenario: scenario,
-						then: then,
-						when: when)
-	}
 	
 	private func then_featureNameShouldBe(_ name: String,
 										  file: StaticString = #file, line: UInt = #line) {

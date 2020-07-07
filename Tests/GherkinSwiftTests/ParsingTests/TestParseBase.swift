@@ -28,7 +28,33 @@ class TestParseBase: XCTestCase {
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
 
+	override func setUp() {
+		
+		// Default to the same english language as in
+		// the gherkin-languages.json file,
+		// but without the extra keywords
+		given_defaultLanguage("en")
+		given_languages(
+			["en" : Language(name: "English",
+							 native: "English",
+							 and: ["And"],
+							 background: ["Background"],
+							 but: ["But"],
+							 examples: ["Examples"],
+							 feature: ["Feature"],
+							 given: ["Given"],
+							 rule: ["Rule"],
+							 scenario: ["Scenario"],
+							 scenarioOutline: ["Scenario Outline"],
+							 then: ["Then"],
+							 when: ["When"])])
+	}
+d
 	func given_defaultLanguage(_ languageCode: String) {
+		
+	}
+
+	func given_languages(_ languages: [String: Language]) {
 		
 	}
 
@@ -60,6 +86,25 @@ class TestParseBase: XCTestCase {
 	}
 		
 	// MARK: - Factory methods
+	func L(feature: [String],
+		   scenario: [String] = [],
+		   given: [String] = [],
+		   when: [String] = [],
+		   then: [String] = []) -> Language {
+		return Language(name: "name", native: "native",
+						and: [],
+						background: [],
+						but: [],
+						examples: [],
+						feature: feature,
+						given: given,
+						rule: [],
+						scenario: scenario,
+						scenarioOutline: [],
+						then: then,
+						when: when)
+	}
+
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
 		return Table.withColumns([col])

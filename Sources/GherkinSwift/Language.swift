@@ -25,15 +25,15 @@ struct Language {
 	let name: String
 	let native: String
 	
-	let and: [String] = []
-	let background: [String]  = []
-	let but: [String] = []
-	let examples: [String] = []
+	let and: [String]
+	let background: [String]
+	let but: [String]
+	let examples: [String]
     let feature: [String]
     let given: [String]
-	let rule: [String] = []
+	let rule: [String]
     let scenario: [String]
-    let scenarioOutline: [String] = []
+    let scenarioOutline: [String]
     let then: [String]
     let when: [String]
 }
