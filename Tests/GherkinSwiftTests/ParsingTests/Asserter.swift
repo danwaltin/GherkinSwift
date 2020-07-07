@@ -116,7 +116,7 @@ struct Asserter {
 			assertDocStringParameter(docString)
 		}
 	}
-
+	
 	func step(_ stepType: StepType,
 			  _ text: String,
 			  atIndex stepIndex: Int = 0,
