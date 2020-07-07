@@ -60,21 +60,24 @@ class DocStringScanner {
 			if isDocString(line) {
 				state = .done
 			} else {
-				if line.isEmpty() {
-					docStringLines.append(line.text)
-				} else {
-					let totalIndentation = line.text.indentation()
-					var indentation = totalIndentation - separatorIndentation
-					indentation = indentation < 0 ? 0 : indentation
-					let indentationPrefix = String(repeating: " ", count: indentation)
-					docStringLines.append(indentationPrefix + line.text.trimLeft())
-				}
+				docStringLines.append(correctlyIndented(line))
 			}
 			
 		case .done:
 			// ignore...
 			break
 		}
+	}
+	
+	private func correctlyIndented(_ line: Line) -> String {
+		if line.isEmpty() {
+			return line.text
+		}
+		
+		let indentation = max(0, line.text.indentation() - separatorIndentation)
+
+		let indentationPrefix = String(repeating: " ", count: indentation)
+		return indentationPrefix + line.text.trimLeft()
 	}
 	
 	func getDocString() -> DocString? {
