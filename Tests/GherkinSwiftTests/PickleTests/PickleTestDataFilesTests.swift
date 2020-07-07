@@ -31,8 +31,10 @@ class PickleTestDataFilesTests: XCTestCase {
 		"datatables_with_new_lines",
 		"datatables",
 		"descriptions",
+		"docstrings",
 		"empty",
 		"example_token_multiple",
+		"example_tokens_everywhere",
 		"incomplete_background_1",
 		"incomplete_background_2",
 		"incomplete_feature_1",
@@ -43,6 +45,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"padded_example",
 		"readme_example",
 		"scenario_outline_no_newline",
+		"scenario_outline_with_docstring",
 		"scenario_outline_with_value_with_dollar_sign",
 		"scenario_outlines_with_tags",
 		"scenario_outline",
@@ -53,9 +56,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	]
 	/*
 	"complex_background",
-	"docstrings",
 	"escaped_pipes",
-	"example_tokens_everywhere",
 	"i18n_emoji",
 	"i18n_fr",
 	"i18n_no",
@@ -64,7 +65,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"minimal-example",
 	"rule_without_name_and_description",
 	"rule",
-	"scenario_outline_with_docstring",
 	"spaces_in_language",
 	*/
 
@@ -137,7 +137,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	}
 	
 	private func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser()
+		return GherkinFeatureParser(configuration: ParseConfiguration())
 	}
 }
 

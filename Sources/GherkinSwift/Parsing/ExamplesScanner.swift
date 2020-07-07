@@ -14,14 +14,14 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ScenarioOutlineExamplesScanner.swift
+//  ExamplesScanner.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-29.
 //
 // ------------------------------------------------------------------------
 
-class ScenarioOutlineExamplesScanner {
+class ExamplesScanner {
 	var name = ""
 	
 	var isScanningDescription = false
@@ -31,12 +31,13 @@ class ScenarioOutlineExamplesScanner {
 	var columnNumber = 0
 
 	var isScanningTable = false
-	let tableScanner = TableScanner()
+	let tableScanner: TableScanner
 
 	private let tags: [Tag]
 	
-	init(tags: [Tag]) {
+	init(tags: [Tag], tableScanner: TableScanner) {
 		self.tags = tags
+		self.tableScanner = tableScanner
 	}
 	
 	func scan(_ line: Line) {

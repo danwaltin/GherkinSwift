@@ -36,20 +36,25 @@ class ScenarioScanner {
 	private var name = ""
 	private var descriptionLines = [String]()
 	
-	private var examplesTagScanner = TagScanner()
-	
-	private var currentStepScanner: StepScanner!
+	private let examplesTagScanner: TagScanner
+	private let stepScannerFactory: StepScannerFactory
 	private var stepScanners = [StepScanner]()
-	
+	private let examplesScannerFactory: ExamplesScannerFactory
+	private var examplesScanners = [ExamplesScanner]()
+
 	private let tags: [Tag]
-	
-	private var currentExamplesScanner: ScenarioOutlineExamplesScanner!
-	private var examplesScanners = [ScenarioOutlineExamplesScanner]()
 
 	private var isScenarioOutline = false
 	
-	init(tags: [Tag]) {
+	init(tags: [Tag],
+		 stepScannerFactory: StepScannerFactory,
+		 examplesTagScanner: TagScanner,
+		 examplesScannerFactory: ExamplesScannerFactory) {
+		
 		self.tags = tags
+		self.stepScannerFactory = stepScannerFactory
+		self.examplesTagScanner = examplesTagScanner
+		self.examplesScannerFactory = examplesScannerFactory
 	}
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
@@ -112,7 +117,7 @@ class ScenarioScanner {
 				startNewExamples(line)
 
 			} else {
-				currentStepScanner.scan(line)
+				scanStep(line)
 			}
 			
 		case .scanningExamples:
@@ -124,7 +129,7 @@ class ScenarioScanner {
 				startNewExamples(line)
 
 			} else {
-				currentExamplesScanner.scan(line)
+				scanExamples(line)
 			}
 
 		case .foundNextExamplesTags:
@@ -143,12 +148,19 @@ class ScenarioScanner {
 	}
 	
 	private func startNewStep(_ line: Line) {
-		currentStepScanner = StepScanner()
-		stepScanners.append(currentStepScanner)
+		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		currentStepScanner.scan(line)
+		scanStep(line)
 		
 		state = .scanningSteps
+	}
+	
+	private func scanStep(_ line: Line) {
+		stepScanners.last!.scan(line)
+	}
+	
+	private func scanExamples(_ line: Line) {
+		examplesScanners.last!.scan(line)
 	}
 	
 	private func shouldStartNewExamples(_ line: Line) -> Bool {
@@ -156,11 +168,11 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line) {
-		currentExamplesScanner = ScenarioOutlineExamplesScanner(tags: examplesTagScanner.getTags())
+		let scanner = examplesScannerFactory.examplesScanner(tags: examplesTagScanner.getTags())
+		examplesScanners.append(scanner)
 		examplesTagScanner.clear()
-		examplesScanners += [currentExamplesScanner]
 
-		currentExamplesScanner.scan(line)
+		scanExamples(line)
 
 		state = .scanningExamples
 	}

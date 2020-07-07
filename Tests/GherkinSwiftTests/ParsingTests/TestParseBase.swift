@@ -24,47 +24,37 @@ import XCTest
 @testable import GherkinSwift
 
 class TestParseBase: XCTestCase {
-	var actualFeature: Feature {
-		return actualGherkinDocument.feature!
-	}
 	var actualGherkinDocument: GherkinDocument!
+	var docStringSeparator: String = "..."
+	var alternativeDocStringSeparator: String = ",,,"
+
+	func given_docStringSeparator(_ separator: String, alternative: String) {
+		docStringSeparator = separator
+		alternativeDocStringSeparator = alternative
+	}
 	
 	func when_parsingDocument(_ document: String) {
 		actualGherkinDocument = parseDocument(document, parser: parser())
 	}
 
 	func when_parsing(_ lines: [String]) {
-		actualGherkinDocument = parseGherkinDocument(lines, parser: parser())
+		actualGherkinDocument = parse(lines, parser: parser())
 	}
 
-	func parseGherkinDocument(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
+	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
 		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
 	}
 
 	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
-		let lines = document.allLines()
-		return parseGherkinDocument(lines, parser: parser)
-	}
-
-	func then_shouldReturnScenariosWithNames(_ names: [String]) {
-		let actualNames = scenarios().map{ s in
-			s.name
-		}
-		XCTAssertEqual(actualNames, names)
+		let lines = parser.getAllLinesInDocument(document: document)
+		return parse(lines, parser: parser)
 	}
 
 	func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser()
+		return GherkinFeatureParser(configuration: ParseConfiguration(docStringSeparator: docStringSeparator,
+																	  alternativeDocStringSeparator: alternativeDocStringSeparator))
 	}
-	
-	func scenarios() -> [Scenario] {
-		return actualFeature.scenarios
-	}
-	
-	func scenario(at index: Int) -> Scenario {
-		return scenarios()[index]
-	}
-
+		
 	// MARK: - Factory methods
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
@@ -99,69 +89,8 @@ class TestParseBase: XCTestCase {
 	}
 	
 	// MARK: - Assertions
-	func assertBackground(_ file: StaticString, _ line: UInt, assertBackground: (Background) -> Void ) {
-		guard let actualBackground = actualFeature.background else {
-			XCTFail("No background found", file: file, line: line)
-			return
-		}
-		
-		assertBackground(actualBackground)
-	}
-
-	func assertBackgroundStep(atIndex index: Int, _ file: StaticString, _ line: UInt, assertStep: (Step) -> Void ) {
-		assertBackground(file, line) {
-			let steps = $0.steps
-			if steps.count <= index {
-				XCTFail("No step at index \(index). Number of steps: \(steps.count)", file: file, line: line)
-				return
-			}
-			
-			let actualStep = steps[index]
-			
-			assertStep(actualStep)
-		}
-	}
-
-	func assertScenario(_ scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Scenario) -> Void) {
-		let scenarios = actualFeature.scenarios
-		if scenarios.count <= scenarioIndex {
-			XCTFail("No scenario at index \(scenarioIndex). Number of scenarios: \(scenarios.count)", file: file, line: line)
-			return
-		}
-		
-		assert(scenarios[scenarioIndex])
-	}
-	
-	func assertStep(_ stepIndex: Int, forScenario scenarioIndex: Int, _ file: StaticString, _ line: UInt, assert: (Step) -> Void) {
-		assertScenario(scenarioIndex, file, line) {
-			let steps = $0.steps
-			if steps.count <= stepIndex {
-				XCTFail("No step at index \(stepIndex). Number of steps: \(steps.count)", file: file, line: line)
-				return
-			}
-			
-			let actualStep = steps[stepIndex]
-			
-			assert(actualStep)
-		}
-	}
-
-	func assertExamples(_ examplesIndex: Int,
-						forScenario scenarioIndex: Int,
-						_ file: StaticString,
-						_ line: UInt,
-						assert: (ScenarioOutlineExamples) -> Void) {
-		assertScenario(scenarioIndex, file, line) {
-			let examples = $0.examples
-			if examples.count <= examplesIndex {
-				XCTFail("No examples at index \(examplesIndex). Number of examples: \(examples.count)", file: file, line: line)
-				return
-			}
-			
-			let actualExamples = examples[examplesIndex]
-			
-			assert(actualExamples)
-		}
+	var assert: Asserter {
+		return Asserter(actualDocument: actualGherkinDocument)
 	}
 }
 

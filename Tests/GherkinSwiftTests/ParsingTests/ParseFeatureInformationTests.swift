@@ -59,7 +59,10 @@ class ParseFeatureInformationTests: TestParseBase {
 	}
 	
 	// MARK: - Givens, whens, thens
-	private func then_featureNameShouldBe(_ name: String, file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualFeature.name, name, file: file, line: line)
+	private func then_featureNameShouldBe(_ name: String,
+										  file: StaticString = #file, line: UInt = #line) {
+		assert.feature(file, line) {
+			XCTAssertEqual($0.name, name, file: file, line: line)
+		}
 	}
 }

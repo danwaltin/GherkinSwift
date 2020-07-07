@@ -22,27 +22,62 @@
 // ------------------------------------------------------------------------
 
 class StepScanner {
+	enum State {
+		case started
+		case scanningStep
+		case scanningTableParameter
+		case scanningDocString
+	}
+
+	var state: State = .started
+	
 	var text = ""
 	var location = Location(column: 0, line: 0)
 	var step: Step!
 	
-	var isScanningTable = false
-	let tableScanner = TableScanner()
+	let tableScanner: TableScanner
+	let docStringScanner: DocStringScanner
+
+	init(tableScanner: TableScanner, docStringScanner: DocStringScanner) {
+		self.tableScanner = tableScanner
+		self.docStringScanner = docStringScanner
+	}
 
 	func getStep() -> Step {
-		return Step(type: step.type, text: step.text, location: location, tableParameter: tableScanner.getTable())
+		return Step(type: step.type,
+					text: step.text,
+					location: location,
+					tableParameter: tableScanner.getTable(),
+					docStringParameter: docStringScanner.getDocString())
 	}
 	
 	func scan(_ line: Line) {
-		handleStepText(line: line)
-		handleTable(line: line)
+		switch state {
+		case .started:
+			if !line.isEmpty() {
+				handleStepText(line)
+				state = .scanningStep
+			}
+			
+		case .scanningStep:
+			if shouldStartScanTable(line) {
+				handleTable(line)
+				state = .scanningTableParameter
+			}
+			if shouldStartScanDocString(line) {
+				handleDocString(line)
+				state = .scanningDocString
+			}
+
+		case .scanningTableParameter:
+			handleTable(line)
+
+		case .scanningDocString:
+			handleDocString(line)
+		}
 	}
 	
-	private func handleStepText(line: Line) {
-		if line.isEmpty() {
-			return
-		}
-		
+	private func handleStepText(_ line: Line) {
 		if line.isAsterisk() {
 			location = Location(column: line.columnForKeyword(keywordAsterisk), line: line.number)
 			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
@@ -74,15 +109,21 @@ class StepScanner {
 		}
 	}
 	
-	private func handleTable(line: Line) {
-		if line.isEmpty() {
-			return
-		}
+	private func shouldStartScanTable(_ line: Line) -> Bool {
+		return line.isTable()
+	}
 
-		isScanningTable = isScanningTable || line.isTable()
+	private func shouldStartScanDocString(_ line: Line) -> Bool {
+		return docStringScanner.isDocString(line)
+	}
 
-		if isScanningTable {
+	private func handleTable(_ line: Line) {
+		if line.isTable() {
 			tableScanner.scan(line)
 		}
+	}
+
+	private func handleDocString(_ line: Line) {
+		docStringScanner.scan(line)
 	}
 }

@@ -23,26 +23,30 @@
 
 import Foundation
 
-public class GherkinFeatureParser : FeatureParser {
+public class GherkinFeatureParser {
 	
-	public init() {
+	let scannerFactory: ScannerFactory
+	
+	public init(configuration: ParseConfiguration) {
+		scannerFactory = ScannerFactory(configuration: configuration)
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
-		let featureScanner = FeatureScanner()
-		let commentCollector = CommentCollector()
+		let featureScanner = scannerFactory.featureScanner()
+		let commentCollector = scannerFactory.commentCollector()
 		
 		let theLines = getLines(lines)
 		for line in theLines {
-			featureScanner.scan(line, commentCollector, allLines: theLines)
+			if line.isComment() {
+				commentCollector.collectComment(line)
+			} else {
+				featureScanner.scan(line, allLines: theLines)
+			}
 		}
 		
-		let feature = featureScanner.getFeature()
-		let comments = commentCollector.getComments()
-		
 		return GherkinFile(gherkinDocument: GherkinDocument(
-			comments: comments,
-			feature: feature,
+			comments: commentCollector.getComments(),
+			feature: featureScanner.getFeature(),
 			uri: fileUri))
 	}
 
@@ -50,9 +54,13 @@ public class GherkinFeatureParser : FeatureParser {
 		let data = try! Data(contentsOf: url)
 		let content = String(data: data, encoding: .utf8)!
 		
-		return content.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
+		return getAllLinesInDocument(document: content)
 	}
-	
+
+	public func getAllLinesInDocument(document: String) -> [String] {
+		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
+	}
+
 	private func getLines(_ lines:[String]) -> [Line] {
 		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
 	}

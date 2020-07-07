@@ -103,293 +103,51 @@ class ParseScenarioOutlinesTests: TestParseBase {
 				"beta"))
 	}
 
-
-	// MARK: - Replacing keys with examples in steps
-	
-	func IGNORE_test_oneKeyOneExample() {
-		when_parsing([
-			"Feature: feature name          ",
-			"Scenario Outline: scenario name",
-			"    Given the key <key>        ",
-			"                               ",
-			"    Examples:                  ",
-			"        | key   |              ",
-			"        | value |              "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("the key value")]
-		)
-	}
-
-	func IGNORE_test_oneKeyInTwoInstancesInOneStepsOneExample() {
-		when_parsing([
-			"Feature: feature name          ",
-			"Scenario Outline: scenario name",
-			"    Then foo <key> bar '<key>' ",
-			"                               ",
-			"    Examples:                  ",
-			"        | key   |              ",
-			"        | value |              "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.then("foo value bar 'value'")]
-		)
-	}
-
-	func IGNORE_IGNORE_test_twoKeyInInOneStepsOneExample() {
-		when_parsing([
-			"Feature: feature name                 ",
-			"Scenario Outline: scenario name       ",
-			"    Then foo <key one> bar '<key two>'",
-			"                                      ",
-			"    Examples:                         ",
-			"        | key one | key two |         ",
-			"        | one     | two     |         "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.then("foo one bar 'two'")]
-		)
-	}
-
-	func IGNORE_test_oneKeyInTwoStepsOneExample() {
-		when_parsing([
-			"Feature: feature name          ",
-			"Scenario Outline: scenario name",
-			"    Given foo <key>            ",
-			"    When <key> bar             ",
-			"                               ",
-			"    Examples:                  ",
-			"        | key   |              ",
-			"        | value |              "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("foo value"),
-			Step.when("value bar")]
-		)
-	}
-
-	func IGNORE_test_threeKeysInThreeStepsOneExample() {
-		when_parsing([
-			"Feature: feature name                     ",
-			"Scenario Outline: scenario name           ",
-			"    Given foo <key one>                   ",
-			"    When <key two> bar                    ",
-			"    Then <key three>                      ",
-			"                                          ",
-			"    Examples:                             ",
-			"        | key one  | key two | key three |",
-			"        | v1       | v2      | v3        |"])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("foo v1"),
-			Step.when("v2 bar"),
-			Step.then("v3")]
-		)
-	}
-
-	func IGNORE_test_threeKeysInThreeStepsTwoExamples() {
-		when_parsing([
-			"Feature: feature name          ",
-			"Scenario Outline: scenario name",
-			"    Given alpha <k1>           ",
-			"    When beta <k2>             ",
-			"    Then gamma <k3>            ",
-			"                               ",
-			"    Examples:                  ",
-			"        | k1   | k2   | k3   | ",
-			"        | v1_1 | v1_2 | v1_3 | ",
-			"        | v2_1 | v2_2 | v2_3 | "])
-		
-		then_shouldReturnTwoScenariosWithSteps(
-			[
-				Step.given("alpha v1_1"),
-				Step.when("beta v1_2"),
-				Step.then("gamma v1_3")
-			],
-			[
-				Step.given("alpha v2_1"),
-				Step.when("beta v2_2"),
-				Step.then("gamma v2_3")
-			]
-		)
-	}
-	
-	// MARK: - Replacing keys with value in table parameters
-	
-	func IGNORE_test_oneColumnOneRow_oneKeyOneExample_replaceCell() {
-		when_parsing([
-			"Feature: feature          ",
-			"Scenario Outline: scenario",
-			"    Given x               ",
-			"        | Column |        ",
-			"        | <key>  |        ",
-			"                          ",
-			"    Examples:             ",
-			"        | key   |         ",
-			"        | value |         "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("x", table(
-				"Column",
-				"value"))]
-		)
-	}
-
-	func IGNORE_test_oneColumnOneRow_twoKeysOneExample_replaceCell() {
-		when_parsing([
-			"Feature: feature          ",
-			"Scenario Outline: scenario",
-			"    Given x               ",
-			"        | Column      |   ",
-			"        | <one> <two> |   ",
-			"                          ",
-			"    Examples:             ",
-			"        | one | two |     ",
-			"        | v1  | v2  |     "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.given("x", table(
-				"Column",
-				"v1 v2"))]
-		)
-	}
-
-	func IGNORE_test_oneColumnOneRow_oneKeyOneExample_replaceColumn() {
-		when_parsing([
-			"Feature: feature          ",
-			"Scenario Outline: scenario",
-			"    When x                ",
-			"        | <key>      |    ",
-			"        | cell value |    ",
-			"                          ",
-			"    Examples:             ",
-			"        | key         |   ",
-			"        | Column Name |   "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.when("x", table(
-				"Column Name",
-				"cell value"))]
-		)
-	}
-
-	func IGNORE_test_oneColumnOneRow_twoKeysOneExample_replaceColumn() {
-		when_parsing([
-			"Feature: feature             ",
-			"Scenario Outline: scenario   ",
-			"    When x                   ",
-			"        | <keyOne> <keyTwo> |",
-			"        | cell value        |",
-			"                             ",
-			"    Examples:                ",
-			"        | keyOne | keyTwo |  ",
-			"        | c1     |c2      |  "])
-		
-		then_shouldReturnScenarioWithSteps([
-			Step.when("x", table(
-				"c1 c2",
-				"cell value"))]
-		)
-	}
-
-	func IGNORE_test_twoColumnsTwoRows_fourKeysTwoSameTwoExamples_replaceColumnAndCells() {
-		when_parsing([
-			"Feature: feature                            ",
-			"Scenario Outline: scenario                  ",
-			"    Then x                                  ",
-			"        | Constant Column | <key alfa>     |",
-			"        | <same key>      | constant value |",
-			"        | <key beta>      | <same key>     |",
-			"                                            ",
-			"    Examples:                               ",
-			"        | key alfa | key beta | same key |  ",
-			"        | XX       | YY       | ZZ       |  ",
-			"        | AA       | BB       | CC       |  "])
-		
-		then_shouldReturnTwoScenariosWithSteps(
-			[
-				Step.then("x", table(
-					"Constant Column", "XX",
-					"ZZ", "constant value",
-					"YY", "ZZ"))
-			],
-			[
-				Step.then("x", table(
-					"Constant Column", "AA",
-					"CC", "constant value",
-					"BB", "CC"))
-			]
-		)
-	}
-	
 	// MARK: - Givens, whens, thens
 	
+	func then_shouldReturnScenariosWithNames(_ names: [String],
+											 file: StaticString = #file, line: UInt = #line) {
+		assert.scenarios(withNames: names, file, line)
+	}
+
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
-											   file: StaticString = #file,
-											   line: UInt = #line) {
-		
-		let s = scenario(at: 0)
-		XCTAssertEqual(s.steps.count, expected, file: file, line: line)
+											   file: StaticString = #file, line: UInt = #line) {
+		assert.scenario(0, file, line) {
+			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
-											   file: StaticString = #file,
-											   line: UInt = #line) {
+											   file: StaticString = #file, line: UInt = #line) {
 		
-		let s = scenario(at: 0)
-		XCTAssertEqual(s.examples.count, expected, file: file, line: line)
+		assert.scenario(0, file, line) {
+			XCTAssertEqual($0.examples.count, expected, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWithExamples(atIndex index: Int,
-												   name: String,
-												   _ table: Table,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = examples(at: index)
-		
-		XCTAssertEqual(actual.name, name, file: file, line: line)
-		XCTAssertEqual(actual.table.withoutLocation(), table, file: file, line: line)
+													   name: String,
+													   _ table: Table,
+													   file: StaticString = #file, line: UInt = #line) {
+		assert.examples(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.name, name, file: file, line: line)
+			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
+		}
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
+												   file: StaticString = #file, line: UInt = #line) {
+		assert.step(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
 
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
 												   _ table: Table,
-												   file: StaticString = #file,
-												   line: UInt = #line) {
-		let actual = step(at: index)
-		
-		XCTAssertEqual(actual.type, stepType, file: file, line: line)
-		XCTAssertEqual(actual.text, text, file: file, line: line)
-		XCTAssertEqual(actual.tableParameter!.withoutLocation(), table, file: file, line: line)
-	}
-
-	func then_shouldReturnScenarioWithSteps(_ steps: [Step], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: 0).steps, steps, file: file, line: line)
-	}
-
-	func then_shouldReturnTwoScenariosWithSteps(_ stepsScenarioOne: [Step], _ stepsScenarioTwo: [Step], file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(scenario(at: 0).steps, stepsScenarioOne, file: file, line: line)
-		XCTAssertEqual(scenario(at: 1).steps, stepsScenarioTwo, file: file, line: line)
-	}
-
-	private func step(at index: Int) -> Step {
-		return scenario(at: 0).steps[index]
-	}
-
-	private func examples(at index: Int) -> ScenarioOutlineExamples {
-		return scenario(at: 0).examples[index]
+												   file: StaticString = #file, line: UInt = #line) {
+		assert.step(stepType, text, table, atIndex: index, forScenario: 0, file, line)
 	}
 }
 

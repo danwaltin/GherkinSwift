@@ -14,13 +14,16 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  FeatureParser.swift
+//  DocString.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-07-05.
 //
 // ------------------------------------------------------------------------
 
-public protocol FeatureParser {
-	func pickle(lines: [String], fileUri: String) -> GherkinFile
+public struct DocString : Equatable {
+	public let separator: String
+	public let content: String
+	public let location: Location
+	public let mediaType: String?
 }

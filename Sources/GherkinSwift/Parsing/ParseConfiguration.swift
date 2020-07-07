@@ -14,28 +14,19 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  TableEqualityTests.swift
-//  GherkinSwiftSpec
+//  ParseConfiguration.swift
+//  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-21.
+//  Created by Dan Waltin on 2020-07-05.
 //
 // ------------------------------------------------------------------------
 
-import XCTest
-@testable import GherkinSwift
-
-class TableEqualityTests : XCTestCase {
-	func test_equalWhenTwoColumns() {
-		let one = Table.withColumns(["alpha", "beta"])
-		let two = Table.withColumns(["alpha", "beta"])
-		
-		XCTAssertEqual(one, two)
-	}
+public struct ParseConfiguration {
+	let docStringSeparator: String
+	let alternativeDocStringSeparator: String
 	
-	func test_notEqualWhenTwoColumns() {
-		let one = Table.withColumns(["alpha", "beta"])
-		let two = Table.withColumns(["alpha", "gamma"])
-		
-		XCTAssertNotEqual(one, two)
+	init(docStringSeparator: String = "\"\"\"", alternativeDocStringSeparator: String = "```") {
+		self.docStringSeparator = docStringSeparator
+		self.alternativeDocStringSeparator = alternativeDocStringSeparator
 	}
 }
