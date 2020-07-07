@@ -60,7 +60,8 @@ class DocStringScanner {
 			if isEndSeparator(line) {
 				state = .done
 			} else {
-				docStringLines.append(correctlyIndented(line))
+				let s = removingEscapesFromStandardSeparators(correctlyIndented(line))
+				docStringLines.append(s)
 			}
 			
 		case .done:
@@ -78,6 +79,12 @@ class DocStringScanner {
 
 		let indentationPrefix = String(repeating: " ", count: indentation)
 		return indentationPrefix + line.text.trimLeft()
+	}
+	
+	private func removingEscapesFromStandardSeparators(_ text: String) -> String {
+		return text
+			.replacingOccurrences(of: "\\\"", with: "\"")
+			.replacingOccurrences(of: "\\`", with: "`")
 	}
 	
 	func getDocString() -> DocString? {
