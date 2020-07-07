@@ -35,6 +35,9 @@ class DocStringScanner {
 	private var docStringLines = [String]()
 	private var location = Location.zero()
 	private var mediaType: String? = nil
+	
+	private var separatorIndentation = 0
+	
 	init(configuration: ParseConfiguration) {
 		self.configuration = configuration
 	}
@@ -44,6 +47,8 @@ class DocStringScanner {
 		case .started:
 			if isDocString(line) {
 				separator = whichSeparator(line)
+				separatorIndentation = line.text.indentation()
+				
 				if line.text.trim().count > separator.count {
 					mediaType = line.text.trim().replacingOccurrences(of: separator, with: "")
 				}
@@ -55,7 +60,15 @@ class DocStringScanner {
 			if isDocString(line) {
 				state = .done
 			} else {
-				docStringLines.append(line.text.trim())
+				if line.isEmpty() {
+					docStringLines.append(line.text)
+				} else {
+					let totalIndentation = line.text.indentation()
+					var indentation = totalIndentation - separatorIndentation
+					indentation = indentation < 0 ? 0 : indentation
+					let indentationPrefix = String(repeating: " ", count: indentation)
+					docStringLines.append(indentationPrefix + line.text.trimLeft())
+				}
 			}
 			
 		case .done:

@@ -34,6 +34,10 @@ public extension String {
 		return trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	}
 
+	func indentation() -> Int {
+		return self.count - self.trimLeft().count
+	}
+	
 	func trimSpaces() -> String {
 		return trimmingCharacters(in: NSCharacterSet.whitespaces)
 	}
