@@ -88,24 +88,10 @@ struct Line {
 		return beginsWithKeyword(keywordExamples)
 	}
 	
-	func isAsterisk() -> Bool {
-		return beginsWithKeyword(keywordAsterisk)
-	}
-
-	func isThen() -> Bool {
-		return beginsWithKeyword(keywordThen)
-	}
-
-	func isAnd() -> Bool {
-		return beginsWithKeyword(keywordAnd)
-	}
-
-	func isBut() -> Bool {
-		return beginsWithKeyword(keywordBut)
-	}
 
 	func isStep() -> Bool {
-		return isAsterisk() || keyword == .given || keyword == .when || isThen() || isAnd() || isBut()
+		let stepKeywords: [Keyword] = [.asterisk, .given, .when, .then, .and, .but]
+		return stepKeywords.contains(keyword)
 	}
 
 	func isTable() -> Bool {

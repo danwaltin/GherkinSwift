@@ -78,34 +78,34 @@ class StepScanner {
 	}
 	
 	private func handleStepText(_ line: Line) {
-		if line.isAsterisk() {
-			location = Location(column: line.columnForKeyword(keywordAsterisk), line: line.number)
-			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
+		if line.keyword == .asterisk {
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.asterisk(line.removeKeyword())
 		}
 
 		if line.keyword == .given {
-			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
-			step = Step.given(line.removeKeyword(keywordGiven))
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.given(line.removeKeyword())
 		}
 
 		if line.keyword == .when {
-			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
-			step = Step.when(line.removeKeyword(keywordWhen))
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.when(line.removeKeyword())
 		}
 
-		if line.isThen() {
-			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
-			step = Step.then(line.removeKeyword(keywordThen))
+		if line.keyword == .then {
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.then(line.removeKeyword())
 		}
 
-		if line.isAnd() {
-			location = Location(column: line.columnForKeyword(keywordAnd), line: line.number)
-			step = Step.and(line.removeKeyword(keywordAnd))
+		if line.keyword == .and {
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.and(line.removeKeyword())
 		}
 
-		if line.isBut() {
-			location = Location(column: line.columnForKeyword(keywordBut), line: line.number)
-			step = Step.but(line.removeKeyword(keywordBut))
+		if line.keyword == .but {
+			location = Location(column: line.columnForKeyword(), line: line.number)
+			step = Step.but(line.removeKeyword())
 		}
 	}
 	
