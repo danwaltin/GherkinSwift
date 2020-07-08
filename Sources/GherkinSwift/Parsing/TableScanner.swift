@@ -65,16 +65,16 @@ class TableScanner {
 		columns = lineItems(line.text)
 		
 		headerLine = line.number
-		headerColumn = line.columnForKeyword(tableSeparator)
+		headerColumn = line.text.startColumnFor(character: tableSeparator)
 		
-		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		let location = Location(column: line.text.startColumnFor(character: tableSeparator), line: line.number)
 		headerRow = TableRow(cells: cells(line), location: location)
 		
 		hasScannedColumns = true
 	}
 
 	private func addRow(_ line: Line) {
-		let location = Location(column: line.columnForKeyword(tableSeparator), line: line.number)
+		let location = Location(column: line.text.startColumnFor(character: tableSeparator), line: line.number)
 		
 		rows.append(TableRow(cells: cells(line), location: location))
 	}

@@ -46,7 +46,7 @@ class BackgroundScanner {
 		case .started:
 			if line.keyword == .background {
 				name = line.removeKeyword()
-				location = Location(column: line.columnForKeyword(keywordBackground) , line: line.number)
+				location = line.keywordLocation()
 				state = .scanningBackground
 			}
 

@@ -61,15 +61,12 @@ struct Line {
 		return text.trim().isEmpty
 	}
 	
-	func columnForKeyword(_ keyword: Character) -> Int {
-		return columnForKeyword(String(keyword))
-	}
-	
-	func columnForKeyword(_ keyword: String) -> Int {
-		let range = text.range(of: keyword)!
-		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
-
-		return index + 1
+//	func columnForKeyword(_ keyword: Character) -> Int {
+//		return text.startColumnFor(text: String(keyword))
+//	}
+//	
+	func keywordLocation() -> Location {
+		return Location(column: keyword.startColumnIn(text: text), line: number)
 	}
 
 	func removeKeyword(_ keyword: String) -> String {

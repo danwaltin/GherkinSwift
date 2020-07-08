@@ -85,7 +85,7 @@ class ScenarioScanner {
 				name = line.removeKeyword()
 				
 				isScenarioOutline = line.keyword == .scenarioOutline
-				location = Location(column: line.columnForKeyword() , line: line.number)
+				location = line.keywordLocation()
 				examplesTagScanner.clear()
 				state = .scanningScenario
 			}

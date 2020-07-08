@@ -97,4 +97,22 @@ public extension String {
 	func deleteText(_ text: String) -> String {
 		return replacingOccurrences(of: text, with: "")
 	}
+	
+	/**
+	The 1-based column at which the text begins
+	*/
+	func startColumnFor(text: String) -> Int {
+		let r = range(of: text)!
+		let index: Int = distance(from: startIndex, to: r.lowerBound)
+		
+		return index + 1
+
+	}
+
+	/**
+	The 1-based column at which the character begins
+	*/
+	func startColumnFor(character: Character) -> Int {
+		return startColumnFor(text: String(character))
+	}
 }

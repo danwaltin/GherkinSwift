@@ -93,7 +93,7 @@ enum Keyword {
 	*/
 	func startColumnIn(text: String) -> Int {
 		if let k = keywordAsText() {
-			return startColumnIn(text: text, forKeyword: k)
+			return text.startColumnFor(text: k)
 		}
 		return 1
 	}
@@ -111,13 +111,6 @@ enum Keyword {
 			return Keyword.keywordMap[self]
 		}
 		return nil
-	}
-	
-	private func startColumnIn(text: String, forKeyword keyword: String) -> Int {
-		let range = text.range(of: keyword)!
-		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
-		
-		return index + 1
 	}
 }
 
