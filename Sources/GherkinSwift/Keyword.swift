@@ -33,7 +33,6 @@ let keywordThen = "Then"
 let keywordAnd = "And"
 let keywordBut = "But"
 
-
 enum Keyword {
 	case none
 	case feature
