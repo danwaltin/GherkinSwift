@@ -84,14 +84,8 @@ struct Line {
 		return hasPrefix(commentToken)
 	}
 	
-	func isExamples() -> Bool {
-		return beginsWithKeyword(keywordExamples)
-	}
-	
-
 	func isStep() -> Bool {
-		let stepKeywords: [Keyword] = [.asterisk, .given, .when, .then, .and, .but]
-		return stepKeywords.contains(keyword)
+		return keyword.isStep()
 	}
 
 	func isTable() -> Bool {

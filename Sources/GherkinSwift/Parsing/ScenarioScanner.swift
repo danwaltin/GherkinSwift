@@ -70,7 +70,7 @@ class ScenarioScanner {
 		
 		for i in nextIndex...lastIndex {
 			let line = allLines[i]
-			if line.keyword == .scenario || line.keyword == .scenarioOutline || line.isExamples() {
+			if line.keyword == .scenario || line.keyword == .scenarioOutline || line.keyword == .examples {
 				return line
 			}
 		}
@@ -164,7 +164,7 @@ class ScenarioScanner {
 	}
 	
 	private func shouldStartNewExamples(_ line: Line) -> Bool {
-		return line.isExamples()
+		return line.keyword == .examples
 	}
 	
 	private func startNewExamples(_ line: Line) {
