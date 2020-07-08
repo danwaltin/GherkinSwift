@@ -83,12 +83,12 @@ class StepScanner {
 			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
 		}
 
-		if line.isGiven() {
+		if line.keyword == .given {
 			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
 			step = Step.given(line.removeKeyword(keywordGiven))
 		}
 
-		if line.isWhen() {
+		if line.keyword == .when {
 			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
 			step = Step.when(line.removeKeyword(keywordWhen))
 		}

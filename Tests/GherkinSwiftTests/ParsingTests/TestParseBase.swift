@@ -49,7 +49,7 @@ class TestParseBase: XCTestCase {
 							 then: ["Then"],
 							 when: ["When"])])
 	}
-d
+
 	func given_defaultLanguage(_ languageCode: String) {
 		
 	}

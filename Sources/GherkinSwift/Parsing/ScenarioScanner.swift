@@ -59,7 +59,7 @@ class ScenarioScanner {
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
 		if line.isTag(), let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
-			return next.isScenario() || next.isScenarioOutline()
+			return next.keyword == .scenario || next.keyword == .scenarioOutline
 		}
 		return false
 	}
@@ -70,7 +70,7 @@ class ScenarioScanner {
 		
 		for i in nextIndex...lastIndex {
 			let line = allLines[i]
-			if line.isScenario() || line.isScenarioOutline() || line.isExamples() {
+			if line.keyword == .scenario || line.keyword == .scenarioOutline || line.isExamples() {
 				return line
 			}
 		}
@@ -81,11 +81,11 @@ class ScenarioScanner {
 	func scan(_ line: Line) {
 		switch state {
 		case .started:
-			if line.isScenario() || line.isScenarioOutline() {
-				isScenarioOutline = line.isScenarioOutline()
-				let keyword = isScenarioOutline ? keywordScenarioOutline : keywordScenario
-				name = line.removeKeyword(keyword)
-				location = Location(column: line.columnForKeyword(keyword) , line: line.number)
+			if line.keyword == .scenario || line.keyword == .scenarioOutline {
+				name = line.removeKeyword()
+				
+				isScenarioOutline = line.keyword == .scenarioOutline
+				location = Location(column: line.columnForKeyword() , line: line.number)
 				examplesTagScanner.clear()
 				state = .scanningScenario
 			}

@@ -55,14 +55,16 @@ class FeatureScanner {
 	}
 	
 	func scan(_ line: Line, allLines: [Line]) {
+		let keyword = line.keyword
+		
 		switch state {
 		case .started:
 			if line.isTag() {
 				featureTagScanner.scan(line)
 			}
 
-			if line.isFeature() {
-				name = line.removeKeyword(keywordFeature)
+			if keyword == .feature {
+				name = line.removeKeyword()
 				location = Location(column: line.columnForKeyword(keywordFeature) , line: line.number)
 				state = .scanningFeature
 			}
@@ -115,7 +117,7 @@ class FeatureScanner {
 	}
 
 	private func shouldStartBackground(_ line: Line) -> Bool {
-		return line.isBackground()
+		return line.keyword == .background
 	}
 	
 	private func startBackground(_ line: Line) {
@@ -124,7 +126,7 @@ class FeatureScanner {
 	}
 	
 	private func shouldStartNewScenario(_ line: Line) -> Bool {
-		return line.isScenario() || line.isScenarioOutline()
+		return line.keyword == .scenario || line.keyword == .scenarioOutline
 	}
 
 	private func startNewScenario(_ line: Line) {
