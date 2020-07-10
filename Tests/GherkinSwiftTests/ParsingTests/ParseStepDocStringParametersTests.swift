@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseStepDocStringParameters.swift
+//  ParseStepDocStringParametersTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-05.
@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepDocStringParameters: TestParseBase {
+class ParseStepDocStringParametersTests: TestParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")

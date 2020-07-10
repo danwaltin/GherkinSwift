@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseStepTableParameters.swift
+//  ParseStepTableParametersTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-05.
@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepTableParameters: TestParseBase {
+class ParseStepTableParametersTests: TestParseBase {
 	func test_tableParametersToSteps_oneColumnOneRow() {
 		when_parsingDocument(
 		"""

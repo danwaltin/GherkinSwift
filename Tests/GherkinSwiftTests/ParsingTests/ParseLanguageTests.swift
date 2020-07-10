@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseLanguages.swift
+//  ParseLanguageTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-05.
@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseLanguages: TestParseBase {
+class ParseLanguageTests: TestParseBase {
 	func test_defaultLanguageIsUsed_whenNoLanguageIsGiven() {
 		given_defaultLanguage("bpa")
 		
