@@ -24,9 +24,16 @@
 public struct ParseConfiguration {
 	let docStringSeparator: String
 	let alternativeDocStringSeparator: String
+	let defaultLanguage: String
+	let languages: [String: Language]
 	
-	init(docStringSeparator: String = "\"\"\"", alternativeDocStringSeparator: String = "```") {
+	init(docStringSeparator: String = "\"\"\"",
+		 alternativeDocStringSeparator: String = "```",
+		 defaultLanguage: String,
+		 languages: [String: Language]) {
 		self.docStringSeparator = docStringSeparator
 		self.alternativeDocStringSeparator = alternativeDocStringSeparator
+		self.defaultLanguage = defaultLanguage
+		self.languages = languages
 	}
 }

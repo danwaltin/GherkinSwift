@@ -27,7 +27,9 @@ class TestParseBase: XCTestCase {
 	var actualGherkinDocument: GherkinDocument!
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
-
+	var defaultLanguage: String = ""
+	var languages: [String: Language] = [:]
+	
 	override func setUp() {
 		
 		// Default to the same english language as in
@@ -51,11 +53,11 @@ class TestParseBase: XCTestCase {
 	}
 
 	func given_defaultLanguage(_ languageCode: String) {
-		
+		defaultLanguage = languageCode
 	}
 
 	func given_languages(_ languages: [String: Language]) {
-		
+		self.languages = languages
 	}
 
 	func given_docStringSeparator(_ separator: String, alternative: String) {
@@ -81,8 +83,12 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser(configuration: ParseConfiguration(docStringSeparator: docStringSeparator,
-																	  alternativeDocStringSeparator: alternativeDocStringSeparator))
+		return GherkinFeatureParser(
+			configuration: ParseConfiguration(
+				docStringSeparator: docStringSeparator,
+				alternativeDocStringSeparator: alternativeDocStringSeparator,
+				defaultLanguage: defaultLanguage,
+				languages: languages))
 	}
 		
 	// MARK: - Factory methods
