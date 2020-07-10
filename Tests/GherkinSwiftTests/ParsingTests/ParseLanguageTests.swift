@@ -50,17 +50,17 @@ class ParseLanguageTests: TestParseBase {
 		when_parsingDocument(
 		"""
 		#language:sv
-		Egenskap: Egenskap
-		Scenario: scenario
+		Egenskap: Feature på svenska är Egenskap
+		Scenario: Scenario på svenska är Scenario
 		    Givet x
 		    När y
 		    Så z
 		""")
 
-		then_featureNameShouldBe("feature name")
+		then_featureNameShouldBe("Feature på svenska är Egenskap")
 
 		then_shouldReturnScenariosWithNames([
-			"scenario name"]
+			"Scenario på svenska är Scenario"]
 		)
 
 		then_shouldReturnScenarioWith(numberOfSteps: 3)
@@ -68,7 +68,24 @@ class ParseLanguageTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
 		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
 	}
-	
+
+	func test_language_identifier_with_spaces() {
+		given_languages(
+			["sv" : L(feature: ["Egenskap"],
+				scenario: ["Scenario"],
+				given: ["Givet"],
+				when: ["När"],
+				then: ["Så"])])
+
+		when_parsingDocument(
+		"""
+		# language: sv
+		Egenskap: Feature på svenska är Egenskap
+		""")
+
+		then_featureNameShouldBe("Feature på svenska är Egenskap")
+	}
+
 	// MARK: - Givens, whens, thens
 	
 	private func then_featureNameShouldBe(_ name: String,
