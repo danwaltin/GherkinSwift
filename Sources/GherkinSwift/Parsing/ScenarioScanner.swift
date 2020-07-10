@@ -82,7 +82,7 @@ class ScenarioScanner {
 		switch state {
 		case .started:
 			if line.keyword == .scenario || line.keyword == .scenarioOutline {
-				name = line.removeKeyword()
+				name = line.keywordRemoved()
 				
 				isScenarioOutline = line.keyword == .scenarioOutline
 				location = line.keywordLocation()

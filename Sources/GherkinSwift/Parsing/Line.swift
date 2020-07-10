@@ -24,7 +24,6 @@ import Foundation
 
 let tagToken: Character = "@"
 let commentToken = "#"
-let tableSeparator: Character = "|"
 
 extension String {
 	func removeKeyword(_ keyword: String) -> String {
@@ -36,7 +35,6 @@ extension String {
 struct Line {
 	let text: String
 	let number: Int
-	
 	let keyword: Keyword
 	
 	init(text: String, number: Int) {
@@ -45,7 +43,7 @@ struct Line {
 		self.keyword = Keyword.createFrom(text: text)
 	}
 
-	func removeKeyword() -> String {
+	func keywordRemoved() -> String {
 		return keyword.removeFrom(text: text)
 	}
 	
@@ -61,16 +59,8 @@ struct Line {
 		return text.trim().isEmpty
 	}
 	
-//	func columnForKeyword(_ keyword: Character) -> Int {
-//		return text.startColumnFor(text: String(keyword))
-//	}
-//	
 	func keywordLocation() -> Location {
 		return Location(column: keyword.startColumnIn(text: text), line: number)
-	}
-
-	func removeKeyword(_ keyword: String) -> String {
-		return text.removeKeyword(keyword)
 	}
 
 	func isTag() -> Bool {
@@ -83,18 +73,6 @@ struct Line {
 	
 	func isStep() -> Bool {
 		return keyword.isStep()
-	}
-
-	func isTable() -> Bool {
-		return beginsWithKeyword(tableSeparator)
-	}
-
-	private func beginsWithKeyword(_ keyword: Character) -> Bool {
-		return hasPrefix(keyword)
-	}
-
-	private func beginsWithKeyword(_ keyword: String) -> Bool {
-		return hasPrefix(keyword)
 	}
 	
 	private func hasPrefix(_ prefix: Character) -> Bool {

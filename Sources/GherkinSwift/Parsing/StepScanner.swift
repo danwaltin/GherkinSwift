@@ -80,37 +80,37 @@ class StepScanner {
 	private func handleStepText(_ line: Line) {
 		if line.keyword == .asterisk {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.asterisk(line.removeKeyword())
+			step = Step.asterisk(line.keywordRemoved())
 		}
 
 		if line.keyword == .given {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.given(line.removeKeyword())
+			step = Step.given(line.keywordRemoved())
 		}
 
 		if line.keyword == .when {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.when(line.removeKeyword())
+			step = Step.when(line.keywordRemoved())
 		}
 
 		if line.keyword == .then {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.then(line.removeKeyword())
+			step = Step.then(line.keywordRemoved())
 		}
 
 		if line.keyword == .and {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.and(line.removeKeyword())
+			step = Step.and(line.keywordRemoved())
 		}
 
 		if line.keyword == .but {
 			location = Location(column: line.columnForKeyword(), line: line.number)
-			step = Step.but(line.removeKeyword())
+			step = Step.but(line.keywordRemoved())
 		}
 	}
 	
 	private func shouldStartScanTable(_ line: Line) -> Bool {
-		return line.isTable()
+		return line.keyword == .table
 	}
 
 	private func shouldStartScanDocString(_ line: Line) -> Bool {
@@ -118,7 +118,7 @@ class StepScanner {
 	}
 
 	private func handleTable(_ line: Line) {
-		if line.isTable() {
+		if line.keyword == .table {
 			tableScanner.scan(line)
 		}
 	}

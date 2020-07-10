@@ -45,7 +45,7 @@ class BackgroundScanner {
 		switch state {
 		case .started:
 			if line.keyword == .background {
-				name = line.removeKeyword()
+				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningBackground
 			}

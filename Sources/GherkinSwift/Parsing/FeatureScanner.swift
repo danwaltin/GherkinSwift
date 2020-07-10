@@ -64,7 +64,7 @@ class FeatureScanner {
 			}
 
 			if keyword == .feature {
-				name = line.removeKeyword()
+				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
 			}

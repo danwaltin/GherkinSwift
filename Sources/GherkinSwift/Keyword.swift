@@ -33,6 +33,8 @@ let keywordThen = "Then"
 let keywordAnd = "And"
 let keywordBut = "But"
 
+let tableSeparator: Character = "|"
+
 enum Keyword {
 	case none
 	case feature
@@ -46,6 +48,8 @@ enum Keyword {
 	case and
 	case but
 	case asterisk
+	
+	case table
 	
 	//	case tag
 	//	case comment
@@ -62,6 +66,7 @@ enum Keyword {
 		.and             : keywordAnd,
 		.but             : keywordBut,
 		.asterisk        : keywordAsterisk,
+		.table           : String(tableSeparator)
 	]
 	
 	

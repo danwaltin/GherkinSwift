@@ -51,7 +51,7 @@ class ExamplesScanner {
 		}
 
 		if line.keyword == .examples {
-			name = line.removeKeyword()
+			name = line.keywordRemoved()
 			location = Location(column: line.columnForKeyword(), line: line.number)
 		}
 	}
@@ -59,7 +59,7 @@ class ExamplesScanner {
 	private func handleDescription(_ line: Line) {
 		if isScanningDescription && !isScanningTable {
 			descriptionLines.append(line.text)
-		} else if line.keyword != .examples && !line.isTable() && !isScanningDescription &&  !line.isEmpty() {
+		} else if line.keyword != .examples && line.keyword != .table && !isScanningDescription &&  !line.isEmpty() {
 			isScanningDescription = true
 			descriptionLines.append(line.text)
 		}
@@ -70,7 +70,7 @@ class ExamplesScanner {
 			return
 		}
 
-		isScanningTable = isScanningTable || line.isTable()
+		isScanningTable = isScanningTable || line.keyword == .table
 		
 		if isScanningTable {
 			tableScanner.scan(line)
