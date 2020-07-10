@@ -23,7 +23,6 @@
 import Foundation
 
 let tagToken: Character = "@"
-let commentToken = "#"
 
 extension String {
 	func removeKeyword(_ keyword: String) -> String {
@@ -67,9 +66,9 @@ struct Line {
 		return hasPrefix(tagToken)
 	}
 
-	func isComment() -> Bool {
-		return hasPrefix(commentToken)
-	}
+//	func isComment() -> Bool {
+//		return hasPrefix(commentToken)
+//	}
 	
 	func isStep() -> Bool {
 		return keyword.isStep()

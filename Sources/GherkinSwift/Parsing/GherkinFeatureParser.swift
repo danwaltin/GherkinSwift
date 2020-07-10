@@ -37,7 +37,7 @@ public class GherkinFeatureParser {
 		
 		let theLines = getLines(lines)
 		for line in theLines {
-			if line.isComment() {
+			if line.keyword == .comment {
 				commentCollector.collectComment(line)
 			} else {
 				featureScanner.scan(line, allLines: theLines)
