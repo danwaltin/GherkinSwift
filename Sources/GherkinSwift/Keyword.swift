@@ -35,6 +35,7 @@ let keywordBut = "But"
 
 let tableSeparator: Character = "|"
 let commentToken = "#"
+let tagToken: Character = "@"
 
 enum Keyword {
 	case none
@@ -52,8 +53,7 @@ enum Keyword {
 	
 	case table
 	case comment
-	
-	//	case tag
+	case tag
 		
 	
 	private static let keywordMap: [Keyword: String] = [
@@ -69,8 +69,8 @@ enum Keyword {
 		.but             : keywordBut,
 		.asterisk        : keywordAsterisk,
 		.table           : String(tableSeparator),
-		.comment         : commentToken
-		
+		.comment         : commentToken,
+		.tag             : String(tagToken)
 	]
 	
 	

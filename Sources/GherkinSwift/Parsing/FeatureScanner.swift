@@ -59,7 +59,7 @@ class FeatureScanner {
 		
 		switch state {
 		case .started:
-			if line.isTag() {
+			if line.keyword == .tag {
 				featureTagScanner.scan(line)
 			}
 
@@ -70,7 +70,7 @@ class FeatureScanner {
 			}
 
 		case .scanningFeature:
-			if line.isTag() {
+			if line.keyword == .tag {
 				scenarioTagScanner.scan(line)
 
 			} else if shouldStartBackground(line) {
@@ -84,7 +84,7 @@ class FeatureScanner {
 			}
 
 		case .scanningBackground:
-			if line.isTag() && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+			if line.keyword == .tag && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 			} else if shouldStartNewScenario(line) {
@@ -95,7 +95,7 @@ class FeatureScanner {
 			}
 			
 		case .scanningScenario:
-			if line.isTag() && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+			if line.keyword == .tag && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 				
@@ -107,7 +107,7 @@ class FeatureScanner {
 			}
 
 		case .foundNextScenarioTags:
-			if line.isTag() {
+			if line.keyword == .tag {
 				scenarioTagScanner.scan(line)
 			
 			} else if shouldStartNewScenario(line) {

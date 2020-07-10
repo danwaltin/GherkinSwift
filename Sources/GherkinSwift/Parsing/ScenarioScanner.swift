@@ -58,7 +58,7 @@ class ScenarioScanner {
 	}
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
-		if line.isTag(), let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
+		if line.keyword == .tag , let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
 			return next.keyword == .scenario || next.keyword == .scenarioOutline
 		}
 		return false
@@ -91,7 +91,7 @@ class ScenarioScanner {
 			}
 
 		case .scanningScenario:
-			if line.isTag() {
+			if line.keyword == .tag {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -106,7 +106,7 @@ class ScenarioScanner {
 			}
 
 		case .scanningSteps:
-			if line.isTag() {
+			if line.keyword == .tag {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -121,7 +121,7 @@ class ScenarioScanner {
 			}
 			
 		case .scanningExamples:
-			if line.isTag() {
+			if line.keyword == .tag {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -133,7 +133,7 @@ class ScenarioScanner {
 			}
 
 		case .foundNextExamplesTags:
-			if line.isTag() {
+			if line.keyword == .tag {
 				examplesTagScanner.scan(line)
 
 			} else if shouldStartNewExamples(line) {

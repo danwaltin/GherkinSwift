@@ -22,8 +22,6 @@
 // ------------------------------------------------------------------------
 import Foundation
 
-let tagToken: Character = "@"
-
 extension String {
 	func removeKeyword(_ keyword: String) -> String {
 		let copy = deleteText(keyword)
@@ -62,14 +60,6 @@ struct Line {
 		return Location(column: keyword.startColumnIn(text: text), line: number)
 	}
 
-	func isTag() -> Bool {
-		return hasPrefix(tagToken)
-	}
-
-//	func isComment() -> Bool {
-//		return hasPrefix(commentToken)
-//	}
-	
 	func isStep() -> Bool {
 		return keyword.isStep()
 	}
