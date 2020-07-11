@@ -14,20 +14,20 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseConfiguration.swift
+//  LanguagesConfiguration.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-07-05.
+//  Created by Dan Waltin on 2020-07-11.
 //
 // ------------------------------------------------------------------------
 
-public struct ParseConfiguration {
-	let docStringSeparator: String
-	let alternativeDocStringSeparator: String
+public struct LanguagesConfiguration {
+	let defaultLanguage: String
+	let languages: [String: Language]
 	
-	init(docStringSeparator: String = "\"\"\"",
-		 alternativeDocStringSeparator: String = "```") {
-		self.docStringSeparator = docStringSeparator
-		self.alternativeDocStringSeparator = alternativeDocStringSeparator
+	init(defaultLanguage: String,
+		 languages: [String: Language]) {
+		self.defaultLanguage = defaultLanguage
+		self.languages = languages
 	}
 }

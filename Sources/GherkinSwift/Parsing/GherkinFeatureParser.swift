@@ -27,7 +27,7 @@ public class GherkinFeatureParser {
 	
 	let scannerFactory: ScannerFactory
 	
-	public init(configuration: ParseConfiguration) {
+	public init(configuration: ParseConfiguration, languages: LanguagesConfiguration) {
 		scannerFactory = ScannerFactory(configuration: configuration)
 	}
 	

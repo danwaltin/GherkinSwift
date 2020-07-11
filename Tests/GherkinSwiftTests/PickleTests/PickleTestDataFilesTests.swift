@@ -138,9 +138,8 @@ class PickleTestDataFilesTests: XCTestCase {
 	
 	private func parser() -> GherkinFeatureParser {
 		return GherkinFeatureParser(
-			configuration: ParseConfiguration(
-				defaultLanguage: "",
-				languages: [:]))
+			configuration: ParseConfiguration(),
+			languages: LanguagesConfiguration(defaultLanguage: "", languages: [:]))
 	}
 }
 

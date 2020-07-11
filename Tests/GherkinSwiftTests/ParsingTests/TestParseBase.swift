@@ -86,7 +86,8 @@ class TestParseBase: XCTestCase {
 		return GherkinFeatureParser(
 			configuration: ParseConfiguration(
 				docStringSeparator: docStringSeparator,
-				alternativeDocStringSeparator: alternativeDocStringSeparator,
+				alternativeDocStringSeparator: alternativeDocStringSeparator),
+			languages: LanguagesConfiguration(
 				defaultLanguage: defaultLanguage,
 				languages: languages))
 	}
