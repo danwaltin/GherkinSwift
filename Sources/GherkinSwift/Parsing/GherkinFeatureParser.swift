@@ -49,19 +49,24 @@ public class GherkinFeatureParser {
 			feature: featureScanner.getFeature(),
 			uri: fileUri))
 	}
-
+	
 	public func getAllLinesInFile(url: URL) -> [String] {
 		let data = try! Data(contentsOf: url)
 		let content = String(data: data, encoding: .utf8)!
 		
 		return getAllLinesInDocument(document: content)
 	}
-
+	
 	public func getAllLinesInDocument(document: String) -> [String] {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
-
+	
 	private func getLines(_ lines:[String]) -> [Line] {
-		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
+		return lines.enumerated().map{ (index, text) in
+			let keyword = Keyword.createFrom(text: text)
+			
+			return Line(text: text,
+						number: index + 1,
+						keyword: keyword) }
 	}
 }

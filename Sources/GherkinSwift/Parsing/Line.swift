@@ -34,10 +34,10 @@ struct Line {
 	let number: Int
 	let keyword: Keyword
 	
-	init(text: String, number: Int) {
+	init(text: String, number: Int, keyword: Keyword) {
 		self.text = text
 		self.number = number
-		self.keyword = Keyword.createFrom(text: text)
+		self.keyword = keyword
 	}
 
 	func keywordRemoved() -> String {
