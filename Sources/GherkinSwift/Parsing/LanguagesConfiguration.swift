@@ -61,6 +61,6 @@ public struct LanguagesConfiguration {
 	}
 
 	var defaultLanguage: Language {
-		return languages.values.first!
+		return languages[defaultLanguageKey]!
 	}
 }

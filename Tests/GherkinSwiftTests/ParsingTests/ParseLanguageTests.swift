@@ -69,6 +69,66 @@ class ParseLanguageTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
 	}
 
+	func test_language_withBasicKeywords_twoKLocalizedeywordsPerType_first() {
+		given_languages(
+			["lang" : L(feature: ["Feature One", "Feature Two"],
+				scenario: ["Scenario One", "Scenario Two"],
+				given: ["Given One", "Given Two"],
+				when: ["When One", "When Two"],
+				then: ["Then One", "Then Two"])])
+
+		when_parsingDocument(
+		"""
+		#language:lang
+		Feature One: Feature name
+		Scenario One: Scenario name
+		    Given One x
+		    When One y
+		    Then One z
+		""")
+
+		then_featureNameShouldBe("Feature name")
+
+		then_shouldReturnScenariosWithNames([
+			"Scenario name"]
+		)
+
+		then_shouldReturnScenarioWith(numberOfSteps: 3)
+		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
+	}
+
+	func test_language_withBasicKeywords_twoKLocalizedeywordsPerType_second() {
+		given_languages(
+			["lang" : L(feature: ["Feature One", "Feature Two"],
+				scenario: ["Scenario One", "Scenario Two"],
+				given: ["Given One", "Given Two"],
+				when: ["When One", "When Two"],
+				then: ["Then One", "Then Two"])])
+
+		when_parsingDocument(
+		"""
+		#language:lang
+		Feature Two: Feature name
+		Scenario Two: Scenario name
+		    Given Two x
+		    When2 Two
+		    Then2 Two
+		""")
+
+		then_featureNameShouldBe("Feature name")
+
+		then_shouldReturnScenariosWithNames([
+			"Scenario name"]
+		)
+
+		then_shouldReturnScenarioWith(numberOfSteps: 3)
+		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
+	}
+
 	func test_language_identifier_with_spaces() {
 		given_languages(
 			["sv" : L(feature: ["Egenskap"],

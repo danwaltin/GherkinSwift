@@ -94,6 +94,9 @@ struct Keyword {
 	private static func keywordTypeFrom(text: String, language: Language) -> (type: KeywordType, localizedKeyword: String) {
 		let trimmed = text.trim()
 
+		if let x = k(trimmed, keywordItems: language.feature, keywordType: .feature) {
+			return x
+		}
 		let feature = language.feature.first!
 		if trimmed.hasPrefix(feature) {
 			return (.feature, feature + ":")
@@ -134,6 +137,14 @@ struct Keyword {
 		return (.none, "")
 	}
 	
+	private static func k(_ line: String, keywordItems: [String], keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
+	if let keyword = keywordItems.first {
+		if line.hasPrefix(keyword) {
+			return (keywordType, keyword + ":")
+		}
+	}
+		return nil
+	}
 	/**
 	Remove the keyword from the given text
 	*/

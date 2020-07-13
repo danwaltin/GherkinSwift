@@ -81,6 +81,11 @@ public class GherkinFeatureParser {
 			return languages.language(withKey: languageKey)
 		}
 
+		if text.hasPrefix("# language:") {
+			let languageKey = text.removeKeyword("# language:")
+			return languages.language(withKey: languageKey)
+		}
+
 		return languages.defaultLanguage
 	}
 }
