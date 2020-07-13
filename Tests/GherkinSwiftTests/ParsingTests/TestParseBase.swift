@@ -39,17 +39,17 @@ class TestParseBase: XCTestCase {
 		given_languages(
 			["en" : Language(name: "English",
 							 native: "English",
-							 and: ["And"],
+							 and: ["And "],
 							 background: ["Background"],
-							 but: ["But"],
+							 but: ["But "],
 							 examples: ["Examples"],
 							 feature: ["Feature"],
-							 given: ["Given"],
+							 given: ["Given "],
 							 rule: ["Rule"],
 							 scenario: ["Scenario"],
 							 scenarioOutline: ["Scenario Outline"],
-							 then: ["Then"],
-							 when: ["When"])])
+							 then: ["Then "],
+							 when: ["When "])])
 	}
 
 	func given_defaultLanguage(_ languageCode: String) {

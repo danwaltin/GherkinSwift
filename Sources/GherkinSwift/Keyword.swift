@@ -86,12 +86,15 @@ struct Keyword {
 		return type == t
 	}
 
-	static func createFrom(text: String, language: Language) -> Keyword {
+	static func createFrom(text: String,
+						   language: Language) -> Keyword {
 		let k = keywordTypeFrom(text: text, language: language)
 		return Keyword(type: k.type, localizedKeyword: k.localizedKeyword)
 	}
 	
-	private static func keywordTypeFrom(text: String, language: Language) -> (type: KeywordType, localizedKeyword: String) {
+	private static func keywordTypeFrom(text: String,
+										language: Language) -> (type: KeywordType, localizedKeyword: String) {
+
 		let trimmed = text.trim()
 
 		let map: [(items: [String], type: KeywordType, postfix: String)] = [
@@ -128,7 +131,7 @@ struct Keyword {
 						  keywordPostfix: String) -> (type: KeywordType, localizedKeyword: String)? {
 		for localized in localizedItems {
 			if line.hasPrefix(localized) {
-				if Keyword.isStep(type: keywordType) && localized == keywordAsterisk {
+				if Keyword.isStep(type: keywordType) && localized.trim() == keywordAsterisk {
 					return (.asterisk, localized + keywordPostfix)
 				}
 				return (keywordType, localized + keywordPostfix)

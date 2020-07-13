@@ -44,9 +44,9 @@ class ParseLanguageTests: TestParseBase {
 			["lang" : L(feature: ["Egenskap"],
 						background: ["Bakgrund"],
 						scenario: ["Testfall"],
-						given: ["Givet"],
-						when: ["När"],
-						then: ["Så"])])
+						given: ["Givet "],
+						when: ["När "],
+						then: ["Så "])])
 		
 		when_parsingDocument(
 			"""
@@ -79,9 +79,9 @@ class ParseLanguageTests: TestParseBase {
 		given_languages(
 			["lang" : L(feature: ["Feature One", "Feature Two"],
 						scenario: ["Scenario One", "Scenario Two"],
-						given: ["Given One", "Given Two"],
-						when: ["When One", "When Two"],
-						then: ["Then One", "Then Two"])])
+						given: ["Given One ", "Given Two "],
+						when: ["When One ", "When Two "],
+						then: ["Then One ", "Then Two "])])
 		
 		when_parsingDocument(
 			"""
@@ -109,9 +109,9 @@ class ParseLanguageTests: TestParseBase {
 		given_languages(
 			["lang" : L(feature: ["Feature One", "Feature Two"],
 						scenario: ["Scenario One", "Scenario Two"],
-						given: ["Given One", "Given Two"],
-						when: ["When One", "When Two"],
-						then: ["Then One", "Then Two"])])
+						given: ["Given One ", "Given Two "],
+						when: ["When One ", "When Two "],
+						then: ["Then One ", "Then Two "])])
 		
 		when_parsingDocument(
 			"""
@@ -139,46 +139,46 @@ class ParseLanguageTests: TestParseBase {
 		given_languages(
 			["given" : L(feature: ["Feature"],
 						 scenario: ["Scenario"],
-						 given: ["*", "Given"],
-						 when: ["When"],
-						 then: ["Then"],
-						 and: ["And"],
-						 but: ["But"]),
+						 given: ["* ", "Given "],
+						 when: ["When "],
+						 then: ["Then "],
+						 and: ["And "],
+						 but: ["But "]),
 			"when" : L(feature: ["Feature"],
 						scenario: ["Scenario"],
-						given: ["Given"],
-						when: ["*", "When"],
-						then: ["Then"],
-						and: ["And"],
-						but: ["But"]),
+						given: ["Given "],
+						when: ["* ", "When "],
+						then: ["Then "],
+						and: ["And "],
+						but: ["But "]),
 			"then" : L(feature: ["Feature"],
 						scenario: ["Scenario"],
-						given: ["Given"],
-						when: ["When"],
-						then: ["*", "Then"],
-						and: ["And"],
-						but: ["But"]),
+						given: ["Given "],
+						when: ["When "],
+						then: ["* ", "Then "],
+						and: ["And "],
+						but: ["But "]),
 			"and" : L(feature: ["Feature"],
 						scenario: ["Scenario"],
 						given: ["Given"],
-						when: ["When"],
-						then: ["Then"],
-						and: ["*", "And"],
-						but: ["But"]),
+						when: ["When "],
+						then: ["Then "],
+						and: ["* ", "And "],
+						but: ["But "]),
 			"but" : L(feature: ["Feature"],
 						scenario: ["Scenario"],
-						given: ["Given"],
-						when: ["When"],
-						then: ["Then"],
-						and: ["And"],
-						but: ["*", "But"]),
+						given: ["Given "],
+						when: ["When "],
+						then: ["Then "],
+						and: ["And "],
+						but: ["* ", "But "]),
 			"allfive" : L(feature: ["Feature"],
 						scenario: ["Scenario"],
-						given: ["*", "Given"],
-						when: ["*", "When"],
-						then: ["*", "Then"],
-						and: ["*", "And"],
-						but: ["*", "But"]),
+						given: ["* ", "Given "],
+						when: ["* ", "When "],
+						then: ["* ", "Then "],
+						and: ["* ", "And "],
+						but: ["* ", "But "]),
 		])
 
 		// Given
@@ -307,9 +307,9 @@ class ParseLanguageTests: TestParseBase {
 		given_languages(
 			["sv" : L(feature: ["Egenskap"],
 					  scenario: ["Scenario"],
-					  given: ["Givet"],
-					  when: ["När"],
-					  then: ["Så"])])
+					  given: ["Givet "],
+					  when: ["När "],
+					  then: ["Så "])])
 		
 		when_parsingDocument(
 			"""
