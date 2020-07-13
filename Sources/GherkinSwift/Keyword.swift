@@ -94,39 +94,30 @@ struct Keyword {
 	private static func keywordTypeFrom(text: String, language: Language) -> (type: KeywordType, localizedKeyword: String) {
 		let trimmed = text.trim()
 
-		if let x = k(trimmed, keywordItems: language.feature, keywordType: .feature) {
+		if let x = k(trimmed, keywordItems: language.feature, keywordType: .feature, keywordPostfix: ":") {
 			return x
 		}
-		let feature = language.feature.first!
-		if trimmed.hasPrefix(feature) {
-			return (.feature, feature + ":")
+
+		if let x = k(trimmed, keywordItems: language.scenarioOutline, keywordType: .scenario, keywordPostfix: ":") {
+			return x
 		}
 
-		if let scenarioOutline = language.scenarioOutline.first {
-			if trimmed.hasPrefix(scenarioOutline) {
-				return (.scenarioOutline, scenarioOutline + ":")
-			}
-		}
-		
-		let scenario = language.scenario.first!
-		if trimmed.hasPrefix(scenario) {
-			return (.scenario, scenario + ":")
+		if let x = k(trimmed, keywordItems: language.scenario, keywordType: .scenario, keywordPostfix: ":") {
+			return x
 		}
 
-		let given = language.given.first!
-		if trimmed.hasPrefix(given) {
-			return (.given, given)
+		if let x = k(trimmed, keywordItems: language.given, keywordType: .given, keywordPostfix: "") {
+			return x
 		}
 
-		let when = language.when.first!
-		if trimmed.hasPrefix(when) {
-			return (.when, when)
+		if let x = k(trimmed, keywordItems: language.when, keywordType: .when, keywordPostfix: "") {
+			return x
 		}
 
-		let then = language.then.first!
-		if trimmed.hasPrefix(then) {
-			return (.then, then)
+		if let x = k(trimmed, keywordItems: language.then, keywordType: .then, keywordPostfix: "") {
+			return x
 		}
+
 
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
@@ -137,12 +128,15 @@ struct Keyword {
 		return (.none, "")
 	}
 	
-	private static func k(_ line: String, keywordItems: [String], keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
-	if let keyword = keywordItems.first {
-		if line.hasPrefix(keyword) {
-			return (keywordType, keyword + ":")
+	private static func k(_ line: String,
+						  keywordItems: [String],
+						  keywordType: KeywordType,
+						  keywordPostfix: String) -> (type: KeywordType, localizedKeyword: String)? {
+		for keyword in keywordItems {
+			if line.hasPrefix(keyword) {
+				return (keywordType, keyword + keywordPostfix)
+			}
 		}
-	}
 		return nil
 	}
 	/**

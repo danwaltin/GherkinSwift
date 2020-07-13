@@ -113,8 +113,8 @@ class ParseLanguageTests: TestParseBase {
 		Feature Two: Feature name
 		Scenario Two: Scenario name
 		    Given Two x
-		    When2 Two
-		    Then2 Two
+		    When Two y
+		    Then Two z
 		""")
 
 		then_featureNameShouldBe("Feature name")
