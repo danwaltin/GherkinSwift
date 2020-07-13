@@ -40,6 +40,10 @@ struct Line {
 		self.keyword = keyword
 	}
 
+	func hasKeyword(_ type: KeywordType) -> Bool {
+		return keyword.isType(type)
+	}
+	
 	func keywordRemoved() -> String {
 		return keyword.removeFrom(text: text)
 	}

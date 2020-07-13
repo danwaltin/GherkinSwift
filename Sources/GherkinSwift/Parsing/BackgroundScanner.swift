@@ -44,7 +44,7 @@ class BackgroundScanner {
 	func scan(_ line: Line) {
 		switch state {
 		case .started:
-			if line.keyword == .background {
+			if line.hasKeyword(.background) {
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningBackground

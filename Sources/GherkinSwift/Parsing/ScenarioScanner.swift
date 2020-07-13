@@ -58,8 +58,8 @@ class ScenarioScanner {
 	}
 	
 	class func lineBelongsToNextScenario(_ line: Line, allLines: [Line]) -> Bool {
-		if line.keyword == .tag , let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
-			return next.keyword == .scenario || next.keyword == .scenarioOutline
+		if line.hasKeyword(.tag) , let next = nextLineWithKeyword(currentLine: line, allLines: allLines) {
+			return next.hasKeyword(.scenario) || next.hasKeyword(.scenarioOutline)
 		}
 		return false
 	}
@@ -70,7 +70,7 @@ class ScenarioScanner {
 		
 		for i in nextIndex...lastIndex {
 			let line = allLines[i]
-			if line.keyword == .scenario || line.keyword == .scenarioOutline || line.keyword == .examples {
+			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) || line.hasKeyword(.examples) {
 				return line
 			}
 		}
@@ -81,17 +81,17 @@ class ScenarioScanner {
 	func scan(_ line: Line) {
 		switch state {
 		case .started:
-			if line.keyword == .scenario || line.keyword == .scenarioOutline {
+			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) {
 				name = line.keywordRemoved()
 				
-				isScenarioOutline = line.keyword == .scenarioOutline
+				isScenarioOutline = line.hasKeyword(.scenarioOutline)
 				location = line.keywordLocation()
 				examplesTagScanner.clear()
 				state = .scanningScenario
 			}
 
 		case .scanningScenario:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -106,7 +106,7 @@ class ScenarioScanner {
 			}
 
 		case .scanningSteps:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -121,7 +121,7 @@ class ScenarioScanner {
 			}
 			
 		case .scanningExamples:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				examplesTagScanner.scan(line)
 				state = .foundNextExamplesTags
 
@@ -133,7 +133,7 @@ class ScenarioScanner {
 			}
 
 		case .foundNextExamplesTags:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				examplesTagScanner.scan(line)
 
 			} else if shouldStartNewExamples(line) {
@@ -164,7 +164,7 @@ class ScenarioScanner {
 	}
 	
 	private func shouldStartNewExamples(_ line: Line) -> Bool {
-		return line.keyword == .examples
+		return line.hasKeyword(.examples)
 	}
 	
 	private func startNewExamples(_ line: Line) {

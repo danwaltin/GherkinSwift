@@ -37,7 +37,7 @@ let tableSeparator: Character = "|"
 let commentToken = "#"
 let tagToken: Character = "@"
 
-enum Keyword {
+enum KeywordType {
 	case none
 	case feature
 	case background
@@ -54,9 +54,16 @@ enum Keyword {
 	case table
 	case comment
 	case tag
-		
+}
+
+struct Keyword {
+	private let type: KeywordType
 	
-	private static let keywordMap: [Keyword: String] = [
+	private init(type: KeywordType) {
+		self.type = type
+	}
+	
+	private static let keywordMap: [KeywordType: String] = [
 		.feature         : keywordFeature,
 		.background      : keywordBackground,
 		.scenario        : keywordScenario,
@@ -73,17 +80,20 @@ enum Keyword {
 		.tag             : String(tagToken)
 	]
 	
-	
+	func isType(_ t: KeywordType) -> Bool {
+		return type == t
+	}
+
 	static func createFrom(text: String) -> Keyword {
 		let trimmed = text.trim()
 		
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
-				return items.key
+				return Keyword(type: items.key)
 			}
 		}
 		
-		return .none
+		return Keyword(type: .none)
 	}
 	
 	/**
@@ -110,13 +120,13 @@ enum Keyword {
 	Does this keyword represent a scanario step?
 	*/
 	func isStep() -> Bool {
-		let stepKeywords: [Keyword] = [.asterisk, .given, .when, .then, .and, .but]
-		return stepKeywords.contains(self)
+		let stepKeywords: [KeywordType] = [.asterisk, .given, .when, .then, .and, .but]
+		return stepKeywords.contains(type)
 	}
 
 	private func keywordAsText() -> String? {
-		if Keyword.keywordMap.keys.contains(self) {
-			return Keyword.keywordMap[self]
+		if Keyword.keywordMap.keys.contains(type) {
+			return Keyword.keywordMap[type]
 		}
 		return nil
 	}

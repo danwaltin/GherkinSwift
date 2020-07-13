@@ -59,18 +59,18 @@ class FeatureScanner {
 		
 		switch state {
 		case .started:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				featureTagScanner.scan(line)
 			}
 
-			if keyword == .feature {
+			if line.hasKeyword(.feature) {
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
 			}
 
 		case .scanningFeature:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
 
 			} else if shouldStartBackground(line) {
@@ -84,7 +84,7 @@ class FeatureScanner {
 			}
 
 		case .scanningBackground:
-			if line.keyword == .tag && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+			if line.hasKeyword(.tag) && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 			} else if shouldStartNewScenario(line) {
@@ -95,7 +95,7 @@ class FeatureScanner {
 			}
 			
 		case .scanningScenario:
-			if line.keyword == .tag && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
+			if line.hasKeyword(.tag) && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 				
@@ -107,7 +107,7 @@ class FeatureScanner {
 			}
 
 		case .foundNextScenarioTags:
-			if line.keyword == .tag {
+			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
 			
 			} else if shouldStartNewScenario(line) {
@@ -117,7 +117,7 @@ class FeatureScanner {
 	}
 
 	private func shouldStartBackground(_ line: Line) -> Bool {
-		return line.keyword == .background
+		return line.hasKeyword(.background)
 	}
 	
 	private func startBackground(_ line: Line) {
@@ -126,7 +126,7 @@ class FeatureScanner {
 	}
 	
 	private func shouldStartNewScenario(_ line: Line) -> Bool {
-		return line.keyword == .scenario || line.keyword == .scenarioOutline
+		return line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline)
 	}
 
 	private func startNewScenario(_ line: Line) {
