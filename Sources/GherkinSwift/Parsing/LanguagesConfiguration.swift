@@ -20,14 +20,43 @@
 //  Created by Dan Waltin on 2020-07-11.
 //
 // ------------------------------------------------------------------------
+import Foundation
 
 public struct LanguagesConfiguration {
-	let defaultLanguage: String
-	let languages: [String: Language]
+	private let defaultLanguageKey: String
+	private let languages: [String: Language]
 	
-	init(defaultLanguage: String,
-		 languages: [String: Language]) {
-		self.defaultLanguage = defaultLanguage
+	init(defaultLanguageKey: String,
+		 languages: [String: Language] = LanguagesConfiguration.getAvailableLanguages()) {
+		self.defaultLanguageKey = defaultLanguageKey
 		self.languages = languages
+	}
+	
+	private static func getAvailableLanguages() -> [String : Language] {
+		return [:]
+		let languagesFileUrl = fileUrl(of: "gherkin-languages.json")
+		
+		let data = try! Data(contentsOf: languagesFileUrl)
+
+		let s = String(decoding: data, as: UTF8.self)
+		
+		let d = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        guard let dictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            print("Could not cast JSON content as a Dictionary<String, Language>")
+			return [:]
+        }
+		return [:]
+	}
+	
+	private static func fileUrl(of file: String) -> URL {
+		let thisSourceFile = URL(fileURLWithPath: #file)
+		let currentDirectory = thisSourceFile.deletingLastPathComponent()
+		let parentDirectory = currentDirectory.deletingLastPathComponent()
+		
+		return parentDirectory.appendingPathComponent(file)
+	}
+
+	var defaultLanguage: Language {
+		return languages.values.first!
 	}
 }

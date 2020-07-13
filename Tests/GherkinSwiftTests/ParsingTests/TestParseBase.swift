@@ -88,7 +88,7 @@ class TestParseBase: XCTestCase {
 				docStringSeparator: docStringSeparator,
 				alternativeDocStringSeparator: alternativeDocStringSeparator),
 			languages: LanguagesConfiguration(
-				defaultLanguage: defaultLanguage,
+				defaultLanguageKey: defaultLanguage,
 				languages: languages))
 	}
 		

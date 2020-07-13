@@ -25,10 +25,13 @@ import Foundation
 
 public class GherkinFeatureParser {
 	
-	let scannerFactory: ScannerFactory
+	private let scannerFactory: ScannerFactory
+	private let languages: LanguagesConfiguration
 	
-	public init(configuration: ParseConfiguration, languages: LanguagesConfiguration) {
+	public init(configuration: ParseConfiguration,
+				languages: LanguagesConfiguration) {
 		scannerFactory = ScannerFactory(configuration: configuration)
+		self.languages = languages
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
@@ -61,12 +64,16 @@ public class GherkinFeatureParser {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
 	
-	private func getLines(_ lines:[String]) -> [Line] {
+	private func getLines(_ lines: [String]) -> [Line] {
 		return lines.enumerated().map{ (index, text) in
 			let keyword = Keyword.createFrom(text: text)
 			
 			return Line(text: text,
 						number: index + 1,
 						keyword: keyword) }
+	}
+	
+	private func getLanguage() -> Language {
+		return languages.defaultLanguage
 	}
 }

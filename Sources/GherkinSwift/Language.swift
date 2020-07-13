@@ -21,7 +21,7 @@
 //
 // ------------------------------------------------------------------------
 
-struct Language {
+struct Language : Encodable {
 	let name: String
 	let native: String
 	

@@ -85,15 +85,19 @@ struct Keyword {
 	}
 
 	static func createFrom(text: String) -> Keyword {
+		return Keyword(type: keywordTypeFrom(text: text))
+	}
+	
+	private static func keywordTypeFrom(text: String) -> KeywordType {
 		let trimmed = text.trim()
 		
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
-				return Keyword(type: items.key)
+				return items.key
 			}
 		}
 		
-		return Keyword(type: .none)
+		return .none
 	}
 	
 	/**

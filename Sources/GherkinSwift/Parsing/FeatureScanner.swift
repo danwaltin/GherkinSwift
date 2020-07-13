@@ -55,8 +55,6 @@ class FeatureScanner {
 	}
 	
 	func scan(_ line: Line, allLines: [Line]) {
-		let keyword = line.keyword
-		
 		switch state {
 		case .started:
 			if line.hasKeyword(.tag) {
