@@ -94,14 +94,17 @@ class TestParseBase: XCTestCase {
 		
 	// MARK: - Factory methods
 	func L(feature: [String],
+		   background: [String] = [],
 		   scenario: [String] = [],
 		   given: [String] = [],
 		   when: [String] = [],
-		   then: [String] = []) -> Language {
+		   then: [String] = [],
+		   and: [String] = [],
+		   but: [String] = []) -> Language {
 		return Language(name: "name", native: "native",
-						and: [],
-						background: [],
-						but: [],
+						and: and,
+						background: background,
+						but: but,
 						examples: [],
 						feature: feature,
 						given: given,

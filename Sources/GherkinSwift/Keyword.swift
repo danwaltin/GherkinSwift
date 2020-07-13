@@ -94,30 +94,24 @@ struct Keyword {
 	private static func keywordTypeFrom(text: String, language: Language) -> (type: KeywordType, localizedKeyword: String) {
 		let trimmed = text.trim()
 
-		if let x = k(trimmed, keywordItems: language.feature, keywordType: .feature, keywordPostfix: ":") {
-			return x
+		let map: [(items: [String], type: KeywordType, postfix: String)] = [
+			(language.feature,         .feature,         ":"),
+			(language.background,      .background,      ":"),
+			(language.scenarioOutline, .scenarioOutline, ":"),
+			(language.scenario,        .scenario,        ":"),
+			(language.given,           .given,           ""),
+			(language.when,            .when,            ""),
+			(language.then,            .then,            ""),
+		]
+		
+		for item in map {
+			if let x = k(trimmed,
+						 localizedItems: item.items,
+						 keywordType: item.type,
+						 keywordPostfix: item.postfix) {
+				return x
+			}
 		}
-
-		if let x = k(trimmed, keywordItems: language.scenarioOutline, keywordType: .scenario, keywordPostfix: ":") {
-			return x
-		}
-
-		if let x = k(trimmed, keywordItems: language.scenario, keywordType: .scenario, keywordPostfix: ":") {
-			return x
-		}
-
-		if let x = k(trimmed, keywordItems: language.given, keywordType: .given, keywordPostfix: "") {
-			return x
-		}
-
-		if let x = k(trimmed, keywordItems: language.when, keywordType: .when, keywordPostfix: "") {
-			return x
-		}
-
-		if let x = k(trimmed, keywordItems: language.then, keywordType: .then, keywordPostfix: "") {
-			return x
-		}
-
 
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
@@ -129,12 +123,15 @@ struct Keyword {
 	}
 	
 	private static func k(_ line: String,
-						  keywordItems: [String],
+						  localizedItems: [String],
 						  keywordType: KeywordType,
 						  keywordPostfix: String) -> (type: KeywordType, localizedKeyword: String)? {
-		for keyword in keywordItems {
-			if line.hasPrefix(keyword) {
-				return (keywordType, keyword + keywordPostfix)
+		for localized in localizedItems {
+			if line.hasPrefix(localized) {
+				if Keyword.isStep(type: keywordType) && localized == keywordAsterisk {
+					return (.asterisk, localized + keywordPostfix)
+				}
+				return (keywordType, localized + keywordPostfix)
 			}
 		}
 		return nil
@@ -163,10 +160,14 @@ struct Keyword {
 	Does this keyword represent a scanario step?
 	*/
 	func isStep() -> Bool {
+		return Keyword.isStep(type: type)
+	}
+
+	private static func isStep(type: KeywordType) -> Bool {
 		let stepKeywords: [KeywordType] = [.asterisk, .given, .when, .then, .and, .but]
 		return stepKeywords.contains(type)
 	}
-
+	
 	private func keywordAsText() -> String? {
 		if Keyword.keywordMap.keys.contains(type) {
 			return localizedKeyword
