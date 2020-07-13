@@ -58,9 +58,11 @@ enum KeywordType {
 
 struct Keyword {
 	private let type: KeywordType
+	private let localizedKeyword: String
 	
-	private init(type: KeywordType) {
+	private init(type: KeywordType, localizedKeyword: String) {
 		self.type = type
+		self.localizedKeyword = localizedKeyword
 	}
 	
 	private static let keywordMap: [KeywordType: String] = [
@@ -84,20 +86,26 @@ struct Keyword {
 		return type == t
 	}
 
-	static func createFrom(text: String) -> Keyword {
-		return Keyword(type: keywordTypeFrom(text: text))
+	static func createFrom(text: String, language: Language) -> Keyword {
+		let k = keywordTypeFrom(text: text, language: language)
+		return Keyword(type: k.type, localizedKeyword: k.localizedKeyword)
 	}
 	
-	private static func keywordTypeFrom(text: String) -> KeywordType {
+	private static func keywordTypeFrom(text: String, language: Language) -> (type: KeywordType, localizedKeyword: String) {
 		let trimmed = text.trim()
-		
+
+		let feature = language.feature.first!
+		if trimmed.hasPrefix(feature) {
+			return (.feature, feature + ":")
+		}
+
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
-				return items.key
+				return (items.key, items.value)
 			}
 		}
 		
-		return .none
+		return (.none, "")
 	}
 	
 	/**
@@ -130,7 +138,8 @@ struct Keyword {
 
 	private func keywordAsText() -> String? {
 		if Keyword.keywordMap.keys.contains(type) {
-			return Keyword.keywordMap[type]
+			return localizedKeyword
+			//return Keyword.keywordMap[type]
 		}
 		return nil
 	}

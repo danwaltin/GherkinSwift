@@ -65,15 +65,22 @@ public class GherkinFeatureParser {
 	}
 	
 	private func getLines(_ lines: [String]) -> [Line] {
+		let firstLine = lines.count > 0 ? lines.first! : ""
+		let language = getLanguage(text: firstLine)
 		return lines.enumerated().map{ (index, text) in
-			let keyword = Keyword.createFrom(text: text)
+			let keyword = Keyword.createFrom(text: text, language: language)
 			
 			return Line(text: text,
 						number: index + 1,
 						keyword: keyword) }
 	}
 	
-	private func getLanguage() -> Language {
+	private func getLanguage(text: String) -> Language {
+		if text.hasPrefix("#language:") {
+			let languageKey = text.removeKeyword("#language:")
+			return languages.language(withKey: languageKey)
+		}
+
 		return languages.defaultLanguage
 	}
 }

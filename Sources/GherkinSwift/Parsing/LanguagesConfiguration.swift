@@ -52,6 +52,14 @@ public struct LanguagesConfiguration {
 		return parentDirectory.appendingPathComponent(file)
 	}
 
+	func language(withKey key: String) -> Language {
+		if let l = languages[key] {
+			return l
+		}
+		
+		return defaultLanguage
+	}
+
 	var defaultLanguage: Language {
 		return languages.values.first!
 	}
