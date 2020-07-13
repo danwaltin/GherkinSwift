@@ -104,7 +104,7 @@ class ParseLanguageTests: TestParseBase {
 			| 1 |
 		""")
 		
-		then_shouldReturnScenarioWith(numberOfExamples: 2)
+		then_shouldReturnScenarioWith(numberOfExamples: 1)
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 0,
 			name: "",
@@ -119,12 +119,12 @@ class ParseLanguageTests: TestParseBase {
 		Egenskap: Egenskap
 		Scenariomall: Scenariomall
 		    Givet x '<y>'
-		Exampel:
+		Exempel:
 			| y |
 			| 1 |
 		""")
 		
-		then_shouldReturnScenarioWith(numberOfExamples: 2)
+		then_shouldReturnScenarioWith(numberOfExamples: 1)
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 0,
 			name: "",

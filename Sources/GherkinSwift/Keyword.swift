@@ -101,6 +101,7 @@ struct Keyword {
 			(language.feature,         .feature,         ":"),
 			(language.background,      .background,      ":"),
 			(language.scenarioOutline, .scenarioOutline, ":"),
+			(language.examples,        .examples,        ":"),
 			(language.scenario,        .scenario,        ":"),
 			(language.given,           .given,           ""),
 			(language.when,            .when,            ""),
