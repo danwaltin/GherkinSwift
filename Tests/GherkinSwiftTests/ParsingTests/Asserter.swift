@@ -40,7 +40,7 @@ struct Asserter {
 			let actualNames = $0.scenarios.map{ s in
 				s.name
 			}
-			XCTAssertEqual(actualNames, names)
+			XCTAssertEqual(actualNames, names, file: file, line: line)
 		}
 	}
 

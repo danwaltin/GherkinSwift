@@ -41,26 +41,26 @@ class ParseLanguageTests: TestParseBase {
 	
 	func test_language_withBasicKeywords() {
 		given_languages(
-			["sv" : L(feature: ["Egenskap"],
-				scenario: ["Scenario"],
+			["lang" : L(feature: ["Egenskap"],
+				scenario: ["Testfall"],
 				given: ["Givet"],
 				when: ["När"],
 				then: ["Så"])])
 
 		when_parsingDocument(
 		"""
-		#language:sv
-		Egenskap: Feature på svenska är Egenskap
-		Scenario: Scenario på svenska är Scenario
+		#language:lang
+		Egenskap: Feature är Egenskap
+		Testfall: Scenario är Testfall
 		    Givet x
 		    När y
 		    Så z
 		""")
 
-		then_featureNameShouldBe("Feature på svenska är Egenskap")
+		then_featureNameShouldBe("Feature är Egenskap")
 
 		then_shouldReturnScenariosWithNames([
-			"Scenario på svenska är Scenario"]
+			"Scenario är Testfall"]
 		)
 
 		then_shouldReturnScenarioWith(numberOfSteps: 3)

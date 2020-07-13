@@ -139,7 +139,6 @@ struct Keyword {
 	private func keywordAsText() -> String? {
 		if Keyword.keywordMap.keys.contains(type) {
 			return localizedKeyword
-			//return Keyword.keywordMap[type]
 		}
 		return nil
 	}
