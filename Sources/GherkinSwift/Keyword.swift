@@ -99,6 +99,32 @@ struct Keyword {
 			return (.feature, feature + ":")
 		}
 
+		if let scenarioOutline = language.scenarioOutline.first {
+			if trimmed.hasPrefix(scenarioOutline) {
+				return (.scenarioOutline, scenarioOutline + ":")
+			}
+		}
+		
+		let scenario = language.scenario.first!
+		if trimmed.hasPrefix(scenario) {
+			return (.scenario, scenario + ":")
+		}
+
+		let given = language.given.first!
+		if trimmed.hasPrefix(given) {
+			return (.given, given)
+		}
+
+		let when = language.when.first!
+		if trimmed.hasPrefix(when) {
+			return (.when, when)
+		}
+
+		let then = language.then.first!
+		if trimmed.hasPrefix(then) {
+			return (.then, then)
+		}
+
 		for items in keywordMap {
 			if trimmed.hasPrefix(items.value) {
 				return (items.key, items.value)
