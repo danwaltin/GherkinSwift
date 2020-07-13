@@ -32,7 +32,7 @@ class ParseLanguageTests: TestParseBase {
 			 "bpa" : L(feature: ["Bbb"])])
 		
 		when_parsingDocument(
-			"""
+		"""
 		Bbb: feature name
 		""")
 		
@@ -49,7 +49,7 @@ class ParseLanguageTests: TestParseBase {
 						then: ["Så "])])
 		
 		when_parsingDocument(
-			"""
+		"""
 		#language:lang
 		Egenskap: Feature är Egenskap
 		Bakgrund:
@@ -74,7 +74,65 @@ class ParseLanguageTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
 		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
 	}
-	
+
+	func test_language_scenarioOutline() {
+		given_languages(
+			// note that for english "scenario"
+			// can be called "Example", which is
+			// the same beginning as of "Examples"
+			// in a scenario outline
+			["en" : L(feature: ["Feature"],
+					  scenario: ["Example", "Scenario"],
+					  scenarioOutline: ["Scenario Outline"],
+					  examples: ["Examples"],
+					  given: ["Given "]),
+			 "sv" : L(feature: ["Egenskap"],
+					  scenario: ["Scenario"],
+					  scenarioOutline: ["Scenariomall"],
+					  examples: ["Exempel"],
+					  given: ["Givet "])])
+
+		// english
+		when_parsingDocument(
+		"""
+		#language:en
+		Feature: Feature
+		Scenario Outline: Scenario outline
+		    Given x '<y>'
+		Examples:
+			| y |
+			| 1 |
+		""")
+		
+		then_shouldReturnScenarioWith(numberOfExamples: 2)
+		then_shouldReturnScenarioWithExamples(
+			atIndex: 0,
+			name: "",
+			table(
+				"y",
+				"1"))
+
+		// swedish
+		when_parsingDocument(
+		"""
+		#language:sv
+		Egenskap: Egenskap
+		Scenariomall: Scenariomall
+		    Givet x '<y>'
+		Exampel:
+			| y |
+			| 1 |
+		""")
+		
+		then_shouldReturnScenarioWith(numberOfExamples: 2)
+		then_shouldReturnScenarioWithExamples(
+			atIndex: 0,
+			name: "",
+			table(
+				"y",
+				"1"))
+	}
+
 	func test_language_withBasicKeywords_twoKLocalizedeywordsPerType_first() {
 		given_languages(
 			["lang" : L(feature: ["Feature One", "Feature Two"],
@@ -365,4 +423,21 @@ class ParseLanguageTests: TestParseBase {
 		}
 	}
 
+	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
+											   file: StaticString = #file, line: UInt = #line) {
+		
+		assert.scenario(0, file, line) {
+			XCTAssertEqual($0.examples.count, expected, file: file, line: line)
+		}
+	}
+
+	private func then_shouldReturnScenarioWithExamples(atIndex index: Int,
+													   name: String,
+													   _ table: Table,
+													   file: StaticString = #file, line: UInt = #line) {
+		assert.examples(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.name, name, file: file, line: line)
+			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
+		}
+	}
 }

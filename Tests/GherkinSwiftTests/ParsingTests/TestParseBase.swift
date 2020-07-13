@@ -96,6 +96,8 @@ class TestParseBase: XCTestCase {
 	func L(feature: [String],
 		   background: [String] = [],
 		   scenario: [String] = [],
+		   scenarioOutline: [String] = [],
+		   examples: [String] = [],
 		   given: [String] = [],
 		   when: [String] = [],
 		   then: [String] = [],
@@ -105,12 +107,12 @@ class TestParseBase: XCTestCase {
 						and: and,
 						background: background,
 						but: but,
-						examples: [],
+						examples: examples,
 						feature: feature,
 						given: given,
 						rule: [],
 						scenario: scenario,
-						scenarioOutline: [],
+						scenarioOutline: scenarioOutline,
 						then: then,
 						when: when)
 	}
