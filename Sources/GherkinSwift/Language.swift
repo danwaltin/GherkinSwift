@@ -21,7 +21,11 @@
 //
 // ------------------------------------------------------------------------
 
-struct Language : Encodable {
+struct LanguageTest : Codable {
+	var name: String
+}
+
+struct Language : Codable {
 	let name: String
 	let native: String
 	

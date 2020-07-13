@@ -33,18 +33,14 @@ public struct LanguagesConfiguration {
 	}
 	
 	private static func getAvailableLanguages() -> [String : Language] {
-		return [:]
 		let languagesFileUrl = fileUrl(of: "gherkin-languages.json")
 		
 		let data = try! Data(contentsOf: languagesFileUrl)
 
-		let s = String(decoding: data, as: UTF8.self)
+		if let x = try? JSONDecoder().decode([String: Language].self, from: data) {
+			return x
+		}
 		
-		let d = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-        guard let dictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-            print("Could not cast JSON content as a Dictionary<String, Language>")
-			return [:]
-        }
 		return [:]
 	}
 	
