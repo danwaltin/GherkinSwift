@@ -197,7 +197,7 @@ extension Step : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(keyword + " ", forKey: .keyword)
+		try container.encode(localizedKeyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
 		

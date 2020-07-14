@@ -44,21 +44,4 @@ public struct Step : Equatable {
 		self.docStringParameter = docStringParameter
 		self.localizedKeyword = localizedKeyword
 	}
-	
-	var keyword: String {
-		switch type {
-		case .asterisk:
-			return keywordAsterisk
-		case .given:
-			return keywordGiven
-		case .when:
-			return keywordWhen
-		case .then:
-			return keywordThen
-		case .and:
-			return keywordAnd
-		case .but:
-			return keywordBut
-		}
-	}
 }
