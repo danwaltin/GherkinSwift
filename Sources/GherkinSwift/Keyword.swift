@@ -104,7 +104,7 @@ struct Keyword {
 		let map: [(items: [String], type: KeywordType, postfix: String)] = [
 			(language.feature,         .feature,         ""),
 			(language.background,      .background,      ":"),
-			(language.scenarioOutline, .scenarioOutline, ":"),
+			(language.scenarioOutline, .scenarioOutline, ""),
 			(language.examples,        .examples,        ":"),
 			(language.scenario,        .scenario,        ""),
 			(language.given,           .given,           ""),
@@ -181,7 +181,7 @@ struct Keyword {
 	private func keywordAsText() -> String? {
 		if Keyword.keywordMap.keys.contains(type) {
 			switch type {
-			case .feature, .scenario:
+			case .feature, .scenario, .scenarioOutline:
 				return localized + ":"
 			default:
 				return localized
