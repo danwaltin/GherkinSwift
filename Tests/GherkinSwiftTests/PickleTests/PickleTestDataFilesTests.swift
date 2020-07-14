@@ -44,6 +44,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"incomplete_feature_2",
 		"incomplete_feature_3",
 		"incomplete_scenario",
+		"incomplete_scenario_outline",
 		"language",
 		"minimal",
 		"minimal-example",
@@ -65,7 +66,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	
 	"complex_background",
 	"escaped_pipes",
-	"incomplete_scenario_outline",
 	"rule_without_name_and_description",
 	"rule",
 	*/

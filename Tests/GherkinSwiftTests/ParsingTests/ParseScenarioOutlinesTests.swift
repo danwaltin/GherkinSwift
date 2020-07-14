@@ -25,17 +25,19 @@ import XCTest
 
 class ParseScenarioOutlinesTests: TestParseBase {
 	func test_oneScenarioOutlineWithOneExampleShouldReturnScenarioWithName() {
-		when_parsing([
-			"Feature: feature name            ",
-			"Scenario Outline: scenario name  ",
-			"    Given given <alpha>          ",
-			"    When when <beta>             ",
-			"    Then then <gamma>            ",
-			"                                 ",
-			"    Examples:                    ",
-			"        | alpha | beta | gamma | ",
-			"        | one   | two  | three | "])
-
+		when_parsingDocument(
+			"""
+			Feature: feature name
+			Scenario Outline: scenario name
+			    Given given <alpha>
+			    When when <beta>
+			    Then then <gamma>
+			
+			    Examples:
+			        | alpha | beta | gamma |
+			        | one   | two  | three |
+			""")
+		
 		then_shouldReturnScenariosWithNames([
 			"scenario name"]
 		)
@@ -46,20 +48,36 @@ class ParseScenarioOutlinesTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(atIndex: 2, .then, "then <gamma>")
 	}
 	
+	func test_oneScenarioOutlineWithoutStepsOrExamples() {
+		when_parsingDocument(
+			"""
+			Feature: feature name
+			Scenario Outline: scenario name
+			""")
+		
+		then_shouldReturnScenariosWithNames([
+			"scenario name"]
+		)
+		then_shouldReturnScenarioWith(numberOfSteps: 0)
+		then_shouldReturnScenarioWith(numberOfExamples: 0)
+	}
+	
 	// MARK: - Table parameters to steps
 	
 	func test_tableParametersToSteps() {
-		when_parsing([
-			"Feature: feature          ",
-			"Scenario Outline: scenario",
-			"    Given x               ",
-			"        | Column |        ",
-			"        | <key>  |        ",
-			"                          ",
-			"    Examples:             ",
-			"        | key   |         ",
-			"        | value |         "])
-
+		when_parsingDocument(
+			"""
+			Feature: feature
+			Scenario Outline: scenario
+			    Given x
+			        | Column |
+			        | <key>  |
+			
+			    Examples:
+			        | key   |
+			        | value |
+			""")
+		
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			atIndex: 0,
@@ -69,24 +87,26 @@ class ParseScenarioOutlinesTests: TestParseBase {
 				"Column",
 				"<key>"))
 	}
-
+	
 	// MARK: - Examples
 	func test_outlineExamples() {
-		when_parsing([
-			"Feature: feature          ",
-			"Scenario Outline: scenario",
-			"    When the <foo>        ",
-			"    Then should <bar>     ",
-			"                          ",
-			"    Examples:             ",
-			"        | foo | bar   |   ",
-			"        | one | two   |   ",
-			"                          ",
-			"    Examples: Lorem ipsum ",
-			"        | foo   |         ",
-			"        | alpha |         ",
-			"        | beta  |         "])
-
+		when_parsingDocument(
+			"""
+			Feature: feature
+			Scenario Outline: scenario
+			    When the <foo>
+			    Then should <bar>
+			
+			    Examples:
+			        | foo | bar   |
+			        | one | two   |
+			
+			    Examples: Lorem ipsum
+			        | foo   |
+			        | alpha |
+			        | beta  |
+			""")
+		
 		then_shouldReturnScenarioWith(numberOfExamples: 2)
 		then_shouldReturnScenarioWithExamples(
 			atIndex: 0,
@@ -102,21 +122,35 @@ class ParseScenarioOutlinesTests: TestParseBase {
 				"alpha",
 				"beta"))
 	}
-
+	
+	func test_outlineOneExampleWithoutTable() {
+		when_parsingDocument(
+			"""
+			Feature: feature
+			Scenario Outline: scenario
+			    When something happens
+			
+			    Examples:
+			""")
+		
+		then_shouldReturnScenarioWith(numberOfExamples: 1)
+		then_shouldReturnScenarioWithExamplesWithoutTable(atIndex: 0)
+	}
+	
 	// MARK: - Givens, whens, thens
 	
 	func then_shouldReturnScenariosWithNames(_ names: [String],
 											 file: StaticString = #file, line: UInt = #line) {
 		assert.scenarios(withNames: names, file, line)
 	}
-
+	
 	private func then_shouldReturnScenarioWith(numberOfSteps expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
 		assert.scenario(0, file, line) {
 			XCTAssertEqual($0.steps.count, expected, file: file, line: line)
 		}
 	}
-
+	
 	private func then_shouldReturnScenarioWith(numberOfExamples expected: Int,
 											   file: StaticString = #file, line: UInt = #line) {
 		
@@ -124,24 +158,31 @@ class ParseScenarioOutlinesTests: TestParseBase {
 			XCTAssertEqual($0.examples.count, expected, file: file, line: line)
 		}
 	}
-
+	
 	private func then_shouldReturnScenarioWithExamples(atIndex index: Int,
 													   name: String,
 													   _ table: Table,
 													   file: StaticString = #file, line: UInt = #line) {
 		assert.examples(index, forScenario: 0, file, line) {
 			XCTAssertEqual($0.name, name, file: file, line: line)
-			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
+			XCTAssertEqual($0.table!.withoutLocation(), table, file: file, line: line)
 		}
 	}
-
+	
+	private func then_shouldReturnScenarioWithExamplesWithoutTable(atIndex index: Int,
+																   file: StaticString = #file, line: UInt = #line) {
+		assert.examples(index, forScenario: 0, file, line) {
+			XCTAssertEqual($0.table, nil, file: file, line: line)
+		}
+	}
+	
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,
 												   file: StaticString = #file, line: UInt = #line) {
 		assert.step(stepType, text, atIndex: index, forScenario: 0, file, line)
 	}
-
+	
 	private func then_shouldReturnScenarioWithStep(atIndex index: Int,
 												   _ stepType: StepType,
 												   _ text: String,

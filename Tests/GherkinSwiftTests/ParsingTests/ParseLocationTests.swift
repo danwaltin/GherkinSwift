@@ -494,28 +494,28 @@ class ParseLocationTests: TestParseBase {
 	private func then_examplesHeaderCell(_ headerCell: String, shouldHaveLocation location: Location,
 										 file: StaticString = #file, line: UInt = #line) {
 		assert.examples(0, forScenario: 0, file, line) {
-			XCTAssertEqual($0.table.header[headerCell].location, location,file: file, line: line)
+			XCTAssertEqual($0.table!.header[headerCell].location, location,file: file, line: line)
 		}
 	}
 	
 	private func then_examplesRowCell(_ column: String, atExampleRow rowIndex: Int, shouldHaveLocation location: Location,
 									  file: StaticString = #file, line: UInt = #line) {
 		assert.examples(0, forScenario: 0, file, line) {
-			XCTAssertEqual($0.table.rows[rowIndex][column].location, location,file: file, line: line)
+			XCTAssertEqual($0.table!.rows[rowIndex][column].location, location,file: file, line: line)
 		}
 	}
 	
 	private func then_examplesTableHeader(atExample exampleIndex: Int, shouldHaveLocation location: Location,
 										  file: StaticString = #file, line: UInt = #line) {
 		assert.examples(exampleIndex, forScenario: 0, file, line) {
-			XCTAssertEqual($0.table.headerLocation, location,file: file, line: line)
+			XCTAssertEqual($0.table!.headerLocation, location,file: file, line: line)
 		}
 	}
 	
 	private func then_examplesTableRow(_ rowIndex: Int, atExample exampleIndex: Int, shouldHaveLocation location: Location,
 									   file: StaticString = #file, line: UInt = #line) {
 		assert.examples(exampleIndex, forScenario: 0, file, line) {
-			XCTAssertEqual($0.table.rows[rowIndex].location, location,file: file, line: line)
+			XCTAssertEqual($0.table!.rows[rowIndex].location, location,file: file, line: line)
 		}
 	}
 	
