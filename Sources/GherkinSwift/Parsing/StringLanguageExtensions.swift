@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Copyright 2017 Dan Waltin
+// Copyright 2020 Dan Waltin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,29 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Location.swift
+//  KeywordType.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-07-14.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
-
-public struct Location : Equatable, Encodable {
-	public let column: Int
-	public let line: Int
-	
-	public init(column: Int, line: Int) {
-		self.column = column
-		self.line = line
+extension String {
+	func isLanguageSpecification() -> Bool {
+		return languageKeyword() != nil
 	}
-}
+	
+	func languageKeyword() -> String? {
+		// there is probably a regular expression that can solve this...
+		
+		// Must begin with "#" and contain a ":
+		if trim().hasPrefix(String(commentToken)) && contains(":") {
+			let between = stringBetween(commentToken, and: ":")
+			if between.trim() == "language" {
+				return "\(commentToken)\(between):"
+			}
+		}
 
-extension Location {
-	public static func zero() -> Location {
-		return Location(column: 0, line: 0)
+		return nil
 	}
 }

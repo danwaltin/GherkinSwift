@@ -28,6 +28,9 @@ class CommentCollector {
 	private var comments = [Comment]()
 	
 	func collectComment(_ line: Line) {
+		if line.text.isLanguageSpecification() {
+			return // this is not a comment!
+		}
 		let location = Location(column: 1, line: line.number)
 		comments.append(Comment(text: line.text.trimRight("\r"), location: location))
 	}

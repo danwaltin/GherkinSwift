@@ -27,8 +27,7 @@ class ExamplesScanner {
 	var isScanningDescription = false
 	var descriptionLines = [String]()
 
-	var lineNumber = 0
-	var columnNumber = 0
+	private var location = Location.zero()
 
 	var isScanningTable = false
 	let tableScanner: TableScanner
@@ -51,17 +50,16 @@ class ExamplesScanner {
 			return
 		}
 
-		if line.isExamples() {
-			name = line.removeKeyword(keywordExamples)
-			lineNumber = line.number
-			columnNumber = line.columnForKeyword(keywordExamples)
+		if line.hasKeyword(.examples) {
+			name = line.keywordRemoved()
+			location = Location(column: line.columnForKeyword(), line: line.number)
 		}
 	}
 	
 	private func handleDescription(_ line: Line) {
 		if isScanningDescription && !isScanningTable {
 			descriptionLines.append(line.text)
-		} else if !line.isExamples() && !line.isTable() && !isScanningDescription &&  !line.isEmpty() {
+		} else if !line.hasKeyword(.examples) && !line.hasKeyword(.table) && !isScanningDescription &&  !line.isEmpty() {
 			isScanningDescription = true
 			descriptionLines.append(line.text)
 		}
@@ -72,7 +70,7 @@ class ExamplesScanner {
 			return
 		}
 
-		isScanningTable = isScanningTable || line.isTable()
+		isScanningTable = isScanningTable || line.hasKeyword(.table)
 		
 		if isScanningTable {
 			tableScanner.scan(line)
@@ -83,7 +81,7 @@ class ExamplesScanner {
 		return ScenarioOutlineExamples(name: name,
 									   description: descriptionLines.asDescription(),
 									   tags: tags,
-									   location: Location(column: columnNumber, line: lineNumber),
+									   location: location,
 									   table: tableScanner.getTable()!)
 	}
 }

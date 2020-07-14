@@ -29,6 +29,7 @@ public struct Scenario : Equatable, Taggable, HasName {
 	public let location: Location
 	public let examples: [ScenarioOutlineExamples]
 	public let isScenarioOutline: Bool
+	public let localizedKeyword: String
 	
 	public init(name: String,
 				description: String?,
@@ -36,7 +37,8 @@ public struct Scenario : Equatable, Taggable, HasName {
 				location: Location,
 				steps: [Step],
 				examples: [ScenarioOutlineExamples],
-				isScenarioOutline: Bool = false) {
+				isScenarioOutline: Bool = false,
+				localizedKeyword: String) {
 		self.name = name
 		self.description = description
 		self.tags = tags
@@ -44,5 +46,6 @@ public struct Scenario : Equatable, Taggable, HasName {
 		self.steps = steps
 		self.examples = examples
 		self.isScenarioOutline = isScenarioOutline
+		self.localizedKeyword = localizedKeyword
 	}
 }

@@ -28,8 +28,17 @@ public struct Feature : Equatable, Taggable, HasName {
 	public let tags: [Tag]
 	public let scenarios: [Scenario]
 	public let location: Location
-	
-	public init(name: String, description: String?, background: Background?, tags: [Tag] = [], location: Location, scenarios: [Scenario] = []) {
+	public let language: String
+	public let localizedKeyword: String
+
+	public init(name: String,
+				description: String?,
+				background: Background?,
+				tags: [Tag] = [],
+				location: Location,
+				scenarios: [Scenario] = [],
+				language: String,
+				localizedKeyword: String) {
 		self.name = name
 		self.description = description
 		self.background = background
@@ -37,5 +46,8 @@ public struct Feature : Equatable, Taggable, HasName {
 		self.scenarios = scenarios
 		
 		self.location = location
+
+		self.language = language
+		self.localizedKeyword = localizedKeyword
 	}
 }

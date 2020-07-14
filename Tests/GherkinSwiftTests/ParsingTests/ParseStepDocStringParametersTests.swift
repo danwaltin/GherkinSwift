@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseStepDocStringParameters.swift
+//  ParseStepDocStringParametersTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-05.
@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepDocStringParameters: TestParseBase {
+class ParseStepDocStringParametersTests: TestParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
@@ -46,13 +46,13 @@ class ParseStepDocStringParameters: TestParseBase {
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			forScenario: 0,
-			.Given,
+			.given,
 			"something",
 			docString("Ada Lovelace", "==="))
 
 		then_shouldReturnScenarioWithStep(
 			forScenario: 1,
-			.Then,
+			.then,
 			"something",
 			docString("Alan Turing", "---"))
 	}
@@ -73,7 +73,7 @@ class ParseStepDocStringParameters: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Given,
+			.given,
 			"something",
 			docString("first line\n  second line indented two spaces", "==="))
 	}
@@ -95,7 +95,7 @@ class ParseStepDocStringParameters: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Given,
+			.given,
 			"something",
 			docString("first line\n\nthird line", "==="))
 	}
@@ -115,7 +115,7 @@ class ParseStepDocStringParameters: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Given,
+			.given,
 			"something",
 			docString("one line", "---"))
 	}
@@ -186,7 +186,7 @@ class ParseStepDocStringParameters: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Given,
+			.given,
 			"something",
 			docString("one line", "==="))
 	}

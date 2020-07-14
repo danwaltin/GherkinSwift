@@ -27,7 +27,48 @@ class TestParseBase: XCTestCase {
 	var actualGherkinDocument: GherkinDocument!
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
+	var defaultLanguage: String = ""
+	var languages: [String: Language] = [:]
+	
+	override func setUp() {
+		setupDefaultTestLanguage()
+	}
 
+	func given_defaultLanguage(_ languageCode: String) {
+		defaultLanguage = languageCode
+	}
+
+	func given_languages(_ languages: [String: Language]) {
+		self.languages = languages
+	}
+
+	func given_languageWithAsterisk() {
+		setupDefaultTestLanguage(given: ["* ", "Given "])
+	}
+	
+	private func setupDefaultTestLanguage(given: [String] = ["Given "]) {
+		// Default to the same english language as in
+		// the gherkin-languages.json file,
+		// but without the extra keywords
+		// but potentially different "given" keywords
+		given_defaultLanguage("en")
+		given_languages(
+			["en" : Language(key: "en",
+							 name: "English",
+							 native: "English",
+							 and: ["And "],
+							 background: ["Background"],
+							 but: ["But "],
+							 examples: ["Examples"],
+							 feature: ["Feature"],
+							 given: given,
+							 rule: ["Rule"],
+							 scenario: ["Scenario"],
+							 scenarioOutline: ["Scenario Outline"],
+							 then: ["Then "],
+							 when: ["When "])])
+	}
+	
 	func given_docStringSeparator(_ separator: String, alternative: String) {
 		docStringSeparator = separator
 		alternativeDocStringSeparator = alternative
@@ -51,11 +92,40 @@ class TestParseBase: XCTestCase {
 	}
 
 	func parser() -> GherkinFeatureParser {
-		return GherkinFeatureParser(configuration: ParseConfiguration(docStringSeparator: docStringSeparator,
-																	  alternativeDocStringSeparator: alternativeDocStringSeparator))
+		return GherkinFeatureParser(
+			configuration: ParseConfiguration(
+				docStringSeparator: docStringSeparator,
+				alternativeDocStringSeparator: alternativeDocStringSeparator),
+			languages: LanguagesConfiguration(
+				defaultLanguageKey: defaultLanguage,
+				languages: languages))
 	}
 		
 	// MARK: - Factory methods
+	func L(feature: [String],
+		   background: [String] = [],
+		   scenario: [String] = [],
+		   scenarioOutline: [String] = [],
+		   examples: [String] = [],
+		   given: [String] = [],
+		   when: [String] = [],
+		   then: [String] = [],
+		   and: [String] = [],
+		   but: [String] = []) -> Language {
+		return Language(key: "key", name: "name", native: "native",
+						and: and,
+						background: background,
+						but: but,
+						examples: examples,
+						feature: feature,
+						given: given,
+						rule: [],
+						scenario: scenario,
+						scenarioOutline: scenarioOutline,
+						then: then,
+						when: when)
+	}
+
 	func table(_ col: String,
 	           _ r1c1: String) -> Table {
 		return Table.withColumns([col])

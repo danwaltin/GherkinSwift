@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Copyright 2017 Dan Waltin
+// Copyright 2020 Dan Waltin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,48 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Location.swift
+//  Language.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-07-07.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
-
-public struct Location : Equatable, Encodable {
-	public let column: Int
-	public let line: Int
-	
-	public init(column: Int, line: Int) {
-		self.column = column
-		self.line = line
-	}
+struct LanguageTest : Codable {
+	var name: String
 }
 
-extension Location {
-	public static func zero() -> Location {
-		return Location(column: 0, line: 0)
+struct Language : Codable {
+	enum CodingKeys: CodingKey {
+		// all but "key"
+		case name
+		case native
+		case and
+		case background
+		case but
+		case examples
+		case feature
+		case given
+		case rule
+		case scenario
+		case scenarioOutline
+		case then
+		case when
 	}
+	var key: String = ""
+	
+	let name: String
+	let native: String
+	
+	let and: [String]
+	let background: [String]
+	let but: [String]
+	let examples: [String]
+	let feature: [String]
+	let given: [String]
+	let rule: [String]
+	let scenario: [String]
+	let scenarioOutline: [String]
+	let then: [String]
+	let when: [String]
 }

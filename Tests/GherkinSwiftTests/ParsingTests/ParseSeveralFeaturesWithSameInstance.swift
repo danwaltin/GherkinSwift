@@ -75,18 +75,24 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	}
 	
 	private func feature(_ name: String, _ tags: [Tag], _ location: Location, _ scenarios: [Scenario]) -> Feature {
-		return Feature(name: name, description: nil, background: nil, tags: tags, location: location, scenarios:  scenarios)
+		return Feature(name: name, description: nil, background: nil, tags: tags, location: location, scenarios: scenarios, language: "en", localizedKeyword: "Feature")
 	}
 	
 	private func scenario(_ name: String, _ tags: [Tag], _ location: Location, _ steps: [Step]) -> Scenario {
-		return Scenario(name: name, description: nil, tags: tags, location: location, steps: steps, examples: [])
+		return Scenario(name: name, description: nil, tags: tags, location: location, steps: steps, examples: [], localizedKeyword: "Scenario")
 	}
 	
 	private func given(_ text: String, _ location: Location) -> Step {
-		return Step.given(text, location: location)
+		return Step(.given, text, localizedKeyword: "Given ").with(location: location)
 	}
 	
 	private func t(_ name: String) -> Tag {
 		return Tag(name: name, location: Location.zero())
+	}
+}
+
+extension Step {
+	func with(location: Location) -> Step {
+		return Step(type, text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
 	}
 }

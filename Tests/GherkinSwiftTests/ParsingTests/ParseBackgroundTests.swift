@@ -66,10 +66,12 @@ class ParseBackgroundTests: TestParseBase {
 		""")
 
 		then_shouldReturnBackgroundWith(numberOfSteps: 1)
-		then_shouldReturnBackgroundWithStep(.Given, "there is something")
+		then_shouldReturnBackgroundWithStep(.given, "there is something")
 	}
 
 	func test_backgroundWithOneAsteriskStep() {
+		given_languageWithAsterisk()
+
 		when_parsingDocument(
 		"""
 		Feature: feature
@@ -78,7 +80,7 @@ class ParseBackgroundTests: TestParseBase {
 		""")
 
 		then_shouldReturnBackgroundWith(numberOfSteps: 1)
-		then_shouldReturnBackgroundWithStep(.Asterisk, "there is something")
+		then_shouldReturnBackgroundWithStep(.asterisk, "there is something")
 	}
 
 	func test_backgroundWithGivenAndButStep() {
@@ -91,8 +93,8 @@ class ParseBackgroundTests: TestParseBase {
 		""")
 
 		then_shouldReturnBackgroundWith(numberOfSteps: 2)
-		then_shouldReturnBackgroundWithStep(.Given, "there is something", atIndex: 0)
-		then_shouldReturnBackgroundWithStep(.But, "not something else", atIndex: 1)
+		then_shouldReturnBackgroundWithStep(.given, "there is something", atIndex: 0)
+		then_shouldReturnBackgroundWithStep(.but, "not something else", atIndex: 1)
 	}
 	
 	// MARK: - Table parameters to steps
@@ -109,7 +111,7 @@ class ParseBackgroundTests: TestParseBase {
 
 		then_shouldReturnBackgroundWith(numberOfSteps: 1)
 		then_shouldReturnBackgroundWithStep(
-			.Given,
+			.given,
 			"x",
 			table(
 				"Column",

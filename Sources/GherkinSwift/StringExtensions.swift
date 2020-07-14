@@ -33,7 +33,7 @@ public extension String {
 	func trim() -> String {
 		return trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
 	}
-
+	
 	func indentation() -> Int {
 		return self.count - self.trimLeft().count
 	}
@@ -41,21 +41,21 @@ public extension String {
 	func trimSpaces() -> String {
 		return trimmingCharacters(in: NSCharacterSet.whitespaces)
 	}
-
+	
 	func trimLeft() -> String {
 		guard let index = firstIndex(where: { !CharacterSet(charactersIn: String($0)).isSubset(of: .whitespaces) }) else {
-            return self
-        }
-        return String(self[index...])
+			return self
+		}
+		return String(self[index...])
 	}
 	
 	func trimRight(_ s: Character) -> String {
 		var newString = self
-
+		
 		while newString.last! == s {
 			newString = String(newString.dropLast())
 		}
-
+		
 		return newString
 	}
 	
@@ -72,6 +72,24 @@ public extension String {
 	
 	func compactWhitespace() -> String {
 		return _remove(tripleWhitespace)._remove(doubleWhitespace)
+	}
+	
+	func stringBetween(_ first: String, and second: String) -> String {
+		
+		guard let start = range(of: first)?.lowerBound, let end = range(of: second)?.lowerBound else {
+			
+			return ""
+		}
+		
+		let startIndex = index(start, offsetBy: first.count)
+		let endIndex = end
+		
+		if endIndex < startIndex {
+			return ""
+		}
+		
+		let s = self[startIndex..<endIndex]
+		return String(s)
 	}
 	
 	private func _remove(_ whitespace: String) -> String {
@@ -96,5 +114,23 @@ public extension String {
 	
 	func deleteText(_ text: String) -> String {
 		return replacingOccurrences(of: text, with: "")
+	}
+	
+	/**
+	The 1-based column at which the text begins
+	*/
+	func startColumnFor(text: String) -> Int {
+		let r = range(of: text)!
+		let index: Int = distance(from: startIndex, to: r.lowerBound)
+		
+		return index + 1
+		
+	}
+	
+	/**
+	The 1-based column at which the character begins
+	*/
+	func startColumnFor(character: Character) -> Int {
+		return startColumnFor(text: String(character))
 	}
 }

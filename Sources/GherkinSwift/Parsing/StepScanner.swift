@@ -31,9 +31,10 @@ class StepScanner {
 
 	var state: State = .started
 	
+	var type = StepType.asterisk
 	var text = ""
 	var location = Location(column: 0, line: 0)
-	var step: Step!
+	var keyword = Keyword.none()
 	
 	let tableScanner: TableScanner
 	let docStringScanner: DocStringScanner
@@ -44,11 +45,12 @@ class StepScanner {
 	}
 
 	func getStep() -> Step {
-		return Step(type: step.type,
-					text: step.text,
+		return Step(type,
+					text,
 					location: location,
 					tableParameter: tableScanner.getTable(),
-					docStringParameter: docStringScanner.getDocString())
+					docStringParameter: docStringScanner.getDocString(),
+					localizedKeyword: keyword.localized)
 	}
 	
 	func scan(_ line: Line) {
@@ -78,39 +80,37 @@ class StepScanner {
 	}
 	
 	private func handleStepText(_ line: Line) {
-		if line.isAsterisk() {
-			location = Location(column: line.columnForKeyword(keywordAsterisk), line: line.number)
-			step = Step.asterisk(line.removeKeyword(keywordAsterisk))
+		location = Location(column: line.columnForKeyword(), line: line.number)
+		text = line.keywordRemoved()
+		keyword = line.keyword
+		
+		if line.hasKeyword(.asterisk) {
+			type = .asterisk
 		}
 
-		if line.isGiven() {
-			location = Location(column: line.columnForKeyword(keywordGiven), line: line.number)
-			step = Step.given(line.removeKeyword(keywordGiven))
+		if line.hasKeyword(.given) {
+			type = .given
 		}
 
-		if line.isWhen() {
-			location = Location(column: line.columnForKeyword(keywordWhen), line: line.number)
-			step = Step.when(line.removeKeyword(keywordWhen))
+		if line.hasKeyword(.when) {
+			type = .when
 		}
 
-		if line.isThen() {
-			location = Location(column: line.columnForKeyword(keywordThen), line: line.number)
-			step = Step.then(line.removeKeyword(keywordThen))
+		if line.hasKeyword(.then) {
+			type = .then
 		}
 
-		if line.isAnd() {
-			location = Location(column: line.columnForKeyword(keywordAnd), line: line.number)
-			step = Step.and(line.removeKeyword(keywordAnd))
+		if line.hasKeyword(.and) {
+			type = .and
 		}
 
-		if line.isBut() {
-			location = Location(column: line.columnForKeyword(keywordBut), line: line.number)
-			step = Step.but(line.removeKeyword(keywordBut))
+		if line.hasKeyword(.but) {
+			type = .but
 		}
 	}
 	
 	private func shouldStartScanTable(_ line: Line) -> Bool {
-		return line.isTable()
+		return line.hasKeyword(.table)
 	}
 
 	private func shouldStartScanDocString(_ line: Line) -> Bool {
@@ -118,7 +118,7 @@ class StepScanner {
 	}
 
 	private func handleTable(_ line: Line) {
-		if line.isTable() {
+		if line.hasKeyword(.table) {
 			tableScanner.scan(line)
 		}
 	}

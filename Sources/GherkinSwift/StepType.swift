@@ -24,10 +24,10 @@
 import Foundation
 
 public enum StepType {
-	case Asterisk
-	case Given
-	case When
-	case Then
-	case And
-	case But
+	case asterisk
+	case given
+	case when
+	case then
+	case and
+	case but
 }

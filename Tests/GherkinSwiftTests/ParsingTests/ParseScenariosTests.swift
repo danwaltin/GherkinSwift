@@ -59,7 +59,7 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
-		then_shouldReturnScenarioWithStep(.Given, "there is something")
+		then_shouldReturnScenarioWithStep(.given, "there is something")
 	}
 	
 	func test_scenarioWithOneWhenStep() {
@@ -71,7 +71,7 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
-		then_shouldReturnScenarioWithStep(.When, "something happens")
+		then_shouldReturnScenarioWithStep(.when, "something happens")
 	}
 	
 	func test_scenarioWithOneThenStep() {
@@ -83,10 +83,12 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
-		then_shouldReturnScenarioWithStep(.Then, "something is the result")
+		then_shouldReturnScenarioWithStep(.then, "something is the result")
 	}
 
 	func test_scenarioWithOneAsteriskStep() {
+		given_languageWithAsterisk()
+		
 		when_parsingDocument(
 		"""
 		Feature: feature
@@ -95,7 +97,7 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
-		then_shouldReturnScenarioWithStep(.Asterisk, "something is the result")
+		then_shouldReturnScenarioWithStep(.asterisk, "something is the result")
 	}
 
 	func test_scenarioWithGivenAndAndStep() {
@@ -108,8 +110,8 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 2)
-		then_shouldReturnScenarioWithStep(.Given, "there is something", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.And, "there is something else", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.given, "there is something", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.and, "there is something else", atIndex: 1)
 	}
 
 	func test_scenarioWithThenAndButStep() {
@@ -122,8 +124,8 @@ class ParseScenariosTests: TestParseBase {
 		""")
 
 		then_shouldReturnScenarioWith(numberOfSteps: 2)
-		then_shouldReturnScenarioWithStep(.Then, "something", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.But, "not something else", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "something", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.but, "not something else", atIndex: 1)
 	}
 
 	// MARK: - Givens, whens, thens

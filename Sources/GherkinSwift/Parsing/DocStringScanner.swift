@@ -52,7 +52,7 @@ class DocStringScanner {
 				if line.text.trim().count > separator.count {
 					mediaType = line.text.trim().replacingOccurrences(of: separator, with: "")
 				}
-				location = Location(column: line.columnForKeyword(separator), line: line.number)
+				location = Location(column: line.text.startColumnFor(text: separator), line: line.number)
 				state = .scanningDocString
 			}
 			

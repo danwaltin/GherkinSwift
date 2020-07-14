@@ -29,57 +29,19 @@ public struct Step : Equatable {
 	public let tableParameter: Table?
 	public let docStringParameter: DocString?
 	public let location: Location
-
-	public init(type: StepType,
-				text: String,
-				location: Location,
-				tableParameter: Table?,
-				docStringParameter: DocString?) {
+	public let localizedKeyword: String
+	
+	public init(_ type: StepType,
+				_ text: String,
+				location: Location = Location.zero(),
+				tableParameter: Table? = nil,
+				docStringParameter: DocString? = nil,
+				localizedKeyword: String) {
 		self.type = type
 		self.text = text
 		self.location = location
 		self.tableParameter = tableParameter
 		self.docStringParameter = docStringParameter
-	}
-	
-	var keyword: String {
-		switch type {
-		case .Asterisk:
-			return keywordAsterisk
-		case .Given:
-			return keywordGiven
-		case .When:
-			return keywordWhen
-		case .Then:
-			return keywordThen
-		case .And:
-			return keywordAnd
-		case .But:
-			return keywordBut
-		}
-	}
-	
-	static func asterisk(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .Asterisk, text: text, location: location, tableParameter: table, docStringParameter: docString)
-	}
-
-	static func given(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .Given, text: text, location: location, tableParameter: table, docStringParameter: docString)
-	}
-
-	static func when(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .When, text: text, location: location, tableParameter: table, docStringParameter: docString)
-	}
-
-	static func then(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .Then, text: text, location: location, tableParameter: table, docStringParameter: docString)
-	}
-
-	static func and(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .And, text: text, location: location, tableParameter: table, docStringParameter: docString)
-	}
-
-	static func but(_ text: String, location: Location = Location.zero(), _ table: Table? = nil, _ docString: DocString? = nil) -> Step {
-		return Step(type: .But, text: text, location: location, tableParameter: table, docStringParameter: docString)
+		self.localizedKeyword = localizedKeyword
 	}
 }

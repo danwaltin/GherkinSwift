@@ -25,19 +25,25 @@ import Foundation
 
 public class GherkinFeatureParser {
 	
-	let scannerFactory: ScannerFactory
+	private let scannerFactory: ScannerFactory
+	private let languages: LanguagesConfiguration
 	
-	public init(configuration: ParseConfiguration) {
+	public init(configuration: ParseConfiguration,
+				languages: LanguagesConfiguration) {
 		scannerFactory = ScannerFactory(configuration: configuration)
+		self.languages = languages
 	}
 	
 	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
 		let featureScanner = scannerFactory.featureScanner()
 		let commentCollector = scannerFactory.commentCollector()
 		
-		let theLines = getLines(lines)
+		let firstLine = lines.count > 0 ? lines.first! : ""
+		let language = getLanguage(text: firstLine)
+
+		let theLines = getLines(lines, language: language)
 		for line in theLines {
-			if line.isComment() {
+			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
 			} else {
 				featureScanner.scan(line, allLines: theLines)
@@ -46,22 +52,36 @@ public class GherkinFeatureParser {
 		
 		return GherkinFile(gherkinDocument: GherkinDocument(
 			comments: commentCollector.getComments(),
-			feature: featureScanner.getFeature(),
+			feature: featureScanner.getFeature(languageKey: language.key),
 			uri: fileUri))
 	}
-
+	
 	public func getAllLinesInFile(url: URL) -> [String] {
 		let data = try! Data(contentsOf: url)
 		let content = String(data: data, encoding: .utf8)!
 		
 		return getAllLinesInDocument(document: content)
 	}
-
+	
 	public func getAllLinesInDocument(document: String) -> [String] {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
-
-	private func getLines(_ lines:[String]) -> [Line] {
-		return lines.enumerated().map{ (index, text) in Line(text: text, number: index + 1) }
+	
+	private func getLines(_ lines: [String], language: Language) -> [Line] {
+		return lines.enumerated().map{ (index, text) in
+			let keyword = Keyword.createFrom(text: text, language: language)
+			
+			return Line(text: text,
+						number: index + 1,
+						keyword: keyword) }
+	}
+	
+	private func getLanguage(text: String) -> Language {
+		if let languageKeyword = text.languageKeyword() {
+			let languageKey = text.removeKeyword(languageKeyword)
+			return languages.language(withKey: languageKey)
+		}
+		
+		return languages.defaultLanguage
 	}
 }

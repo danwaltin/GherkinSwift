@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Copyright 2017 Dan Waltin
+// Copyright 2020 Dan Waltin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,34 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Location.swift
+//  KeywordType.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-07-14.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
-
-public struct Location : Equatable, Encodable {
-	public let column: Int
-	public let line: Int
+enum KeywordType : CaseIterable {
+	case none
+	case feature
+	case background
+	case scenario
+	case scenarioOutline
+	case examples
+	case given
+	case when
+	case then
+	case and
+	case but
+	case asterisk
 	
-	public init(column: Int, line: Int) {
-		self.column = column
-		self.line = line
+	case table
+	case comment
+	case tag
+	
+	static func isStep(type: KeywordType) -> Bool {
+		let stepKeywords: [KeywordType] = [.asterisk, .given, .when, .then, .and, .but]
+		return stepKeywords.contains(type)
 	}
-}
 
-extension Location {
-	public static func zero() -> Location {
-		return Location(column: 0, line: 0)
-	}
 }

@@ -84,8 +84,8 @@ extension Feature : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode("Feature", forKey: .keyword)
-		try container.encode("en", forKey: .language)
+		try container.encode(localizedKeyword, forKey: .keyword)
+		try container.encode(language, forKey: .language)
 		try container.encode(location, forKey: .location)
 		if name.count > 0 {
 			try container.encode(name, forKey: .name)
@@ -147,8 +147,7 @@ extension Scenario : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		let keyword = isScenarioOutline ? "Scenario Outline" : "Scenario"
-		try container.encode(keyword, forKey: .keyword)
+		try container.encode(localizedKeyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		if name.count > 0 {
 			try container.encode(name, forKey: .name)
@@ -198,7 +197,7 @@ extension Step : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(keyword + " ", forKey: .keyword)
+		try container.encode(localizedKeyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		try container.encode(text, forKey: .text)
 		

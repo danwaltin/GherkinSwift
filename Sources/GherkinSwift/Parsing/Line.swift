@@ -22,21 +22,6 @@
 // ------------------------------------------------------------------------
 import Foundation
 
-let tagToken: Character = "@"
-let commentToken = "#"
-let keywordFeature = "Feature:"
-let keywordBackground = "Background:"
-let keywordScenarioOutline = "Scenario Outline:"
-let keywordScenario = "Scenario:"
-let keywordExamples = "Examples:"
-let keywordAsterisk = "*"
-let keywordGiven = "Given"
-let keywordWhen = "When"
-let keywordThen = "Then"
-let keywordAnd = "And"
-let keywordBut = "But"
-let tableSeparator: Character = "|"
-
 extension String {
 	func removeKeyword(_ keyword: String) -> String {
 		let copy = deleteText(keyword)
@@ -47,6 +32,25 @@ extension String {
 struct Line {
 	let text: String
 	let number: Int
+	let keyword: Keyword
+	
+	init(text: String, number: Int, keyword: Keyword) {
+		self.text = text
+		self.number = number
+		self.keyword = keyword
+	}
+
+	func hasKeyword(_ type: KeywordType) -> Bool {
+		return keyword.isType(type)
+	}
+	
+	func keywordRemoved() -> String {
+		return keyword.removeFrom(text: text)
+	}
+	
+	func columnForKeyword() -> Int {
+		return keyword.startColumnIn(text: text)
+	}
 	
 	func textWithoutComment() -> String {
 		return text.components(separatedBy: " #").first!
@@ -56,87 +60,12 @@ struct Line {
 		return text.trim().isEmpty
 	}
 	
-	func columnForKeyword(_ keyword: Character) -> Int {
-		return columnForKeyword(String(keyword))
-	}
-	
-	func columnForKeyword(_ keyword: String) -> Int {
-		let range = text.range(of: keyword)!
-		let index: Int = text.distance(from: text.startIndex, to: range.lowerBound)
-
-		return index + 1
-	}
-
-	func removeKeyword(_ keyword: String) -> String {
-		return text.removeKeyword(keyword)
-	}
-
-	func isTag() -> Bool {
-		return hasPrefix(tagToken)
-	}
-
-	func isComment() -> Bool {
-		return hasPrefix(commentToken)
-	}
-	
-	func isFeature() -> Bool {
-		return beginsWithKeyword(keywordFeature)
-	}
-
-	func isBackground() -> Bool {
-		return beginsWithKeyword(keywordBackground)
-	}
-
-	func isScenarioOutline() -> Bool {
-		return beginsWithKeyword(keywordScenarioOutline)
-	}
-
-	func isScenario() -> Bool {
-		return beginsWithKeyword(keywordScenario)
-	}
-
-	func isExamples() -> Bool {
-		return beginsWithKeyword(keywordExamples)
-	}
-	
-	func isAsterisk() -> Bool {
-		return beginsWithKeyword(keywordAsterisk)
-	}
-
-	func isGiven() -> Bool {
-		return beginsWithKeyword(keywordGiven)
-	}
-	
-	func isWhen() -> Bool {
-		return beginsWithKeyword(keywordWhen)
-	}
-	
-	func isThen() -> Bool {
-		return beginsWithKeyword(keywordThen)
-	}
-
-	func isAnd() -> Bool {
-		return beginsWithKeyword(keywordAnd)
-	}
-
-	func isBut() -> Bool {
-		return beginsWithKeyword(keywordBut)
+	func keywordLocation() -> Location {
+		return Location(column: keyword.startColumnIn(text: text), line: number)
 	}
 
 	func isStep() -> Bool {
-		return isAsterisk() || isGiven() || isWhen() || isThen() || isAnd() || isBut()
-	}
-
-	func isTable() -> Bool {
-		return beginsWithKeyword(tableSeparator)
-	}
-
-	private func beginsWithKeyword(_ keyword: Character) -> Bool {
-		return hasPrefix(keyword)
-	}
-
-	private func beginsWithKeyword(_ keyword: String) -> Bool {
-		return hasPrefix(keyword)
+		return keyword.isStep()
 	}
 	
 	private func hasPrefix(_ prefix: Character) -> Bool {
