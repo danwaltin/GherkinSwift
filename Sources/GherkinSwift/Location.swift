@@ -34,7 +34,7 @@ public struct Location : Equatable, Encodable {
 }
 
 extension Location {
-	static func zero() -> Location {
+	public static func zero() -> Location {
 		return Location(column: 0, line: 0)
 	}
 }
