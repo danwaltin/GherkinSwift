@@ -79,7 +79,7 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	}
 	
 	private func scenario(_ name: String, _ tags: [Tag], _ location: Location, _ steps: [Step]) -> Scenario {
-		return Scenario(name: name, description: nil, tags: tags, location: location, steps: steps, examples: [], localizedKeyword: "")
+		return Scenario(name: name, description: nil, tags: tags, location: location, steps: steps, examples: [], localizedKeyword: "Scenario")
 	}
 	
 	private func given(_ text: String, _ location: Location) -> Step {
