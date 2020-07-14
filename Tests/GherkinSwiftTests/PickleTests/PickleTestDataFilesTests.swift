@@ -35,7 +35,9 @@ class PickleTestDataFilesTests: XCTestCase {
 		"empty",
 		"example_token_multiple",
 		"example_tokens_everywhere",
+		"i18n_emoji",
 		"i18n_fr",
+		"i18n_no",
 		"incomplete_background_1",
 		"incomplete_background_2",
 		"incomplete_feature_1",
@@ -59,8 +61,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	/*
 	"complex_background",
 	"escaped_pipes",
-	"i18n_emoji",
-	"i18n_no",
 	"incomplete_scenario_outline",
 	"minimal-example",
 	"rule_without_name_and_description",

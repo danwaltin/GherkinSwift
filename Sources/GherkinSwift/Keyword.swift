@@ -37,7 +37,7 @@ let tableSeparator: Character = "|"
 let commentToken = "#"
 let tagToken: Character = "@"
 
-enum KeywordType {
+enum KeywordType : CaseIterable {
 	case none
 	case feature
 	case background
@@ -66,11 +66,6 @@ struct Keyword {
 	}
 	
 	private static let keywordMap: [KeywordType: String] = [
-		.feature         : keywordFeature,
-		.background      : keywordBackground,
-		.scenario        : keywordScenario,
-		.scenarioOutline : keywordScenarioOutline,
-		.examples        : keywordExamples,
 		.given           : keywordGiven,
 		.when            : keywordWhen,
 		.then            : keywordThen,
@@ -101,24 +96,23 @@ struct Keyword {
 
 		let trimmed = text.trim()
 
-		let map: [(items: [String], type: KeywordType, postfix: String)] = [
-			(language.feature,         .feature,         ""),
-			(language.background,      .background,      ":"),
-			(language.scenarioOutline, .scenarioOutline, ""),
-			(language.examples,        .examples,        ":"),
-			(language.scenario,        .scenario,        ""),
-			(language.given,           .given,           ""),
-			(language.when,            .when,            ""),
-			(language.then,            .then,            ""),
-			(language.and,             .and,            ""),
-			(language.but,             .but,            ""),
+		let map: [(items: [String], type: KeywordType)] = [
+			(language.feature,         .feature),
+			(language.background,      .background),
+			(language.scenarioOutline, .scenarioOutline),
+			(language.examples,        .examples),
+			(language.scenario,        .scenario),
+			(language.given,           .given),
+			(language.when,            .when),
+			(language.then,            .then),
+			(language.and,             .and),
+			(language.but,             .but),
 		]
 		
 		for item in map {
 			if let x = k(trimmed,
 						 localizedItems: item.items,
-						 keywordType: item.type,
-						 keywordPostfix: item.postfix) {
+						 keywordType: item.type) {
 				return x
 			}
 		}
@@ -134,14 +128,13 @@ struct Keyword {
 	
 	private static func k(_ line: String,
 						  localizedItems: [String],
-						  keywordType: KeywordType,
-						  keywordPostfix: String) -> (type: KeywordType, localizedKeyword: String)? {
+						  keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
 		for localized in localizedItems {
 			if line.hasPrefix(localized) {
 				if Keyword.isStep(type: keywordType) && localized.trim() == keywordAsterisk {
-					return (.asterisk, localized + keywordPostfix)
+					return (.asterisk, localized)
 				}
-				return (keywordType, localized + keywordPostfix)
+				return (keywordType, localized)
 			}
 		}
 		return nil
@@ -179,9 +172,9 @@ struct Keyword {
 	}
 	
 	private func keywordAsText() -> String? {
-		if Keyword.keywordMap.keys.contains(type) {
+		if KeywordType.allCases.contains(type) {
 			switch type {
-			case .feature, .scenario, .scenarioOutline:
+			case .feature, .background, .scenario, .scenarioOutline, .examples:
 				return localized + ":"
 			default:
 				return localized
