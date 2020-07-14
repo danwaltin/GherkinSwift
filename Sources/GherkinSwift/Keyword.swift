@@ -21,40 +21,11 @@
 //
 // ------------------------------------------------------------------------
 
-let keywordFeature = "Feature:"
-let keywordBackground = "Background:"
-let keywordScenarioOutline = "Scenario Outline:"
-let keywordScenario = "Scenario:"
-let keywordExamples = "Examples:"
 let keywordAsterisk = "*"
-let keywordGiven = "Given"
-let keywordWhen = "When"
-let keywordThen = "Then"
-let keywordAnd = "And"
-let keywordBut = "But"
 
 let tableSeparator: Character = "|"
 let commentToken = "#"
 let tagToken: Character = "@"
-
-enum KeywordType : CaseIterable {
-	case none
-	case feature
-	case background
-	case scenario
-	case scenarioOutline
-	case examples
-	case given
-	case when
-	case then
-	case and
-	case but
-	case asterisk
-	
-	case table
-	case comment
-	case tag
-}
 
 struct Keyword {
 	private let type: KeywordType
@@ -64,19 +35,7 @@ struct Keyword {
 		self.type = type
 		self.localized = localizedKeyword
 	}
-	
-	private static let keywordMap: [KeywordType: String] = [
-		.given           : keywordGiven,
-		.when            : keywordWhen,
-		.then            : keywordThen,
-		.and             : keywordAnd,
-		.but             : keywordBut,
-		.asterisk        : keywordAsterisk,
-		.table           : String(tableSeparator),
-		.comment         : commentToken,
-		.tag             : String(tagToken)
-	]
-	
+		
 	func isType(_ t: KeywordType) -> Bool {
 		return type == t
 	}
@@ -87,58 +46,10 @@ struct Keyword {
 	
 	static func createFrom(text: String,
 						   language: Language) -> Keyword {
-		let k = keywordTypeFrom(text: text, language: language)
+		let k = KeywordFactory.keywordTypeFrom(text: text, language: language)
 		return Keyword(type: k.type, localizedKeyword: k.localizedKeyword)
 	}
 	
-	private static func keywordTypeFrom(text: String,
-										language: Language) -> (type: KeywordType, localizedKeyword: String) {
-
-		let trimmed = text.trim()
-
-		let map: [(items: [String], type: KeywordType)] = [
-			(language.feature,         .feature),
-			(language.background,      .background),
-			(language.scenarioOutline, .scenarioOutline),
-			(language.examples,        .examples),
-			(language.scenario,        .scenario),
-			(language.given,           .given),
-			(language.when,            .when),
-			(language.then,            .then),
-			(language.and,             .and),
-			(language.but,             .but),
-		]
-		
-		for item in map {
-			if let x = k(trimmed,
-						 localizedItems: item.items,
-						 keywordType: item.type) {
-				return x
-			}
-		}
-
-		for items in keywordMap {
-			if trimmed.hasPrefix(items.value) {
-				return (items.key, items.value)
-			}
-		}
-		
-		return (.none, "")
-	}
-	
-	private static func k(_ line: String,
-						  localizedItems: [String],
-						  keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
-		for localized in localizedItems {
-			if line.hasPrefix(localized) {
-				if Keyword.isStep(type: keywordType) && localized.trim() == keywordAsterisk {
-					return (.asterisk, localized)
-				}
-				return (keywordType, localized)
-			}
-		}
-		return nil
-	}
 	/**
 	Remove the keyword from the given text
 	*/
@@ -163,14 +74,9 @@ struct Keyword {
 	Does this keyword represent a scanario step?
 	*/
 	func isStep() -> Bool {
-		return Keyword.isStep(type: type)
+		return KeywordType.isStep(type: type)
 	}
 
-	private static func isStep(type: KeywordType) -> Bool {
-		let stepKeywords: [KeywordType] = [.asterisk, .given, .when, .then, .and, .but]
-		return stepKeywords.contains(type)
-	}
-	
 	private func keywordAsText() -> String? {
 		if KeywordType.allCases.contains(type) {
 			switch type {
@@ -184,3 +90,59 @@ struct Keyword {
 	}
 }
 
+struct KeywordFactory {
+	static func keywordTypeFrom(text: String,
+										language: Language) -> (type: KeywordType, localizedKeyword: String) {
+		
+		let trimmed = text.trim()
+		
+		let map: [(items: [String], type: KeywordType)] = [
+			(language.feature,         .feature),
+			(language.background,      .background),
+			(language.scenarioOutline, .scenarioOutline),
+			(language.examples,        .examples),
+			(language.scenario,        .scenario),
+			(language.given,           .given),
+			(language.when,            .when),
+			(language.then,            .then),
+			(language.and,             .and),
+			(language.but,             .but),
+		]
+		
+		for item in map {
+			if let x = k(trimmed,
+						 localizedItems: item.items,
+						 keywordType: item.type) {
+				return x
+			}
+		}
+		
+		if trimmed.hasPrefix(String(tableSeparator)) {
+			return (.table, String(tableSeparator))
+		}
+		
+		if trimmed.hasPrefix(commentToken) {
+			return (.comment, commentToken)
+		}
+		
+		if trimmed.hasPrefix(String(tagToken)) {
+			return (.tag, String(tagToken))
+		}
+		
+		return (.none, "")
+	}
+	
+	private static func k(_ line: String,
+						  localizedItems: [String],
+						  keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
+		for localized in localizedItems {
+			if line.hasPrefix(localized) {
+				if KeywordType.isStep(type: keywordType) && localized.trim() == keywordAsterisk {
+					return (.asterisk, localized)
+				}
+				return (keywordType, localized)
+			}
+		}
+		return nil
+	}
+}

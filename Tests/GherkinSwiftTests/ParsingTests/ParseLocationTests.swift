@@ -68,11 +68,11 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario: scenario
-		    Given: given with table
+		    Given given with table
 		       | alpha |
 		       | beta  |
-		   When: when
-		  Then: then
+		   When when
+		  Then then
 		""")
 		
 		then_step(0, forScenario: 0, shouldHaveLocation: Location(column: 5, line: 4))
@@ -86,7 +86,7 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario: scenario
-		    Given: given with table
+		    Given given with table
 		        | alpha |
 		      | beta  |
 		         | gamma |
@@ -103,7 +103,7 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario: scenario
-		   Given: given with table
+		   Given given with table
 		      | foo   | bar   |
 		      |  alpha |  beta  |
 		      |   gamma |   delta |
@@ -129,14 +129,14 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario: regular separator
-		   Given: given with docString
+		   Given given with docString
 		   ===
 		   alpha, beta
 		   gamma
 		   ===
 
 		Scenario: alternative separator
-		   Given: given with docString
+		   Given given with docString
 		      ---
 		      alpha, beta
 		      gamma
@@ -177,9 +177,9 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario Outline: scenario
-		    Given: given
-		   When: when
-		  Then: then
+		    Given given
+		   When when
+		  Then then
 
 		Examples:
 		    |foo|
@@ -295,7 +295,7 @@ class ParseLocationTests: TestParseBase {
 		Feature: feature
 
 		Scenario Outline: one
-		   Given: given with docString
+		   Given given with docString
 		   ===
 		   alpha, beta
 		   gamma
@@ -305,7 +305,7 @@ class ParseLocationTests: TestParseBase {
 		     | alpha |
 
 		Scenario Outline: two
-		   Given: given with docString
+		   Given given with docString
 		      ===
 		      alpha, beta
 		      gamma

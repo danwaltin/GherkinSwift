@@ -70,6 +70,8 @@ class ParseBackgroundTests: TestParseBase {
 	}
 
 	func test_backgroundWithOneAsteriskStep() {
+		given_languageWithAsterisk()
+
 		when_parsingDocument(
 		"""
 		Feature: feature

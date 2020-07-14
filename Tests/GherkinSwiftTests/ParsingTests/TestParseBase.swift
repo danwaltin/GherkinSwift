@@ -31,26 +31,7 @@ class TestParseBase: XCTestCase {
 	var languages: [String: Language] = [:]
 	
 	override func setUp() {
-		
-		// Default to the same english language as in
-		// the gherkin-languages.json file,
-		// but without the extra keywords
-		given_defaultLanguage("en")
-		given_languages(
-			["en" : Language(key: "en",
-							 name: "English",
-							 native: "English",
-							 and: ["And "],
-							 background: ["Background"],
-							 but: ["But "],
-							 examples: ["Examples"],
-							 feature: ["Feature"],
-							 given: ["Given "],
-							 rule: ["Rule"],
-							 scenario: ["Scenario"],
-							 scenarioOutline: ["Scenario Outline"],
-							 then: ["Then "],
-							 when: ["When "])])
+		setupDefaultTestLanguage()
 	}
 
 	func given_defaultLanguage(_ languageCode: String) {
@@ -61,6 +42,33 @@ class TestParseBase: XCTestCase {
 		self.languages = languages
 	}
 
+	func given_languageWithAsterisk() {
+		setupDefaultTestLanguage(given: ["* ", "Given "])
+	}
+	
+	private func setupDefaultTestLanguage(given: [String] = ["Given "]) {
+		// Default to the same english language as in
+		// the gherkin-languages.json file,
+		// but without the extra keywords
+		// but potentially different "given" keywords
+		given_defaultLanguage("en")
+		given_languages(
+			["en" : Language(key: "en",
+							 name: "English",
+							 native: "English",
+							 and: ["And "],
+							 background: ["Background"],
+							 but: ["But "],
+							 examples: ["Examples"],
+							 feature: ["Feature"],
+							 given: given,
+							 rule: ["Rule"],
+							 scenario: ["Scenario"],
+							 scenarioOutline: ["Scenario Outline"],
+							 then: ["Then "],
+							 when: ["When "])])
+	}
+	
 	func given_docStringSeparator(_ separator: String, alternative: String) {
 		docStringSeparator = separator
 		alternativeDocStringSeparator = alternative

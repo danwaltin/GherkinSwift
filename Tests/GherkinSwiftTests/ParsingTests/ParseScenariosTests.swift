@@ -87,6 +87,8 @@ class ParseScenariosTests: TestParseBase {
 	}
 
 	func test_scenarioWithOneAsteriskStep() {
+		given_languageWithAsterisk()
+		
 		when_parsingDocument(
 		"""
 		Feature: feature
