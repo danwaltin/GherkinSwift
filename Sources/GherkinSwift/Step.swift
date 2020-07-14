@@ -31,7 +31,7 @@ public struct Step : Equatable {
 	public let location: Location
 	public let localizedKeyword: String
 	
-	public init(type: StepType,
+	public init(_ type: StepType,
 				text: String,
 				location: Location = Location.zero(),
 				tableParameter: Table? = nil,
@@ -63,26 +63,26 @@ public struct Step : Equatable {
 	}
 		
 	static func asterisk(_ text: String) -> Step {
-		return Step(type: .Asterisk, text: text, localizedKeyword: "")
+		return Step(.Asterisk, text: text, localizedKeyword: "")
 	}
 
 	static func given(_ text: String) -> Step {
-		return Step(type: .Given, text: text, localizedKeyword: "")
+		return Step(.Given, text: text, localizedKeyword: "")
 	}
 
 	static func when(_ text: String) -> Step {
-		return Step(type: .When, text: text, localizedKeyword: "")
+		return Step(.When, text: text, localizedKeyword: "")
 	}
 
 	static func then(_ text: String) -> Step {
-		return Step(type: .Then, text: text, localizedKeyword: "")
+		return Step(.Then, text: text, localizedKeyword: "")
 	}
 
 	static func and(_ text: String) -> Step {
-		return Step(type: .And, text: text, localizedKeyword: "")
+		return Step(.And, text: text, localizedKeyword: "")
 	}
 
 	static func but(_ text: String) -> Step {
-		return Step(type: .But, text: text, localizedKeyword: "")
+		return Step(.But, text: text, localizedKeyword: "")
 	}
 }

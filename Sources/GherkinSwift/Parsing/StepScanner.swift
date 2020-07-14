@@ -45,7 +45,7 @@ class StepScanner {
 	}
 
 	func getStep() -> Step {
-		return Step(type: step.type,
+		return Step(step.type,
 					text: step.text,
 					location: location,
 					tableParameter: tableScanner.getTable(),

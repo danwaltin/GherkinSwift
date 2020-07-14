@@ -93,6 +93,6 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 
 extension Step {
 	func with(location: Location) -> Step {
-		return Step(type: type, text: text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
+		return Step(type, text: text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
 	}
 }
