@@ -148,7 +148,7 @@ extension Scenario : Encodable {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
 		let keyword = isScenarioOutline ? "Scenario Outline" : "Scenario"
-		try container.encode(keyword, forKey: .keyword)
+		try container.encode(localizedKeyword, forKey: .keyword)
 		try container.encode(location, forKey: .location)
 		if name.count > 0 {
 			try container.encode(name, forKey: .name)

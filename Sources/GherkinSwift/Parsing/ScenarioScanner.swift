@@ -33,6 +33,7 @@ class ScenarioScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 
+	private var keyword: Keyword = Keyword.none()
 	private var name = ""
 	private var descriptionLines = [String]()
 	
@@ -83,6 +84,7 @@ class ScenarioScanner {
 		case .started:
 			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) {
 				name = line.keywordRemoved()
+				keyword = line.keyword
 				
 				isScenarioOutline = line.hasKeyword(.scenarioOutline)
 				location = line.keywordLocation()
@@ -184,7 +186,8 @@ class ScenarioScanner {
 						location: location,
 						steps: steps(),
 						examples: examples(),
-						isScenarioOutline: isScenarioOutline)
+						isScenarioOutline: isScenarioOutline,
+						localizedKeyword: keyword.localized)
 	}
 
 	private func steps() -> [Step] {
