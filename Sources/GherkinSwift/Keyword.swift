@@ -35,11 +35,11 @@ struct Keyword {
 		self.type = type
 		self.localized = localizedKeyword
 	}
-		
+	
 	func isType(_ t: KeywordType) -> Bool {
 		return type == t
 	}
-
+	
 	static func none() -> Keyword {
 		return Keyword(type: .none, localizedKeyword: "")
 	}
@@ -69,14 +69,14 @@ struct Keyword {
 		}
 		return 1
 	}
-
+	
 	/**
 	Does this keyword represent a scanario step?
 	*/
 	func isStep() -> Bool {
 		return KeywordType.isStep(type: type)
 	}
-
+	
 	private func keywordAsText() -> String? {
 		if KeywordType.allCases.contains(type) {
 			switch type {
@@ -92,7 +92,7 @@ struct Keyword {
 
 struct KeywordFactory {
 	static func keywordTypeFrom(text: String,
-										language: Language) -> (type: KeywordType, localizedKeyword: String) {
+								language: Language) -> (type: KeywordType, localizedKeyword: String) {
 		
 		let trimmed = text.trim()
 		
@@ -110,10 +110,10 @@ struct KeywordFactory {
 		]
 		
 		for item in map {
-			if let x = k(trimmed,
-						 localizedItems: item.items,
-						 keywordType: item.type) {
-				return x
+			if let localized = mapToLocalized(trimmed,
+											  localizedItems: item.items,
+											  keywordType: item.type) {
+				return localized
 			}
 		}
 		
@@ -132,9 +132,9 @@ struct KeywordFactory {
 		return (.none, "")
 	}
 	
-	private static func k(_ line: String,
-						  localizedItems: [String],
-						  keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
+	private static func mapToLocalized(_ line: String,
+									   localizedItems: [String],
+									   keywordType: KeywordType) -> (type: KeywordType, localizedKeyword: String)? {
 		for localized in localizedItems {
 			if line.hasPrefix(localized) {
 				if KeywordType.isStep(type: keywordType) && localized.trim() == keywordAsterisk {
