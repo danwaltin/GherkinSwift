@@ -75,6 +75,33 @@ class ParseLanguageTests: TestParseBase {
 		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
 	}
 
+	func test_language_withAndAndBut() {
+		given_languages(
+			["lang" : L(feature: ["Egenskap"],
+						background: ["Bakgrund"],
+						scenario: ["Testfall"],
+						given: ["Givet "],
+						and: ["Och "],
+						but: ["Men "])])
+		
+		when_parsingDocument(
+		"""
+		#language:lang
+		Egenskap: Feature är Egenskap
+		Bakgrund:
+		    Givet bakom
+		Testfall: Scenario är Testfall
+		    Givet x
+		    Och y
+		    Men z
+		""")
+		
+		then_shouldReturnScenarioWith(numberOfSteps: 3)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.and, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.but, "z", atIndex: 2)
+	}
+
 	func test_language_scenarioOutline() {
 		given_languages(
 			// note that for english "scenario"

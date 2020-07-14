@@ -110,6 +110,8 @@ struct Keyword {
 			(language.given,           .given,           ""),
 			(language.when,            .when,            ""),
 			(language.then,            .then,            ""),
+			(language.and,             .and,            ""),
+			(language.but,             .but,            ""),
 		]
 		
 		for item in map {
