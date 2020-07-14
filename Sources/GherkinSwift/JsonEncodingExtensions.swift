@@ -84,8 +84,8 @@ extension Feature : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode("Feature", forKey: .keyword)
-		try container.encode("en", forKey: .language)
+		try container.encode(localizedKeyword, forKey: .keyword)
+		try container.encode(language, forKey: .language)
 		try container.encode(location, forKey: .location)
 		if name.count > 0 {
 			try container.encode(name, forKey: .name)

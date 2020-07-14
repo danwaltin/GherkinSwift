@@ -102,7 +102,7 @@ struct Keyword {
 		let trimmed = text.trim()
 
 		let map: [(items: [String], type: KeywordType, postfix: String)] = [
-			(language.feature,         .feature,         ":"),
+			(language.feature,         .feature,         ""),
 			(language.background,      .background,      ":"),
 			(language.scenarioOutline, .scenarioOutline, ":"),
 			(language.examples,        .examples,        ":"),
@@ -179,7 +179,7 @@ struct Keyword {
 	private func keywordAsText() -> String? {
 		if Keyword.keywordMap.keys.contains(type) {
 			switch type {
-			case .scenario:
+			case .feature, .scenario:
 				return localized + ":"
 			default:
 				return localized

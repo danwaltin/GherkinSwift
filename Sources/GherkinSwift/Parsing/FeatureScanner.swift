@@ -39,7 +39,8 @@ class FeatureScanner {
 	let scenarioTagScanner: TagScanner
 	let scenarioScannerFactory: ScenarioScannerFactory
 	var scenarioScanners: [ScenarioScanner] = []
-
+	
+	private var keyword: Keyword = Keyword.none()
 	var name = ""
 	var descriptionLines = [String]()
 	
@@ -60,34 +61,35 @@ class FeatureScanner {
 			if line.hasKeyword(.tag) {
 				featureTagScanner.scan(line)
 			}
-
+			
 			if line.hasKeyword(.feature) {
+				keyword = line.keyword
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
 			}
-
+			
 		case .scanningFeature:
 			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
-
+				
 			} else if shouldStartBackground(line) {
 				startBackground(line)
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line)
-
+				
 			} else {
 				descriptionLines.append(line.text)
 			}
-
+			
 		case .scanningBackground:
 			if line.hasKeyword(.tag) && ScenarioScanner.lineBelongsToNextScenario(line, allLines: allLines) {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line)
-			
+				
 			} else {
 				backgroundScanner.scan(line)
 			}
@@ -99,21 +101,21 @@ class FeatureScanner {
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line)
-			
+				
 			} else {
 				scanScenario(line)
 			}
-
+			
 		case .foundNextScenarioTags:
 			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
-			
+				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line)
 			}
 		}
 	}
-
+	
 	private func shouldStartBackground(_ line: Line) -> Bool {
 		return line.hasKeyword(.background)
 	}
@@ -126,13 +128,13 @@ class FeatureScanner {
 	private func shouldStartNewScenario(_ line: Line) -> Bool {
 		return line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline)
 	}
-
+	
 	private func startNewScenario(_ line: Line) {
 		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
 		scenarioTagScanner.clear()
-
+		
 		scanScenario(line)
-
+		
 		state = .scanningScenario
 	}
 	
@@ -150,13 +152,15 @@ class FeatureScanner {
 					   background: backgroundScanner.getBackground(),
 					   tags: tags(),
 					   location: location,
-					   scenarios: scenarios())
+					   scenarios: scenarios(),
+					   language: "",
+					   localizedKeyword: keyword.localized)
 	}
 	
 	private func tags() -> [Tag] {
 		return featureTagScanner.getTags()
 	}
-
+	
 	private func scenarios() -> [Scenario] {
 		return scenarioScanners.map { $0.getScenario() }
 	}
