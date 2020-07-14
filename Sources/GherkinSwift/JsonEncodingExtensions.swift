@@ -240,8 +240,12 @@ extension ScenarioOutlineExamples : Encodable {
 			try container.encode(tags, forKey: .tags)
 		}
 
-		try container.encode(table.header, forKey: .tableHeader)
-		try container.encode(table.rows, forKey: .tableBody)
+		if let table = table {
+			try container.encode(table.header, forKey: .tableHeader)
+			if table.rows.count > 0 {
+				try container.encode(table.rows, forKey: .tableBody)
+			}
+		}
 	}
 }
 

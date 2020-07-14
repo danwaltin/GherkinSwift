@@ -82,6 +82,6 @@ class ExamplesScanner {
 									   description: descriptionLines.asDescription(),
 									   tags: tags,
 									   location: location,
-									   table: tableScanner.getTable()!)
+									   table: tableScanner.getTable())
 	}
 }

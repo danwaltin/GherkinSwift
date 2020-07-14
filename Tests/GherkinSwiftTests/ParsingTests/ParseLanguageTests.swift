@@ -501,7 +501,7 @@ class ParseLanguageTests: TestParseBase {
 													   file: StaticString = #file, line: UInt = #line) {
 		assert.examples(index, forScenario: 0, file, line) {
 			XCTAssertEqual($0.name, name, file: file, line: line)
-			XCTAssertEqual($0.table.withoutLocation(), table, file: file, line: line)
+			XCTAssertEqual($0.table!.withoutLocation(), table, file: file, line: line)
 		}
 	}
 }
