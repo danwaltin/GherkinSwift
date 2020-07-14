@@ -32,7 +32,7 @@ public struct Step : Equatable {
 	public let localizedKeyword: String
 	
 	public init(_ type: StepType,
-				text: String,
+				_ text: String,
 				location: Location = Location.zero(),
 				tableParameter: Table? = nil,
 				docStringParameter: DocString? = nil,
@@ -47,42 +47,18 @@ public struct Step : Equatable {
 	
 	var keyword: String {
 		switch type {
-		case .Asterisk:
+		case .asterisk:
 			return keywordAsterisk
-		case .Given:
+		case .given:
 			return keywordGiven
-		case .When:
+		case .when:
 			return keywordWhen
-		case .Then:
+		case .then:
 			return keywordThen
-		case .And:
+		case .and:
 			return keywordAnd
-		case .But:
+		case .but:
 			return keywordBut
 		}
-	}
-		
-	static func asterisk(_ text: String) -> Step {
-		return Step(.Asterisk, text: text, localizedKeyword: "")
-	}
-
-	static func given(_ text: String) -> Step {
-		return Step(.Given, text: text, localizedKeyword: "")
-	}
-
-	static func when(_ text: String) -> Step {
-		return Step(.When, text: text, localizedKeyword: "")
-	}
-
-	static func then(_ text: String) -> Step {
-		return Step(.Then, text: text, localizedKeyword: "")
-	}
-
-	static func and(_ text: String) -> Step {
-		return Step(.And, text: text, localizedKeyword: "")
-	}
-
-	static func but(_ text: String) -> Step {
-		return Step(.But, text: text, localizedKeyword: "")
 	}
 }

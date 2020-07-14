@@ -83,7 +83,7 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	}
 	
 	private func given(_ text: String, _ location: Location) -> Step {
-		return Step.given(text).with(location: location)
+		return Step(.given, text, localizedKeyword: "").with(location: location)
 	}
 	
 	private func t(_ name: String) -> Tag {
@@ -93,6 +93,6 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 
 extension Step {
 	func with(location: Location) -> Step {
-		return Step(type, text: text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
+		return Step(type, text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
 	}
 }

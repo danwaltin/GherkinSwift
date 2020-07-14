@@ -36,7 +36,7 @@ class ParseStepTableParametersTests: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Given,
+			.given,
 			"x",
 			table(
 				"Column",
@@ -56,7 +56,7 @@ class ParseStepTableParametersTests: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.When,
+			.when,
 			"y",
 			table(
 				"col",
@@ -76,7 +76,7 @@ class ParseStepTableParametersTests: TestParseBase {
 
 		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
-			.Then,
+			.then,
 			"z",
 			table(
 				"c1", "c2",
@@ -102,7 +102,7 @@ class ParseStepTableParametersTests: TestParseBase {
 		then_shouldReturnScenarioWith(numberOfSteps: 2)
 		then_shouldReturnScenarioWithStep(
 			atIndex: 0,
-			.When,
+			.when,
 			"alfa",
 			table(
 				"A", "B",
@@ -110,7 +110,7 @@ class ParseStepTableParametersTests: TestParseBase {
 				"e", "f"))
 		then_shouldReturnScenarioWithStep(
 			atIndex: 1,
-			.Then,
+			.then,
 			"beta",
 			table(
 				"G", "H",
@@ -132,7 +132,7 @@ class ParseStepTableParametersTests: TestParseBase {
 		
 		then_shouldReturnScenarioWithStep(
 			atIndex: 0,
-			.When,
+			.when,
 			"x",
 			table(
 				"foobar",

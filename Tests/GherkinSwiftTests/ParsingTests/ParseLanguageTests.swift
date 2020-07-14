@@ -63,16 +63,16 @@ class ParseLanguageTests: TestParseBase {
 		then_featureNameShouldBe("Feature är Egenskap")
 		
 		then_shouldReturnBackgroundWith(numberOfSteps: 1)
-		then_shouldReturnBackgroundWithStep(.Given, "bakom")
+		then_shouldReturnBackgroundWithStep(.given, "bakom")
 
 		then_shouldReturnScenariosWithNames([
 			"Scenario är Testfall"]
 		)
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 3)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
 	}
 
 	func test_language_scenarioOutline() {
@@ -158,9 +158,9 @@ class ParseLanguageTests: TestParseBase {
 		)
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 3)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
 	}
 	
 	func test_language_withBasicKeywords_twoKLocalizedeywordsPerType_second() {
@@ -188,9 +188,9 @@ class ParseLanguageTests: TestParseBase {
 		)
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 3)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
 	}
 	
 	func test_language_withAsterisksAsSteps() {
@@ -253,11 +253,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Asterisk, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.And, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.But, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.asterisk, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.and, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.but, "b", atIndex: 4)
 
 		// When
 		when_parsingDocument(
@@ -273,11 +273,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.Asterisk, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.And, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.But, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.asterisk, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.and, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.but, "b", atIndex: 4)
 
 		// Then
 		when_parsingDocument(
@@ -293,11 +293,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Asterisk, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.And, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.But, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.asterisk, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.and, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.but, "b", atIndex: 4)
 
 		// And
 		when_parsingDocument(
@@ -313,11 +313,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.Asterisk, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.But, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.asterisk, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.but, "b", atIndex: 4)
 
 		// But
 		when_parsingDocument(
@@ -333,11 +333,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Given, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.When, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Then, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.And, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.Asterisk, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.given, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.when, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.then, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.and, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.asterisk, "b", atIndex: 4)
 
 
 		// All five
@@ -354,11 +354,11 @@ class ParseLanguageTests: TestParseBase {
 		""")
 		
 		then_shouldReturnScenarioWith(numberOfSteps: 5)
-		then_shouldReturnScenarioWithStep(.Asterisk, "x", atIndex: 0)
-		then_shouldReturnScenarioWithStep(.Asterisk, "y", atIndex: 1)
-		then_shouldReturnScenarioWithStep(.Asterisk, "z", atIndex: 2)
-		then_shouldReturnScenarioWithStep(.Asterisk, "a", atIndex: 3)
-		then_shouldReturnScenarioWithStep(.Asterisk, "b", atIndex: 4)
+		then_shouldReturnScenarioWithStep(.asterisk, "x", atIndex: 0)
+		then_shouldReturnScenarioWithStep(.asterisk, "y", atIndex: 1)
+		then_shouldReturnScenarioWithStep(.asterisk, "z", atIndex: 2)
+		then_shouldReturnScenarioWithStep(.asterisk, "a", atIndex: 3)
+		then_shouldReturnScenarioWithStep(.asterisk, "b", atIndex: 4)
 	}
 	
 	func test_language_identifier_with_spaces() {
