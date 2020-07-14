@@ -55,6 +55,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		"scenario_outlines_with_tags",
 		"scenario_outline",
 		"several_examples",
+		"spaces_in_language",
 		"tagged_feature_with_scenario_outline",
 		"tags",
 		"very_long",
@@ -65,7 +66,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"incomplete_scenario_outline",
 	"rule_without_name_and_description",
 	"rule",
-	"spaces_in_language",
 	*/
 
 	func test_goodTestDataFiles() {

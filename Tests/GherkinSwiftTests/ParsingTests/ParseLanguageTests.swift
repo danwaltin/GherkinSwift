@@ -395,14 +395,51 @@ class ParseLanguageTests: TestParseBase {
 					  given: ["Givet "],
 					  when: ["När "],
 					  then: ["Så "])])
-		
+
+		// one space
 		when_parsingDocument(
-			"""
+		"""
 		# language: sv
-		Egenskap: Feature på svenska är Egenskap
+		Egenskap: Ett mellanslag
 		""")
 		
-		then_featureNameShouldBe("Feature på svenska är Egenskap")
+		then_featureNameShouldBe("Ett mellanslag")
+
+		// two spaces
+		when_parsingDocument(
+		"""
+		#  language: sv
+		Egenskap: Två mellanslag
+		""")
+		
+		then_featureNameShouldBe("Två mellanslag")
+
+		// three spaces
+		when_parsingDocument(
+		"""
+		#  language: sv
+		Egenskap: Tre mellanslag
+		""")
+		
+		then_featureNameShouldBe("Tre mellanslag")
+
+		// space before #
+		when_parsingDocument(
+		"""
+		 #language: sv
+		Egenskap: Mellanslag innan brädgård
+		""")
+		
+		then_featureNameShouldBe("Mellanslag innan brädgård")
+
+		// space before :
+		when_parsingDocument(
+		"""
+		#language : sv
+		Egenskap: Mellanslag innan kolon
+		""")
+		
+		then_featureNameShouldBe("Mellanslag innan kolon")
 	}
 	
 	// MARK: - Givens, whens, thens
