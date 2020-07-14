@@ -34,6 +34,7 @@ class StepScanner {
 	var text = ""
 	var location = Location(column: 0, line: 0)
 	var step: Step!
+	var keyword = Keyword.none()
 	
 	let tableScanner: TableScanner
 	let docStringScanner: DocStringScanner
@@ -48,7 +49,8 @@ class StepScanner {
 					text: step.text,
 					location: location,
 					tableParameter: tableScanner.getTable(),
-					docStringParameter: docStringScanner.getDocString())
+					docStringParameter: docStringScanner.getDocString(),
+					localizedKeyword: keyword.localized)
 	}
 	
 	func scan(_ line: Line) {
@@ -78,33 +80,29 @@ class StepScanner {
 	}
 	
 	private func handleStepText(_ line: Line) {
+		location = Location(column: line.columnForKeyword(), line: line.number)
+
 		if line.hasKeyword(.asterisk) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.asterisk(line.keywordRemoved())
 		}
 
 		if line.hasKeyword(.given) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.given(line.keywordRemoved())
 		}
 
 		if line.hasKeyword(.when) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.when(line.keywordRemoved())
 		}
 
 		if line.hasKeyword(.then) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.then(line.keywordRemoved())
 		}
 
 		if line.hasKeyword(.and) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.and(line.keywordRemoved())
 		}
 
 		if line.hasKeyword(.but) {
-			location = Location(column: line.columnForKeyword(), line: line.number)
 			step = Step.but(line.keywordRemoved())
 		}
 	}

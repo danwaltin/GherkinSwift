@@ -83,10 +83,16 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 	}
 	
 	private func given(_ text: String, _ location: Location) -> Step {
-		return Step.given(text, location: location)
+		return Step.given(text).with(location: location)
 	}
 	
 	private func t(_ name: String) -> Tag {
 		return Tag(name: name, location: Location.zero())
+	}
+}
+
+extension Step {
+	func with(location: Location) -> Step {
+		return Step(type: type, text: text, location: location, tableParameter: tableParameter, docStringParameter: docStringParameter, localizedKeyword: localizedKeyword)
 	}
 }
