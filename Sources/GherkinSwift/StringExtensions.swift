@@ -74,6 +74,10 @@ public extension String {
 		return _remove(tripleWhitespace)._remove(doubleWhitespace)
 	}
 	
+	func stringBetween(_ first: String, and second: String) -> String {
+		return ""
+	}
+	
 	private func _remove(_ whitespace: String) -> String {
 		if count < whitespace.count {
 			return self

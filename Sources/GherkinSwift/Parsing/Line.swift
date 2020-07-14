@@ -27,38 +27,6 @@ extension String {
 		let copy = deleteText(keyword)
 		return copy.trim()
 	}
-	
-	func isLanguageSpecification() -> Bool {
-		return languageKeyword() != nil
-	}
-	
-	func languageKeyword() -> String? {
-		if hasPrefix("#language:") {
-			return "#language:"
-		}
-
-		if hasPrefix("# language:") {
-			return "# language:"
-		}
-
-		if hasPrefix("#  language:") {
-			return "#  language:"
-		}
-
-		if hasPrefix("#   language:") {
-			return "#   language:"
-		}
-
-		if trim().hasPrefix("#language:") {
-			return "#language:"
-		}
-
-		if hasPrefix("#language :") {
-			return "#language :"
-		}
-
-		return nil
-	}
 }
 
 struct Line {
