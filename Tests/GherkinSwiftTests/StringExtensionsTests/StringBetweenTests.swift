@@ -86,12 +86,37 @@ class StringBetweenTests : XCTestCase {
 	}
 
 	func test_twoSetsOfSeparators_shouldReturnStringBetweenFirstSet() {
-		let actual = "#one:#two:".stringBetween("#", and: ":")
-		XCTAssertEqual(actual, "one")
+		let actual = "det var en gång en gube # som bodde i en lådda : med sina # drängar bådda : de voro ute hela daggen".stringBetween("#", and: ":")
+		XCTAssertEqual(actual, " som bodde i en lådda ")
 	}
 
-	func test_twoLetterSeparators() {
-		let actual = "det var en gång alpha en gube beta som bodde i en lådda".stringBetween("alpha", and: "beta")
+	func test_multiLetterSeparators() {
+		let actual = "det var en gång 22 en gube 333 som bodde i en lådda".stringBetween("22", and: "333")
 		XCTAssertEqual(actual, " en gube ")
+	}
+	
+	func test_separatorsWithinAWord() {
+		let actual = "qwerty".stringBetween("w", and: "t")
+		XCTAssertEqual(actual, "er")
+	}
+	
+	func test_emptyFirstSeparator_shouldReturnEmptyString() {
+		let actual = "qwerty".stringBetween("", and: "t")
+		XCTAssertEqual(actual, "")
+	}
+
+	func test_emptySecondSeparator_shouldReturnEmptyString() {
+		let actual = "qwerty".stringBetween("w", and: "")
+		XCTAssertEqual(actual, "")
+	}
+
+	func test_emptySeparators_shouldReturnEmptyString() {
+		let actual = "qwerty".stringBetween("", and: "")
+		XCTAssertEqual(actual, "")
+	}
+
+	func test_equalSeparators_shouldReturnEmptyString() {
+		let actual = "qwerty".stringBetween("w", and: "w")
+		XCTAssertEqual(actual, "")
 	}
 }

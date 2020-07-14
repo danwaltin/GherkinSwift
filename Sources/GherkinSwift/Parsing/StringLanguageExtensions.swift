@@ -30,7 +30,7 @@ extension String {
 		// there is probably a regular expression that can solve this...
 		
 		// Must begin with "#" and contain a ":
-		if trim().hasPrefix(commentToken) && contains(":") {
+		if trim().hasPrefix(String(commentToken)) && contains(":") {
 			let between = stringBetween(commentToken, and: ":")
 			if between.trim() == "language" {
 				return "\(commentToken)\(between):"
