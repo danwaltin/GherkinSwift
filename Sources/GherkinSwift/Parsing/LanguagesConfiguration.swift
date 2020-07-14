@@ -53,7 +53,8 @@ public struct LanguagesConfiguration {
 	}
 
 	func language(withKey key: String) -> Language {
-		if let l = languages[key] {
+		if var l = languages[key] {
+			l.key = key
 			return l
 		}
 		

@@ -38,7 +38,10 @@ public class GherkinFeatureParser {
 		let featureScanner = scannerFactory.featureScanner()
 		let commentCollector = scannerFactory.commentCollector()
 		
-		let theLines = getLines(lines)
+		let firstLine = lines.count > 0 ? lines.first! : ""
+		let language = getLanguage(text: firstLine)
+
+		let theLines = getLines(lines, language: language)
 		for line in theLines {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
@@ -49,7 +52,7 @@ public class GherkinFeatureParser {
 		
 		return GherkinFile(gherkinDocument: GherkinDocument(
 			comments: commentCollector.getComments(),
-			feature: featureScanner.getFeature(),
+			feature: featureScanner.getFeature(languageKey: language.key),
 			uri: fileUri))
 	}
 	
@@ -64,9 +67,7 @@ public class GherkinFeatureParser {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
 	
-	private func getLines(_ lines: [String]) -> [Line] {
-		let firstLine = lines.count > 0 ? lines.first! : ""
-		let language = getLanguage(text: firstLine)
+	private func getLines(_ lines: [String], language: Language) -> [Line] {
 		return lines.enumerated().map{ (index, text) in
 			let keyword = Keyword.createFrom(text: text, language: language)
 			

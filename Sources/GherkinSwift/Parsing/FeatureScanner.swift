@@ -142,7 +142,7 @@ class FeatureScanner {
 		scenarioScanners.last!.scan(line)
 	}
 	
-	func getFeature() -> Feature? {
+	func getFeature(languageKey: String) -> Feature? {
 		if state == .started {
 			return nil
 		}
@@ -153,7 +153,7 @@ class FeatureScanner {
 					   tags: tags(),
 					   location: location,
 					   scenarios: scenarios(),
-					   language: "",
+					   language: languageKey,
 					   localizedKeyword: keyword.localized)
 	}
 	

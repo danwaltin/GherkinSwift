@@ -26,6 +26,24 @@ struct LanguageTest : Codable {
 }
 
 struct Language : Codable {
+	enum CodingKeys: CodingKey {
+		// all but "key"
+		case name
+		case native
+		case and
+		case background
+		case but
+		case examples
+		case feature
+		case given
+		case rule
+		case scenario
+		case scenarioOutline
+		case then
+		case when
+	}
+	var key: String = ""
+	
 	let name: String
 	let native: String
 	
@@ -33,11 +51,11 @@ struct Language : Codable {
 	let background: [String]
 	let but: [String]
 	let examples: [String]
-    let feature: [String]
-    let given: [String]
+	let feature: [String]
+	let given: [String]
 	let rule: [String]
-    let scenario: [String]
-    let scenarioOutline: [String]
-    let then: [String]
-    let when: [String]
+	let scenario: [String]
+	let scenarioOutline: [String]
+	let then: [String]
+	let when: [String]
 }

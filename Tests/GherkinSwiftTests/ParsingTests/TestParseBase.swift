@@ -37,7 +37,8 @@ class TestParseBase: XCTestCase {
 		// but without the extra keywords
 		given_defaultLanguage("en")
 		given_languages(
-			["en" : Language(name: "English",
+			["en" : Language(key: "en",
+							 name: "English",
 							 native: "English",
 							 and: ["And "],
 							 background: ["Background"],
@@ -103,7 +104,7 @@ class TestParseBase: XCTestCase {
 		   then: [String] = [],
 		   and: [String] = [],
 		   but: [String] = []) -> Language {
-		return Language(name: "name", native: "native",
+		return Language(key: "key", name: "name", native: "native",
 						and: and,
 						background: background,
 						but: but,
