@@ -22,5 +22,11 @@
 // ------------------------------------------------------------------------
 
 public struct ParseError {
-	let message: String
+	public let message: String
+	public let source: ParseErrorSource
+}
+
+public struct ParseErrorSource {
+	public let location: Location
+	public let uri: String
 }

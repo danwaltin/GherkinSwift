@@ -65,14 +65,31 @@ extension GherkinDocument : Encodable {
 extension ParseError : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case message
+		case source
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
 		try container.encode(message, forKey: .message)
+		try container.encode(source, forKey: .source)
 	}
 }
+
+extension ParseErrorSource : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case location
+		case uri
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(location, forKey: .location)
+		try container.encode(uri, forKey: .uri)
+	}
+}
+
 
 extension Comment : Encodable {
 	enum CodingKeys: String, CodingKey {
