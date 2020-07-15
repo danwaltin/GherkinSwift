@@ -79,6 +79,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	let badExtension = ".feature.errors.ndjson"
 
 	let badTests: [String] = [
+		"not_gherkin",
 	]
 
 	/*
@@ -150,7 +151,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		return getJson(from: pickledFile)
 	}
 	
-	private func getJson(from pickledFile: GherkinFile) -> String {
+	private func getJson(from pickledFile: PickleResult) -> String {
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 		let actualJson = try! encoder.encode(pickledFile)
@@ -158,7 +159,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		return String(data: actualJson, encoding: .utf8)!
 	}
 	
-	private func gherkinFile(path: String, test: String) -> GherkinFile {
+	private func gherkinFile(path: String, test: String) -> PickleResult {
 		
 		let file = filePath(path, test + ".feature")
 		let lines = parser().getAllLinesInFile(url: testFileUrl(of: file))

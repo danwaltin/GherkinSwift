@@ -14,18 +14,13 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  GherkinFile.swift
+//  PickleResult.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
-import Foundation
 
-public struct GherkinFile : Equatable {
-	public let gherkinDocument: GherkinDocument
-	
-	public init(gherkinDocument: GherkinDocument) {
-		self.gherkinDocument = gherkinDocument
-	}
+public enum PickleResult {
+	case success(GherkinDocument)
 }

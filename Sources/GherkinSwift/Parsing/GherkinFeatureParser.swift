@@ -34,7 +34,7 @@ public class GherkinFeatureParser {
 		self.languages = languages
 	}
 	
-	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
+	public func pickle(lines: [String], fileUri: String) -> PickleResult {
 		let featureScanner = scannerFactory.featureScanner()
 		let commentCollector = scannerFactory.commentCollector()
 		
@@ -50,10 +50,11 @@ public class GherkinFeatureParser {
 			}
 		}
 		
-		return GherkinFile(gherkinDocument: GherkinDocument(
-			comments: commentCollector.getComments(),
-			feature: featureScanner.getFeature(languageKey: language.key),
-			uri: fileUri))
+		let document = GherkinDocument(comments: commentCollector.getComments(),
+									   feature: featureScanner.getFeature(languageKey: language.key),
+									   uri: fileUri)
+		
+		return .success(document)
 	}
 	
 	public func getAllLinesInFile(url: URL) -> [String] {

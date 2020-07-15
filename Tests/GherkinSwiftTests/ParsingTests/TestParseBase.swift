@@ -83,7 +83,12 @@ class TestParseBase: XCTestCase {
 	}
 
 	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
-		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
+		let result = parser.pickle(lines: lines, fileUri: "")
+		
+		switch result {
+		case .success(let document):
+			return document
+		}
 	}
 
 	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {

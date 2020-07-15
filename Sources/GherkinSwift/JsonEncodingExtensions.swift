@@ -23,7 +23,7 @@
 
 import Foundation
 
-extension GherkinFile : Encodable {
+extension PickleResult : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case gherkinDocument
 	}
@@ -31,7 +31,10 @@ extension GherkinFile : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(gherkinDocument, forKey: .gherkinDocument)
+		switch self {
+		case .success(let document):
+			try container.encode(document, forKey: .gherkinDocument)
+		}
 	}
 }
 
