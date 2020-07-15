@@ -26,6 +26,10 @@ import XCTest
 
 @available(OSX 10.15, *)
 class PickleTestDataFilesTests: XCTestCase {
+	// MARK: - good test data
+	let goodPath = "testdata/good"
+	let goodExtension = ".feature.ast.ndjson"
+
 	let goodTests = [
 		"background",
 		"datatables_with_new_lines",
@@ -70,32 +74,74 @@ class PickleTestDataFilesTests: XCTestCase {
 	"rule",
 	*/
 
-	func test_goodTestDataFiles() {
+	//  MARK: - bad test data
+	let badPath = "testdata/bad"
+	let badExtension = ".feature.errors.ndjson"
 
-		let goodPath = "testdata/good"
-		
+	let badTests: [String] = [
+	]
+
+	/*
+	These test cases are not implemented yet
+	
+	"inconsistent_cell_count",
+	"invalid_language",
+	"multiple_parser_errors",
+	"not_gherkin",
+	"single_parser_error",
+	"unexpected_eof",
+	"whitespace_in_tags",
+	*/
+
+	// MARK: - test cases
+	func test_goodTestDataFiles() {
 		var failedTests = [String]()
 		
 		for test in goodTests {
-			let expected = expectedJson(path: goodPath, test: test)
-				.withoutIds()
-				.trim()
-			
-			let actual = parseAndGetJson(path: goodPath, test: test)
-				.replacingOccurrences(of: " :", with: ":")
-				.trim()
-		
-			if actual != expected {
+			let success = executeTest(test: test, path: goodPath, fileExtension: goodExtension)
+
+			if !success {
 				failedTests.append(test)
 			}
-			XCTAssertEqual(actual, expected, "Wrong json for '\(test)'")
 		}
 		
 		XCTAssertEqual(failedTests, [])
 	}
 	
-	private func expectedJson(path: String, test: String) -> String {
-		return testFileContent(of: filePath(path, test + ".feature.ast.ndjson"))
+	func test_badTestDataFiles() {
+		var failedTests = [String]()
+		
+		for test in badTests {
+			let success = executeTest(test: test, path: badPath, fileExtension: badExtension)
+
+			if !success {
+				failedTests.append(test)
+			}
+		}
+		
+		XCTAssertEqual(failedTests, [])
+	}
+	
+	// MARK: - helpers
+	
+	private func executeTest(test: String, path: String, fileExtension: String,
+							 file: StaticString = #file, line: UInt = #line) -> Bool {
+		
+		let expected = expectedJson(path: path, test: test, fileExtension: fileExtension)
+			.withoutIds()
+			.trim()
+		
+		let actual = parseAndGetJson(path: path, test: test)
+			.replacingOccurrences(of: " :", with: ":")
+			.trim()
+	
+		XCTAssertEqual(actual, expected, "Wrong json for '\(test)'", file: file, line: line)
+		
+		return actual == expected
+	}
+	
+	private func expectedJson(path: String, test: String, fileExtension: String) -> String {
+		return testFileContent(of: filePath(path, test + fileExtension))
 	}
 	
 	private func parseAndGetJson(path: String, test: String) -> String {
