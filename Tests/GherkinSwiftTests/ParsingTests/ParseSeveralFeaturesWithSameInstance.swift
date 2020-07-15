@@ -27,18 +27,18 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
-		
-		let one = parseDocument(
+
+		when_parsingDocument(
 			"""
 			@tagF1
 			Feature: f1
 			@tagS1
 			Scenario: s1
 			    Given g1
-			""",
-			parser: instance).feature!
+			""", instance)
+		let one = actualGherkinDocument.feature!
 		
-		let two = parseDocument(
+		when_parsingDocument(
 			"""
 			@tagF2
 			Feature: f2
@@ -49,9 +49,9 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 			@tagS22
 			Scenario: s2.2
 			    Given g2.2.1
-			""",
-			parser: instance).feature!
-		
+			""", instance)
+		let two = actualGherkinDocument.feature!
+
 		XCTAssertEqual(one,
 					   feature("f1", [Tag(name: "tagF1", location: Location(column: 1, line: 1))], Location(column: 1, line: 2), [
 						scenario("s1", [Tag(name: "tagS1", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [

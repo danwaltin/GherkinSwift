@@ -24,7 +24,18 @@ import XCTest
 @testable import GherkinSwift
 
 class TestParseBase: XCTestCase {
-	var actualGherkinDocument: GherkinDocument!
+	var actualPickleResult: PickleResult!
+
+	var actualGherkinDocument: GherkinDocument! {
+		switch actualPickleResult {
+		case .success(let document):
+			return document
+		case .error( _):
+			return nil
+		case .none:
+			return nil
+		}
+	}
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
 	var defaultLanguage: String = ""
@@ -75,23 +86,22 @@ class TestParseBase: XCTestCase {
 	}
 	
 	func when_parsingDocument(_ document: String) {
-		actualGherkinDocument = parseDocument(document, parser: parser())
+		when_parsingDocument(document, parser())
+	}
+
+	func when_parsingDocument(_ document: String, _ parser: GherkinFeatureParser) {
+		actualPickleResult = parseDocument(document, parser: parser)
 	}
 
 	func when_parsing(_ lines: [String]) {
-		actualGherkinDocument = parse(lines, parser: parser())
+		actualPickleResult = parse(lines, parser: parser())
 	}
 
-	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
-		let result = parser.pickle(lines: lines, fileUri: "")
-		
-		switch result {
-		case .success(let document):
-			return document
-		}
+	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> PickleResult {
+		return parser.pickle(lines: lines, fileUri: "")
 	}
 
-	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
+	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> PickleResult {
 		let lines = parser.getAllLinesInDocument(document: document)
 		return parse(lines, parser: parser)
 	}

@@ -51,10 +51,12 @@ class ParseFeatureInformationTests: TestParseBase {
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
 		
-		let one = parseDocument("Feature: one", parser: instance).feature!
+		when_parsingDocument("Feature: one", instance)
+		let one = actualGherkinDocument.feature!
 		XCTAssertEqual("one", one.name)
 
-		let two = parseDocument("Feature: two", parser: instance).feature!
+		when_parsingDocument("Feature: two", instance)
+		let two = actualGherkinDocument.feature!
 		XCTAssertEqual("two", two.name)
 	}
 	

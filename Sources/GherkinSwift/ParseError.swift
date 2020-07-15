@@ -14,14 +14,13 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  PickleResult.swift
+//  ParseError.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-19.
+//  Created by Dan Waltin on 2020-07-14.
 //
 // ------------------------------------------------------------------------
 
-public enum PickleResult {
-	case success(GherkinDocument)
-	case error(ParseError)
+public struct ParseError {
+	let message: String
 }

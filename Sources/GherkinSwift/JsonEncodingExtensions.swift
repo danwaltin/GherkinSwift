@@ -26,14 +26,17 @@ import Foundation
 extension PickleResult : Encodable {
 	enum CodingKeys: String, CodingKey {
 		case gherkinDocument
+		case parseError
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-
+		
 		switch self {
 		case .success(let document):
 			try container.encode(document, forKey: .gherkinDocument)
+		case .error(let error):
+			try container.encode(error, forKey: .parseError)
 		}
 	}
 }
@@ -56,6 +59,18 @@ extension GherkinDocument : Encodable {
 			try container.encode(feature, forKey: .feature)
 		}
 		try container.encode(uri, forKey: .uri)
+	}
+}
+
+extension ParseError : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case message
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(message, forKey: .message)
 	}
 }
 
