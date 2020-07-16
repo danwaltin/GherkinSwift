@@ -67,12 +67,56 @@ class NotGherkinTests : TestErrorParseBase {
 			Location(column: 1, line: 2))
 	}
 
+	func test_twoNonGherkinLines_messages() {
+		when_parsingDocument(
+		"""
+		
+		lorem
+		Feature: several errors
+		Scenario: foo
+		   Given bar
+
+		ipsum
+		""")
+		
+		then_shouldReturnParseErrorWith(messages: [
+			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'lorem\'",
+			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'ipsum\'"
+		])
+	}
+
+	func test_twoNonGherkinLines_locations() {
+		when_parsingDocument(
+		"""
+		
+		lorem
+		Feature: several errors
+		Scenario: foo
+		   Given bar
+
+		ipsum
+		""")
+		
+		then_shouldReturnParseErrorWith(locations: [
+			Location(column: 1, line: 2),
+			Location(column: 1, line: 7)
+		])
+	}
+
 	// MARK: - helpers
 	private func then_shouldReturnParseErrorWith(message: String, file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessage: message, file, line)
 	}
 
+	private func then_shouldReturnParseErrorWith(messages: [String], file: StaticString = #file, line: UInt = #line) {
+		assert.parseError(withMessages: messages, file, line)
+	}
+
 	private func then_shouldReturnParseErrorWith(location: Location, file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withLocation: location, file, line)
+	}
+
+	private func then_shouldReturnParseErrorWith(locations: [Location], file: StaticString = #file, line: UInt = #line) {
+		assert.parseError(withLocations: locations, file, line)
 	}
 }
