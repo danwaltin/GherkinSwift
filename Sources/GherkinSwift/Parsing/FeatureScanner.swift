@@ -164,16 +164,12 @@ class FeatureScanner {
 		let feature = Feature(name: name,
 							  description: descriptionLines.asDescription(),
 							  background: backgroundScanner.getBackground(),
-							  tags: tags(),
+							  tags: featureTagScanner.getTags(),
 							  location: location,
 							  scenarios: scenarios,
 							  language: languageKey,
 							  localizedKeyword: keyword.localized)
 		
 		return (feature, parseErrors)
-	}
-	
-	private func tags() -> [Tag] {
-		return featureTagScanner.getTags()
 	}
 }
