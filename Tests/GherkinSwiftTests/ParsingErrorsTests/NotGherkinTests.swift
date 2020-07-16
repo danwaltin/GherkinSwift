@@ -77,11 +77,17 @@ class NotGherkinTests : TestErrorParseBase {
 		   Given bar
 
 		ipsum
+		
+		Scenario: bar
+		   Given foo
+
+		forty two
 		""")
 		
 		then_shouldReturnParseErrorWith(messages: [
 			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'lorem\'",
-			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'ipsum\'"
+			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'ipsum\'",
+			"(12:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'forty two\'"
 		])
 	}
 
@@ -95,11 +101,17 @@ class NotGherkinTests : TestErrorParseBase {
 		   Given bar
 
 		ipsum
+
+		Scenario: bar
+		   Given foo
+
+		forty two
 		""")
 		
 		then_shouldReturnParseErrorWith(locations: [
 			Location(column: 1, line: 2),
-			Location(column: 1, line: 7)
+			Location(column: 1, line: 7),
+			Location(column: 1, line: 12)
 		])
 	}
 
