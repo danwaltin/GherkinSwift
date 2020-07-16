@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ErrorNotGherkingTests.swift
+//  NotGherkinTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-04.
@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ErrorNotGherkingTests : TestParseBase {
+class NotGherkinTests : TestParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
 		"""
@@ -43,6 +43,28 @@ class ErrorNotGherkingTests : TestParseBase {
 		
 		then_shouldReturnParseErrorWith(location:
 			Location(column: 1, line: 1))
+	}
+
+	func test_secondLineNotGherkin_message() {
+		when_parsingDocument(
+		"""
+		
+		rabarber
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'rabarber'")
+	}
+
+	func test_secondLineNotGherkin_location() {
+		when_parsingDocument(
+		"""
+		
+		tomater
+		""")
+		
+		then_shouldReturnParseErrorWith(location:
+			Location(column: 1, line: 2))
 	}
 
 	// MARK: - helpers
