@@ -29,7 +29,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	// MARK: - good test data
 	let goodPath = "testdata/good"
 	let goodExtension = ".feature.ast.ndjson"
-
+	
 	let goodTests = [
 		"background",
 		"datatables_with_new_lines",
@@ -73,16 +73,16 @@ class PickleTestDataFilesTests: XCTestCase {
 	"rule_without_name_and_description",
 	"rule",
 	*/
-
+	
 	//  MARK: - bad test data
 	let badPath = "testdata/bad"
 	let badExtension = ".feature.errors.ndjson"
-
+	
 	let badTests: [String] = [
 		"not_gherkin",
 		"single_parser_error",
 	]
-
+	
 	/*
 	These test cases are not implemented yet
 	
@@ -93,37 +93,36 @@ class PickleTestDataFilesTests: XCTestCase {
 	"unexpected_eof",
 	"whitespace_in_tags",
 	*/
-
+	
 	// MARK: - test cases
 	func test_goodTestDataFiles() {
-		var failedTests = [String]()
-		
-		for test in goodTests {
-			let success = executeTest(test: test, path: goodPath, fileExtension: goodExtension)
-
-			if !success {
-				failedTests.append(test)
-			}
-		}
-		
-		XCTAssertEqual(failedTests, [])
+		executeTests(goodTests,
+					 path: goodPath,
+					 fileExtension: goodExtension)
 	}
 	
 	func test_badTestDataFiles() {
+		executeTests(badTests,
+					 path: badPath,
+					 fileExtension: badExtension)
+	}
+	
+	// MARK: - helpers
+	private func executeTests(_ tests: [String], path: String, fileExtension: String,
+							  file: StaticString = #file, line: UInt = #line) {
+		
 		var failedTests = [String]()
 		
-		for test in badTests {
-			let success = executeTest(test: test, path: badPath, fileExtension: badExtension)
-
+		for test in tests {
+			let success = executeTest(test: test, path: path, fileExtension: fileExtension, file: file, line: line)
+			
 			if !success {
 				failedTests.append(test)
 			}
 		}
 		
-		XCTAssertEqual(failedTests, [])
+		XCTAssertEqual(failedTests, [], file: file, line: line)
 	}
-	
-	// MARK: - helpers
 	
 	private func executeTest(test: String, path: String, fileExtension: String,
 							 file: StaticString = #file, line: UInt = #line) -> Bool {
@@ -135,7 +134,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		let actual = parseAndGetJson(path: path, test: test)
 			.replacingOccurrences(of: " :", with: ":")
 			.trim()
-	
+		
 		XCTAssertEqual(actual, expected, "Wrong json for '\(test)'", file: file, line: line)
 		
 		return actual == expected
@@ -147,7 +146,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	
 	private func parseAndGetJson(path: String, test: String) -> String {
 		let pickledFile = gherkinFile(path: path, test: test)
-
+		
 		return getJson(from: pickledFile)
 	}
 	
@@ -155,7 +154,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 		let actualJson = try! encoder.encode(pickledFile)
-
+		
 		return String(data: actualJson, encoding: .utf8)!
 	}
 	
@@ -163,7 +162,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		
 		let file = filePath(path, test + ".feature")
 		let lines = parser().getAllLinesInFile(url: testFileUrl(of: file))
-
+		
 		return parser().pickle(lines: lines, fileUri: file)
 	}
 	
@@ -172,7 +171,7 @@ class PickleTestDataFilesTests: XCTestCase {
 		
 		return String(data: data, encoding: .utf8)!
 	}
-
+	
 	private func testFileUrl(of file: String) -> URL {
 		let thisSourceFile = URL(fileURLWithPath: #file)
 		let currentDirectory = thisSourceFile.deletingLastPathComponent()
