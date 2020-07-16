@@ -55,18 +55,18 @@ class FeatureScanner {
 		self.scenarioScannerFactory = scenarioScannerFactory
 	}
 	
-	func scan(_ line: Line, allLines: [Line]) {
+	func scan(_ line: Line, allLines: [Line]) -> ScanResult {
 		switch state {
 		case .started:
 			if line.hasKeyword(.tag) {
 				featureTagScanner.scan(line)
-			}
-			
-			if line.hasKeyword(.feature) {
+			} else if line.hasKeyword(.feature) {
 				keyword = line.keyword
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
+			} else if !(line.text.isLanguageSpecification() || line.isEmpty()) {
+				return .error
 			}
 			
 		case .scanningFeature:
@@ -114,6 +114,8 @@ class FeatureScanner {
 				startNewScenario(line)
 			}
 		}
+		
+		return .success
 	}
 	
 	private func shouldStartBackground(_ line: Line) -> Bool {

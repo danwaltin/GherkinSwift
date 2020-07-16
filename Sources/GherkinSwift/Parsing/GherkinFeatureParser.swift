@@ -40,10 +40,6 @@ public class GherkinFeatureParser {
 		
 		let firstLine = lines.count > 0 ? lines.first! : ""
 		
-		if firstLine == "not gherkin" {
-			return .error(ParseError(message: "(1:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(firstLine)'", source: ParseErrorSource(location: Location(column: 1, line: 1), uri: fileUri)))
-		}
-		
 		let language = getLanguage(text: firstLine)
 
 		let theLines = getLines(lines, language: language)
@@ -51,7 +47,9 @@ public class GherkinFeatureParser {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
 			} else {
-				featureScanner.scan(line, allLines: theLines)
+				if featureScanner.scan(line, allLines: theLines) == .error {
+					return .error(ParseError(message: "(1:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'", source: ParseErrorSource(location: Location(column: 1, line: 1), uri: fileUri)))
+				}
 			}
 		}
 		

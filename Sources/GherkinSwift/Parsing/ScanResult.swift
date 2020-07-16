@@ -14,19 +14,14 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  ParseError.swift
+//  ScanResult.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-07-15.
+//  Created by Dan Waltin on 2020-06-19.
 //
 // ------------------------------------------------------------------------
 
-public struct ParseError {
-	public let message: String
-	public let source: ParseErrorSource
-}
-
-public struct ParseErrorSource {
-	public let location: Location
-	public let uri: String
+enum ScanResult {
+	case success
+	case error
 }
