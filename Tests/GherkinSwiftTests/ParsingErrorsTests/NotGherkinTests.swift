@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class NotGherkinTests : TestParseBase {
+class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
 		"""
@@ -69,10 +69,10 @@ class NotGherkinTests : TestParseBase {
 
 	// MARK: - helpers
 	private func then_shouldReturnParseErrorWith(message: String, file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualParseError.message, message, file: file, line: line)
+		assert.parseError(withMessage: message, file, line)
 	}
 
 	private func then_shouldReturnParseErrorWith(location: Location, file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualParseError.source.location, location, file: file, line: line)
+		assert.parseError(withLocation: location, file, line)
 	}
 }
