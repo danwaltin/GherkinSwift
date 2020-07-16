@@ -151,25 +151,29 @@ class FeatureScanner {
 	
 	func getFeature(languageKey: String) -> (feature: Feature?, errors: [ParseError]) {
 		
-		let feature: Feature? = state == .started
-			? nil
-			: Feature(name: name,
-					  description: descriptionLines.asDescription(),
-					  background: backgroundScanner.getBackground(),
-					  tags: tags(),
-					  location: location,
-					  scenarios: scenarios(),
-					  language: languageKey,
-					  localizedKeyword: keyword.localized)
+		if state == .started {
+			return (nil, parseErrors)
+		}
+
+		let scenariosWithScenarioParseErrors = scenarioScanners.map { $0.getScenario() }
+		let scenarios = scenariosWithScenarioParseErrors.map { $0.scenario }
+		let scenarioParseErrors = scenariosWithScenarioParseErrors.flatMap { $0.errors }
+		
+		parseErrors.append(contentsOf: scenarioParseErrors)
+		
+		let feature = Feature(name: name,
+							  description: descriptionLines.asDescription(),
+							  background: backgroundScanner.getBackground(),
+							  tags: tags(),
+							  location: location,
+							  scenarios: scenarios,
+							  language: languageKey,
+							  localizedKeyword: keyword.localized)
 		
 		return (feature, parseErrors)
 	}
 	
 	private func tags() -> [Tag] {
 		return featureTagScanner.getTags()
-	}
-	
-	private func scenarios() -> [Scenario] {
-		return scenarioScanners.map { $0.getScenario() }
 	}
 }

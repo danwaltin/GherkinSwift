@@ -179,15 +179,17 @@ class ScenarioScanner {
 		state = .scanningExamples
 	}
 	
-	func getScenario() -> Scenario {
-		return Scenario(name: name,
-						description: descriptionLines.asDescription(),
-						tags: tags,
-						location: location,
-						steps: steps(),
-						examples: examples(),
-						isScenarioOutline: isScenarioOutline,
-						localizedKeyword: keyword.localized)
+	func getScenario() -> (scenario: Scenario, errors: [ParseError])  {
+		let scenario = Scenario(name: name,
+								description: descriptionLines.asDescription(),
+								tags: tags,
+								location: location,
+								steps: steps(),
+								examples: examples(),
+								isScenarioOutline: isScenarioOutline,
+								localizedKeyword: keyword.localized)
+
+		return (scenario, [])
 	}
 
 	private func steps() -> [Step] {
