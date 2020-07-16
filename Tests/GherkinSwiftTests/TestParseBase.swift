@@ -188,7 +188,7 @@ class TestParseBase: XCTestCase {
 	
 	// MARK: - Assertions
 	var assert: Asserter {
-		return Asserter(actualDocument: actualGherkinDocument)
+		return Asserter(actualPickleResult: actualPickleResult)
 	}
 }
 

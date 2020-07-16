@@ -24,15 +24,33 @@ import XCTest
 @testable import GherkinSwift
 
 struct Asserter {
-	let actualDocument: GherkinDocument
+	let actualPickleResult: PickleResult
+	
+	func gherkinDocument(_ file: StaticString, _ line: UInt, assert: (GherkinDocument) -> Void ) {
+		switch actualPickleResult {
+		case .success(let document):
+			assert(document)
+
+		case .error(let error):
+			XCTFail("No gherkin document found. Parse error occurred with message '\(error.message)'", file: file, line: line)
+		}
+	}
 	
 	func feature(_ file: StaticString, _ line: UInt, assert: (Feature) -> Void ) {
-		guard let feature = actualDocument.feature else {
-			XCTFail("No feature found", file: file, line: line)
-			return
+		gherkinDocument(file, line) {
+			guard let feature = $0.feature else {
+				XCTFail("No feature found", file: file, line: line)
+				return
+			}
+			
+			assert(feature)
 		}
-		
-		assert(feature)
+//		guard let feature = actualDocument.feature else {
+//			XCTFail("No feature found", file: file, line: line)
+//			return
+//		}
+//		
+//		assert(feature)
 	}
 	
 	func scenarios(withNames names: [String], _ file: StaticString, _ line: UInt) {
