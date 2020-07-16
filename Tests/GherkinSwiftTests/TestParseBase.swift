@@ -36,6 +36,19 @@ class TestParseBase: XCTestCase {
 			return nil
 		}
 	}
+	
+	var actualParseError: ParseError! {
+		switch actualPickleResult {
+		case .success( _):
+			return nil
+		case .error(let error):
+			return error
+		case .none:
+			return nil
+		}
+
+	}
+	
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
 	var defaultLanguage: String = ""
