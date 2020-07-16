@@ -40,7 +40,14 @@ public class GherkinFeatureParser {
 		
 		let firstLine = lines.count > 0 ? lines.first! : ""
 		
-		let language = getLanguage(text: firstLine)
+		let languageKey = getLanguageKey(from: firstLine)
+		if !languages.languageExist(key: languageKey) {
+			return .error(ParseError(
+				message: "(1:1): Language not supported: \(languageKey)",
+				source: ParseErrorSource(location: Location(column: 1, line: 1), uri: fileUri)))
+		}
+		
+		let language = languages.language(withKey: languageKey)
 
 		let theLines = getLines(lines, language: language)
 		for line in theLines {
@@ -85,6 +92,15 @@ public class GherkinFeatureParser {
 			return Line(text: text,
 						number: index + 1,
 						keyword: keyword) }
+	}
+	
+	private func getLanguageKey(from text: String) -> String {
+		if let languageKeyword = text.languageKeyword() {
+			let languageKey = text.removeKeyword(languageKeyword)
+			return languageKey
+		}
+		
+		return languages.defaultLanguageKey
 	}
 	
 	private func getLanguage(text: String) -> Language {
