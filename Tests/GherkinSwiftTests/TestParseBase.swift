@@ -26,17 +26,6 @@ import XCTest
 class TestParseBase: XCTestCase {
 	var actualPickleResult: PickleResult!
 
-	var actualGherkinDocument: GherkinDocument! {
-		switch actualPickleResult {
-		case .success(let document):
-			return document
-		case .error( _):
-			return nil
-		case .none:
-			return nil
-		}
-	}
-	
 	var actualParseError: ParseError! {
 		switch actualPickleResult {
 		case .success( _):

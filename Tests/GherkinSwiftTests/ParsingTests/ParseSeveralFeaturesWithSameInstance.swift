@@ -36,7 +36,12 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 			Scenario: s1
 			    Given g1
 			""", instance)
-		let one = actualGherkinDocument.feature!
+		then_featureShouldBe(feature("f1", [Tag(name: "tagF1", location: Location(column: 1, line: 1))], Location(column: 1, line: 2), [
+					scenario("s1", [Tag(name: "tagS1", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
+						given("g1", Location(column: 5, line: 5))
+						])
+					]
+		))
 		
 		when_parsingDocument(
 			"""
@@ -50,28 +55,22 @@ class ParseSeveralFeaturesWithSameInstance : TestParseBase {
 			Scenario: s2.2
 			    Given g2.2.1
 			""", instance)
-		let two = actualGherkinDocument.feature!
-
-		XCTAssertEqual(one,
-					   feature("f1", [Tag(name: "tagF1", location: Location(column: 1, line: 1))], Location(column: 1, line: 2), [
-						scenario("s1", [Tag(name: "tagS1", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
-							given("g1", Location(column: 5, line: 5))
-							])
-						]
-			)
-		)
-
-		XCTAssertEqual(two,
-					   feature("f2", [Tag(name: "tagF2", location: Location(column: 1, line: 1))], Location(column: 1, line: 2),[
-						scenario("s2.1", [Tag(name: "tagS21", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
-							given("g2.1.1", Location(column: 5, line: 5)),
-							given("g2.1.2", Location(column: 5, line: 6))]),
-						scenario("s2.2", [Tag(name: "tagS22", location: Location(column: 1, line: 7))], Location(column: 1, line: 8), [
-							given("g2.2.1", Location(column: 5, line: 9))
-							])
-						]
-			)
-		)
+		then_featureShouldBe(feature("f2", [Tag(name: "tagF2", location: Location(column: 1, line: 1))], Location(column: 1, line: 2),[
+					scenario("s2.1", [Tag(name: "tagS21", location: Location(column: 1, line: 3))], Location(column: 1, line: 4), [
+						given("g2.1.1", Location(column: 5, line: 5)),
+						given("g2.1.2", Location(column: 5, line: 6))]),
+					scenario("s2.2", [Tag(name: "tagS22", location: Location(column: 1, line: 7))], Location(column: 1, line: 8), [
+						given("g2.2.1", Location(column: 5, line: 9))
+						])
+					]
+		))
+	}
+	
+	private func then_featureShouldBe(_ feature: Feature,
+									  file: StaticString = #file, line: UInt = #line) {
+		assert.feature(file, line) {
+			XCTAssertEqual($0, feature, file: file, line: line)
+		}
 	}
 	
 	private func feature(_ name: String, _ tags: [Tag], _ location: Location, _ scenarios: [Scenario]) -> Feature {

@@ -52,12 +52,10 @@ class ParseFeatureInformationTests: TestParseBase {
 		let instance = parser()
 		
 		when_parsingDocument("Feature: one", instance)
-		let one = actualGherkinDocument.feature!
-		XCTAssertEqual("one", one.name)
+		then_featureNameShouldBe("one")
 
 		when_parsingDocument("Feature: two", instance)
-		let two = actualGherkinDocument.feature!
-		XCTAssertEqual("two", two.name)
+		then_featureNameShouldBe("two")
 	}
 	
 	// MARK: - Givens, whens, thens

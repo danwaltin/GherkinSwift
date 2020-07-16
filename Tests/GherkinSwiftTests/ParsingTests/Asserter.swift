@@ -45,12 +45,6 @@ struct Asserter {
 			
 			assert(feature)
 		}
-//		guard let feature = actualDocument.feature else {
-//			XCTFail("No feature found", file: file, line: line)
-//			return
-//		}
-//		
-//		assert(feature)
 	}
 	
 	func scenarios(withNames names: [String], _ file: StaticString, _ line: UInt) {
