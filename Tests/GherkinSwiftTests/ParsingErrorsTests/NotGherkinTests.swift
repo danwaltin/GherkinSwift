@@ -67,51 +67,45 @@ class NotGherkinTests : TestErrorParseBase {
 			Location(column: 1, line: 2))
 	}
 
-	func test_twoNonGherkinLines_messages() {
+	func test_severalNonGherkinLines() {
 		when_parsingDocument(
 		"""
 		
-		lorem
+		no gherkin one
+		@featureTag
+		no gherkin two
 		Feature: several errors
+		@scenarioTag
+		no gherkin three
 		Scenario: foo
 		   Given bar
 
-		ipsum
-		
+		no gherkin four
+
+		@scenarioTag
+		no gherkin five
 		Scenario: bar
 		   Given foo
 
-		forty two
+		no gherkin six
 		""")
 		
 		then_shouldReturnParseErrorWith(messages: [
-			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'lorem\'",
-			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'ipsum\'",
-			"(12:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'forty two\'"
+			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
+			"(4:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
+			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin three\'",
+			"(11:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin four\'",
+			"(14:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin five\'",
+			"(18:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin six\'",
 		])
-	}
-
-	func test_twoNonGherkinLines_locations() {
-		when_parsingDocument(
-		"""
-		
-		lorem
-		Feature: several errors
-		Scenario: foo
-		   Given bar
-
-		ipsum
-
-		Scenario: bar
-		   Given foo
-
-		forty two
-		""")
 		
 		then_shouldReturnParseErrorWith(locations: [
 			Location(column: 1, line: 2),
+			Location(column: 1, line: 4),
 			Location(column: 1, line: 7),
-			Location(column: 1, line: 12)
+			Location(column: 1, line: 11),
+			Location(column: 1, line: 14),
+			Location(column: 1, line: 18)
 		])
 	}
 
