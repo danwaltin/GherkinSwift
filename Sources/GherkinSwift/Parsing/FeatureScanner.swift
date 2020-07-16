@@ -66,7 +66,7 @@ class FeatureScanner {
 				location = line.keywordLocation()
 				state = .scanningFeature
 			} else if !(line.text.isLanguageSpecification() || line.isEmpty()) {
-				return .error
+				return .error(location: Location(column: 1, line: line.number))
 			}
 			
 		case .scanningFeature:

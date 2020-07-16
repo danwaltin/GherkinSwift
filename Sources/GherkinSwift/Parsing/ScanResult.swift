@@ -23,5 +23,5 @@
 
 enum ScanResult {
 	case success
-	case error
+	case error(location: Location)
 }

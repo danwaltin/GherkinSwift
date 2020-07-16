@@ -25,18 +25,6 @@ import XCTest
 
 class TestParseBase: XCTestCase {
 	var actualPickleResult: PickleResult!
-
-	var actualParseError: ParseError! {
-		switch actualPickleResult {
-		case .success( _):
-			return nil
-		case .error(let error):
-			return error
-		case .none:
-			return nil
-		}
-
-	}
 	
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
@@ -175,4 +163,3 @@ class TestParseBase: XCTestCase {
 		return TableCell(value: value, location: Location.zero(), header: header)
 	}
 }
-
