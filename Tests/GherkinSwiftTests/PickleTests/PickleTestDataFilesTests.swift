@@ -80,6 +80,7 @@ class PickleTestDataFilesTests: XCTestCase {
 
 	let badTests: [String] = [
 		"not_gherkin",
+		"single_parser_error",
 	]
 
 	/*
@@ -89,7 +90,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	"invalid_language",
 	"multiple_parser_errors",
 	"not_gherkin",
-	"single_parser_error",
 	"unexpected_eof",
 	"whitespace_in_tags",
 	*/
