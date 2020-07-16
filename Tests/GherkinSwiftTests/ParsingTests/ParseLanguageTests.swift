@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseLanguageTests: TestParseBase {
+class ParseLanguageTests: TestSuccessfulParseBase {
 	func test_defaultLanguageIsUsed_whenNoLanguageIsGiven() {
 		given_defaultLanguage("bpa")
 		

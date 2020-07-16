@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseFeatureInformationTests: TestParseBase {
+class ParseFeatureInformationTests: TestSuccessfulParseBase {
 
 	func test_parseFeature_shouldReturnFeatureWithName() {
 		when_parsing([

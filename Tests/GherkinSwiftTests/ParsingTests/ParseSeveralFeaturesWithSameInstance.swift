@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseSeveralFeaturesWithSameInstance : TestParseBase {
+class ParseSeveralFeaturesWithSameInstance : TestSuccessfulParseBase {
 
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()

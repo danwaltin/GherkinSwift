@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseLocationTests: TestParseBase {
+class ParseLocationTests: TestSuccessfulParseBase {
 	// MARK: - feature
 	
 	func test_location_feature_at_1_1() {

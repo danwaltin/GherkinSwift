@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseScenariosTests: TestParseBase {
+class ParseScenariosTests: TestSuccessfulParseBase {
 	func test_oneScenarioShouldReturnScenarioWithName() {
 		when_parsingDocument(
 		"""

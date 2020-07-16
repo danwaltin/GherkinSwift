@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepDocStringParametersTests: TestParseBase {
+class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")

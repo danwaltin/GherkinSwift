@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseCommentsTests: TestParseBase {
+class ParseCommentsTests: TestSuccessfulParseBase {
 	func testScenarioWithComment() {
 		when_parsingDocument(
 		"""

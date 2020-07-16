@@ -174,10 +174,5 @@ class TestParseBase: XCTestCase {
 	private func cell(_ value: String, _ header: String) -> TableCell {
 		return TableCell(value: value, location: Location.zero(), header: header)
 	}
-	
-	// MARK: - Assertions
-	var assert: Asserter {
-		return Asserter(actualPickleResult: actualPickleResult)
-	}
 }
 
