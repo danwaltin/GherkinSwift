@@ -54,21 +54,17 @@ public class GherkinFeatureParser {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
 			} else {
-				let scanResult = featureScanner.scan(line, allLines: theLines)
-				switch scanResult {
-				case .error(let location):
-					return .error([ParseError(
-						message: "(\(location.line):1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'",
-						source: ParseErrorSource(location: location, uri: fileUri))])
-				case .success:
-					// happy happy
-					break
-				}
+				featureScanner.scan(line, allLines: theLines, fileUri: fileUri)
 			}
 		}
 		
+		let featureResult = featureScanner.getFeature(languageKey: language.key)
+		if featureResult.errors.count > 0 {
+			return .error(featureResult.errors)
+		}
+		
 		let document = GherkinDocument(comments: commentCollector.getComments(),
-									   feature: featureScanner.getFeature(languageKey: language.key),
+									   feature: featureResult.feature,
 									   uri: fileUri)
 		
 		return .success(document)

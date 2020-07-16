@@ -40,6 +40,7 @@ class FeatureScanner {
 	let scenarioScannerFactory: ScenarioScannerFactory
 	var scenarioScanners: [ScenarioScanner] = []
 	
+	private var parseErrors = [ParseError]()
 	private var keyword: Keyword = Keyword.none()
 	var name = ""
 	var descriptionLines = [String]()
@@ -55,18 +56,24 @@ class FeatureScanner {
 		self.scenarioScannerFactory = scenarioScannerFactory
 	}
 	
-	func scan(_ line: Line, allLines: [Line]) -> ScanResult {
+	func scan(_ line: Line, allLines: [Line], fileUri: String) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.tag) {
 				featureTagScanner.scan(line)
+			
 			} else if line.hasKeyword(.feature) {
 				keyword = line.keyword
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
+				
 			} else if !(line.text.isLanguageSpecification() || line.isEmpty()) {
-				return .error(location: Location(column: 1, line: line.number))
+				parseErrors.append(ParseError(
+					message: "(\(line.number):1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'",
+					source: ParseErrorSource(
+						location: Location(column: 1, line: line.number),
+						uri: fileUri)))
 			}
 			
 		case .scanningFeature:
@@ -114,8 +121,6 @@ class FeatureScanner {
 				startNewScenario(line)
 			}
 		}
-		
-		return .success
 	}
 	
 	private func shouldStartBackground(_ line: Line) -> Bool {
@@ -144,19 +149,20 @@ class FeatureScanner {
 		scenarioScanners.last!.scan(line)
 	}
 	
-	func getFeature(languageKey: String) -> Feature? {
-		if state == .started {
-			return nil
-		}
+	func getFeature(languageKey: String) -> (feature: Feature?, errors: [ParseError]) {
 		
-		return Feature(name: name,
-					   description: descriptionLines.asDescription(),
-					   background: backgroundScanner.getBackground(),
-					   tags: tags(),
-					   location: location,
-					   scenarios: scenarios(),
-					   language: languageKey,
-					   localizedKeyword: keyword.localized)
+		let feature: Feature? = state == .started
+			? nil
+			: Feature(name: name,
+					  description: descriptionLines.asDescription(),
+					  background: backgroundScanner.getBackground(),
+					  tags: tags(),
+					  location: location,
+					  scenarios: scenarios(),
+					  language: languageKey,
+					  localizedKeyword: keyword.localized)
+		
+		return (feature, parseErrors)
 	}
 	
 	private func tags() -> [Tag] {
