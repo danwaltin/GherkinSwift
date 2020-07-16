@@ -27,7 +27,7 @@ import XCTest
 struct ErrorAsserter {
 	let actualPickleResult: PickleResult
 	
-	func parseError(_ file: StaticString, _ line: UInt, assert: (ParseError) -> Void ) {
+	func parseError(_ file: StaticString, _ line: UInt, assert: ([ParseError]) -> Void ) {
 		switch actualPickleResult {
 		case .error(let error):
 			assert(error)
@@ -36,15 +36,24 @@ struct ErrorAsserter {
 			XCTFail("No parse error found. Parse was successful", file: file, line: line)
 		}
 	}
-	
-	func parseError(withMessage message: String, _ file: StaticString, _ line: UInt) {
+
+	func parseSingleError(_ file: StaticString, _ line: UInt, assert: (ParseError) -> Void ) {
 		parseError(file, line) {
+			if $0.count == 0 {
+				XCTFail("No parse error found. Empty error array.", file: file, line: line)
+			}
+			assert($0[0])
+		}
+	}
+
+	func parseError(withMessage message: String, _ file: StaticString, _ line: UInt) {
+		parseSingleError(file, line) {
 			XCTAssertEqual($0.message, message, file: file, line: line)
 		}
 	}
 
 	func parseError(withLocation location: Location, _ file: StaticString, _ line: UInt) {
-		parseError(file, line) {
+		parseSingleError(file, line) {
 			XCTAssertEqual($0.source.location, location, file: file, line: line)
 		}
 	}

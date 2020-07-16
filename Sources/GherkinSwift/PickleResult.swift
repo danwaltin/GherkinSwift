@@ -23,5 +23,5 @@
 
 public enum PickleResult {
 	case success(GherkinDocument)
-	case error(ParseError)
+	case error([ParseError])
 }

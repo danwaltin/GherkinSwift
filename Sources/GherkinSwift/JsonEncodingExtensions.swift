@@ -35,8 +35,10 @@ extension PickleResult : Encodable {
 		switch self {
 		case .success(let document):
 			try container.encode(document, forKey: .gherkinDocument)
-		case .error(let error):
-			try container.encode(error, forKey: .parseError)
+		case .error(let errors):
+			for error in errors {
+				try container.encode(error, forKey: .parseError)
+			}
 		}
 	}
 }

@@ -42,9 +42,9 @@ public class GherkinFeatureParser {
 		
 		let languageKey = getLanguageKey(from: firstLine)
 		if !languages.languageExist(key: languageKey) {
-			return .error(ParseError(
+			return .error([ParseError(
 				message: "(1:1): Language not supported: \(languageKey)",
-				source: ParseErrorSource(location: Location(column: 1, line: 1), uri: fileUri)))
+				source: ParseErrorSource(location: Location(column: 1, line: 1), uri: fileUri))])
 		}
 		
 		let language = languages.language(withKey: languageKey)
@@ -57,9 +57,9 @@ public class GherkinFeatureParser {
 				let scanResult = featureScanner.scan(line, allLines: theLines)
 				switch scanResult {
 				case .error(let location):
-					return .error(ParseError(
+					return .error([ParseError(
 						message: "(\(location.line):1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'",
-						source: ParseErrorSource(location: location, uri: fileUri)))
+						source: ParseErrorSource(location: location, uri: fileUri))])
 				case .success:
 					// happy happy
 					break

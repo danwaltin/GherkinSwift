@@ -32,7 +32,8 @@ struct Asserter {
 			assert(document)
 
 		case .error(let error):
-			XCTFail("No gherkin document found. Parse error occurred with message '\(error.message)'", file: file, line: line)
+			let messages = error.map{$0.message}.asDescription()
+			XCTFail("No gherkin document found. Parse error(-s) occurred with message '\(String(describing: messages))'", file: file, line: line)
 		}
 	}
 	

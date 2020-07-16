@@ -89,7 +89,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	
 	"inconsistent_cell_count",
 	"multiple_parser_errors",
-	"not_gherkin",
 	"unexpected_eof",
 	"whitespace_in_tags",
 	*/
