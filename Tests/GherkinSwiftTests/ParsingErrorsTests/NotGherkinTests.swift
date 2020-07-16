@@ -67,24 +67,28 @@ class NotGherkinTests : TestErrorParseBase {
 			Location(column: 1, line: 2))
 	}
 
-	func test_secondAndFourthLinesNotGherkin() {
+	func test_threeNonGherkinsBeforeFeature() {
 		when_parsingDocument(
 		"""
 		
 		rabarber
 
 		tomater
+		@featureTag
+		morötter
 		Feature: blubb
 		""")
 		
 		then_shouldReturnParseErrorWith(messages: [
 			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'rabarber'",
-			"(4:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'tomater'"
+			"(4:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'tomater'",
+			"(6:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'morötter'"
 		])
 
 		then_shouldReturnParseErrorWith(locations: [
 			Location(column: 1, line: 2),
-			Location(column: 1, line: 4)
+			Location(column: 1, line: 4),
+			Location(column: 1, line: 6)
 		])
 	}
 
