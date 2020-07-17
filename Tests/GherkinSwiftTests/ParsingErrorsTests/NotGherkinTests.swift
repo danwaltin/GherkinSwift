@@ -82,7 +82,7 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(messages: [
 			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'rabarber'",
 			"(4:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'tomater'",
-			"(6:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'morötter'"
+			"(6:1): expected: #TagLine, #FeatureLine, #Comment, #Empty, got 'morötter'"
 		])
 
 		then_shouldReturnParseErrorWith(locations: [
