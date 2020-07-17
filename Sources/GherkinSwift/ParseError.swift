@@ -30,3 +30,17 @@ public struct ParseErrorSource {
 	public let location: Location
 	public let uri: String
 }
+
+extension ParseError {
+	static func withExpectedTags( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
+		return ParseError.withMessage("expected: \(tags), got '\(line.text)'", atLineNumber: line.number, inFile: fileUri)
+	}
+
+	static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
+		return ParseError(
+			message: "(\(lineNumber):1): \(message)",
+			source: ParseErrorSource(
+				location: Location(column: 1, line: lineNumber),
+				uri: fileUri))
+	}
+}

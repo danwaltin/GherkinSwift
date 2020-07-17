@@ -76,11 +76,8 @@ class FeatureScanner {
 					? "#TagLine, #FeatureLine, #Comment, #Empty"
 					: "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty"
 				
-				parseErrors.append(ParseError(
-					message: "(\(line.number):1): expected: \(expected), got '\(line.text)'",
-					source: ParseErrorSource(
-						location: Location(column: 1, line: line.number),
-						uri: fileUri)))
+				parseErrors.append(
+					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
 			}
 			
 		case .scanningFeature:
@@ -95,12 +92,9 @@ class FeatureScanner {
 				
 			} else if !line.isEmpty() && scenarioTagScanner.getTags().count > 0  {
 				let expected = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
-				
-				parseErrors.append(ParseError(
-					message: "(\(line.number):1): expected: \(expected), got '\(line.text)'",
-					source: ParseErrorSource(
-						location: Location(column: 1, line: line.number),
-						uri: fileUri)))
+
+				parseErrors.append(
+					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
 
 			} else {
 				descriptionLines.append(line.text)
