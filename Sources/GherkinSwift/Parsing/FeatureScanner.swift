@@ -93,6 +93,15 @@ class FeatureScanner {
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, fileUri: fileUri)
 				
+			} else if !line.isEmpty() && scenarioTagScanner.getTags().count > 0  {
+				let expected = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				
+				parseErrors.append(ParseError(
+					message: "(\(line.number):1): expected: \(expected), got '\(line.text)'",
+					source: ParseErrorSource(
+						location: Location(column: 1, line: line.number),
+						uri: fileUri)))
+
 			} else {
 				descriptionLines.append(line.text)
 			}
