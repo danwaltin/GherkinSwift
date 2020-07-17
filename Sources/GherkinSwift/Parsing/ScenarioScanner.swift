@@ -91,12 +91,6 @@ class ScenarioScanner {
 				location = line.keywordLocation()
 				examplesTagScanner.clear()
 				state = .scanningScenario
-			} else if !line.isEmpty() {
-				parseErrors.append(ParseError(
-					message: "(\(line.number):1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'",
-					source: ParseErrorSource(
-						location: Location(column: 1, line: line.number),
-						uri: fileUri)))
 			}
 
 		case .scanningScenario:
