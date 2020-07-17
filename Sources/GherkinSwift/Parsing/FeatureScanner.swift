@@ -84,7 +84,7 @@ class FeatureScanner {
 				startBackground(line)
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line)
+				startNewScenario(line, fileUri: fileUri)
 				
 			} else {
 				descriptionLines.append(line.text)
@@ -95,7 +95,7 @@ class FeatureScanner {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line)
+				startNewScenario(line, fileUri: fileUri)
 				
 			} else {
 				backgroundScanner.scan(line)
@@ -107,10 +107,10 @@ class FeatureScanner {
 				state = .foundNextScenarioTags
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line)
+				startNewScenario(line, fileUri: fileUri)
 				
 			} else {
-				scanScenario(line)
+				scanScenario(line, fileUri: fileUri)
 			}
 			
 		case .foundNextScenarioTags:
@@ -118,7 +118,7 @@ class FeatureScanner {
 				scenarioTagScanner.scan(line)
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line)
+				startNewScenario(line, fileUri: fileUri)
 			}
 		}
 	}
@@ -136,17 +136,17 @@ class FeatureScanner {
 		return line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline)
 	}
 	
-	private func startNewScenario(_ line: Line) {
+	private func startNewScenario(_ line: Line, fileUri: String) {
 		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
 		scenarioTagScanner.clear()
 		
-		scanScenario(line)
+		scanScenario(line, fileUri: fileUri)
 		
 		state = .scanningScenario
 	}
 	
-	private func scanScenario(_ line: Line) {
-		scenarioScanners.last!.scan(line)
+	private func scanScenario(_ line: Line, fileUri: String) {
+		scenarioScanners.last!.scan(line, fileUri: fileUri)
 	}
 	
 	func getFeature(languageKey: String) -> (feature: Feature?, errors: [ParseError]) {

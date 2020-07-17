@@ -33,6 +33,7 @@ class ScenarioScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 
+	private var parseErrors = [ParseError]()
 	private var keyword: Keyword = Keyword.none()
 	private var name = ""
 	private var descriptionLines = [String]()
@@ -79,7 +80,7 @@ class ScenarioScanner {
 		return nil
 	}
 	
-	func scan(_ line: Line) {
+	func scan(_ line: Line, fileUri: String) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) {
@@ -90,6 +91,12 @@ class ScenarioScanner {
 				location = line.keywordLocation()
 				examplesTagScanner.clear()
 				state = .scanningScenario
+			} else if !line.isEmpty() {
+				parseErrors.append(ParseError(
+					message: "(\(line.number):1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got '\(line.text)'",
+					source: ParseErrorSource(
+						location: Location(column: 1, line: line.number),
+						uri: fileUri)))
 			}
 
 		case .scanningScenario:
@@ -189,7 +196,7 @@ class ScenarioScanner {
 								isScenarioOutline: isScenarioOutline,
 								localizedKeyword: keyword.localized)
 
-		return (scenario, [])
+		return (scenario, parseErrors)
 	}
 
 	private func steps() -> [Step] {

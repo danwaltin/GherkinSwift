@@ -100,28 +100,32 @@ class NotGherkinTests : TestErrorParseBase {
 		@featureTag
 		no gherkin two
 		Feature: several errors
-		@scenarioTag
+		   @scenarioTag
+
 		no gherkin three
-		Scenario: foo
-		   Given bar
+
+		   Scenario: foo
+		      Given bar
 
 		no gherkin four
 
-		@scenarioTag
+		   @scenarioTag
 		no gherkin five
-		Scenario: bar
-		   Given foo
+		   Scenario: bar
+		      Given foo
 
 		no gherkin six
 		""")
 		
+		then_shouldReturn(numberOfParseErrors: 6)
+		
 		then_shouldReturnParseErrorWith(messages: [
 			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
-			"(4:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
-			"(7:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin three\'",
-			"(11:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin four\'",
-			"(14:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin five\'",
-			"(18:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin six\'",
+			"(4:1): expected: #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
+			"(8:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin three\'",
+			"(13:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin four\'",
+			"(16:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin five\'",
+			"(20:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin six\'",
 		])
 		
 		then_shouldReturnParseErrorWith(locations: [
@@ -135,6 +139,12 @@ class NotGherkinTests : TestErrorParseBase {
 	}
 
 	// MARK: - helpers
+	private func then_shouldReturn(numberOfParseErrors expected: Int, file: StaticString = #file, line: UInt = #line) {
+		assert.parseError(file, line) {
+			XCTAssertEqual($0.count, expected, file: file, line: line)
+		}
+	}
+	
 	private func then_shouldReturnParseErrorWith(message: String, file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessage: message, file, line)
 	}

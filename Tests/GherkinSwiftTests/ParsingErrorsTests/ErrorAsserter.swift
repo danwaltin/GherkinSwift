@@ -54,7 +54,7 @@ struct ErrorAsserter {
 
 	func parseError(withMessages expected: [String], _ file: StaticString, _ line: UInt) {
 		parseError(file, line) {
-			let actual = $0.map{ $0.message }
+			let actual = $0.map { e in e.message }
 			XCTAssertEqual(actual, expected, file: file, line: line)
 		}
 	}
@@ -67,7 +67,7 @@ struct ErrorAsserter {
 
 	func parseError(withLocations expected: [Location], _ file: StaticString, _ line: UInt) {
 		parseError(file, line) {
-			let actual = $0.map{ $0.source.location }
+			let actual = $0.map{ e in e.source.location }
 			XCTAssertEqual(actual, expected, file: file, line: line)
 		}
 	}
