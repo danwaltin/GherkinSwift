@@ -150,6 +150,26 @@ class NotGherkinTests : TestErrorParseBase {
 			location: Location(column: 1, line: 6))
 	}
 
+	func test_invalidInBackgroundStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: f
+
+		Background:
+		   Given the following customers
+		      | Customer     |
+		      | Ada Lovelace |
+		      we expected a table row here!
+		      | Alan Turing  |
+
+		Scenario: s
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
+			location: Location(column: 1, line: 7))
+	}
+
 	func test_severalNonGherkinLines() {
 		when_parsingDocument(
 		"""
