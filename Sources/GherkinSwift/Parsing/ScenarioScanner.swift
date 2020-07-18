@@ -159,9 +159,13 @@ class ScenarioScanner {
 	}
 	
 	private func scanStep(_ line: Line) {
-		stepScanners.last!.scan(line)
+		currentStepScanner.scan(line)
 	}
 	
+	private var currentStepScanner: StepScanner {
+		return stepScanners.last!
+	}
+
 	private func scanExamples(_ line: Line) {
 		examplesScanners.last!.scan(line)
 	}

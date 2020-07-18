@@ -129,6 +129,13 @@ class FeatureScanner {
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, fileUri: fileUri)
+
+			} else if !line.isEmpty()  {
+				let expected = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				
+				parseErrors.append(
+					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+				
 			}
 		}
 	}

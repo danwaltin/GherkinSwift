@@ -65,14 +65,18 @@ class NotGherkinTests : TestErrorParseBase {
 			location: Location(column: 1, line: 3))
 	}
 
-	func test_invalidBetweenScenarioTagAndScenario() {
+	func test_invalidBetweenScenarioTagAndFirstScenario() {
 		when_parsingDocument(
 		"""
-		Feature: blubb
-		@scenarioTag
+		Feature: feature
+		@firstTag
 		
 		not gherkin
-		Scenario: blabb
+		Scenario: first
+
+		@secondTag
+		
+		Scenario: second
 		""")
 		
 		then_shouldReturnParseErrorWith(message:
@@ -80,19 +84,59 @@ class NotGherkinTests : TestErrorParseBase {
 			location: Location(column: 1, line: 4))
 	}
 
-	func test_invalidAfterScenarioStep() {
+	func test_invalidBetweenScenarioTagAndSecondScenario() {
 		when_parsingDocument(
 		"""
-		Feature: blubb
-		Scenario: blabb
+		Feature: feature
+		@firstTag
+		
+		Scenario: first
+
+		@secondTag
+		
+		not gherkin
+		Scenario: second
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(8:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 8))
+	}
+
+	func test_invalidAfterScenarioStepFirstScenario() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: first
 		   Given something
 
 		not gherkin
+
+		Scenario: second
+		   Given something else
 		""")
 		
 		then_shouldReturnParseErrorWith(message:
 			"(5:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
 			location: Location(column: 1, line: 5))
+	}
+
+	func test_invalidAfterScenarioStepSecondScenario() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: first
+		   Given something
+
+		Scenario: second
+		   Given something else
+		
+		not gherkin
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(8:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 8))
 	}
 
 	func test_invalidAfterBackgroundStep() {
@@ -114,23 +158,56 @@ class NotGherkinTests : TestErrorParseBase {
 			location: Location(column: 1, line: 5))
 	}
 
-	func test_invalidBetweenExamplesTagAndExamples() {
+	func test_invalidBetweenExamplesTagAndFirstExamples() {
 		when_parsingDocument(
 		"""
-		Feature: f
-		Scenario Outline: s
+		Feature: feature
+		Scenario Outline: things on the sky becomes visible
 		   Given the <thing> becomes visible
 		   
-		   @examplesTag
+		   @firstTag
+
 		   nope, not gherkin
-		   Examples:
+		   Examples: first
 		      | thing |
 		      | sun   |
+
+		   @secondTag
+
+		   Examples: second
+		      | thing |
+		      | moon  |
 		""")
 		
 		then_shouldReturnParseErrorWith(message:
 			"(6:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
 			location: Location(column: 1, line: 6))
+	}
+
+	func test_invalidBetweenExamplesTagAndSecondExamples() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: things on the sky becomes visible
+		   Given the <thing> becomes visible
+		   
+		   @firstTag
+
+		   Examples: first
+		      | thing |
+		      | sun   |
+
+		   @secondTag
+
+		   nope, not gherkin
+		   Examples: second
+		      | thing |
+		      | moon  |
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(13:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
+			location: Location(column: 1, line: 13))
 	}
 
 	func test_invalidInScenarioStepTable() {
