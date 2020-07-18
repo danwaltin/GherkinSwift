@@ -24,6 +24,8 @@
 import XCTest
 @testable import GherkinSwift
 
+#warning("TODO: add test for invalid after docString")
+#warning("TODO: add test for invalid when scanning examples table")
 class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(

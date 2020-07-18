@@ -23,6 +23,8 @@
 import XCTest
 @testable import GherkinSwift
 
+#warning("TODO: add test for @tag in docstring")
+
 class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
