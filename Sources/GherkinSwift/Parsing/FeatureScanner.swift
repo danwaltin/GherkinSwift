@@ -83,19 +83,14 @@ class FeatureScanner {
 		case .scanningFeature:
 			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
-				
+				state = .foundNextScenarioTags
+
 			} else if shouldStartBackground(line) {
 				startBackground(line)
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, fileUri: fileUri)
 				
-			} else if !line.isEmpty() && scenarioTagScanner.getTags().count > 0  {
-				let expected = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
-
-				parseErrors.append(
-					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
-
 			} else {
 				descriptionLines.append(line.text)
 			}
