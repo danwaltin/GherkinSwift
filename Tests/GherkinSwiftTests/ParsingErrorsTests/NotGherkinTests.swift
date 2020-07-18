@@ -180,8 +180,8 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(message:
-			"(6:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
-			location: Location(column: 1, line: 6))
+			"(7:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
+			location: Location(column: 1, line: 7))
 	}
 
 	func test_invalidBetweenExamplesTagAndSecondExamples() {

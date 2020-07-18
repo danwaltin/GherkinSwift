@@ -142,6 +142,12 @@ class ScenarioScanner {
 			} else if shouldStartNewExamples(line) {
 				startNewExamples(line)
 
+			} else if !line.isEmpty()  {
+				let expected = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				
+				parseErrors.append(
+					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+				
 			}
 		}
 	}
