@@ -23,8 +23,6 @@
 import XCTest
 @testable import GherkinSwift
 
-#warning("TODO: test for table in docstring")
-
 class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
@@ -216,6 +214,32 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 			"something",
 			docString("@thisLooksLikeATag but it's not", "==="))
 	}
+
+	// MARK: - Table in doc string
+	func test_docStringParameter_withTable() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario with docString
+		   Given something
+		      ===
+		      | this | looks   |
+		      | like | a table |
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("| this | looks   |\n| like | a table |", "==="))
+	}
+
 	// MARK: - Givens, whens, thens
 
 	private func docString(_ content: String, _ separator: String) -> DocString {
