@@ -68,6 +68,10 @@ class TableScanner {
 	}
 
 	private func addRow(_ line: Line) {
+		if !line.hasKeyword(.table) {
+			return
+		}
+		
 		let location = line.keywordLocation()
 		
 		rows.append(TableRow(cells: cells(line), location: location))

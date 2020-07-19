@@ -25,7 +25,6 @@ import XCTest
 @testable import GherkinSwift
 
 #warning("TODO: add test for invalid after docString")
-#warning("TODO: add test for invalid when scanning examples table")
 class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
@@ -39,7 +38,6 @@ class NotGherkinTests : TestErrorParseBase {
 		
 	}
 
-	
 	func test_secondLineNotGherkin_message() {
 		when_parsingDocument(
 		"""
@@ -247,6 +245,26 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(message:
 			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
 			location: Location(column: 1, line: 7))
+	}
+
+	func test_invalidInExamplesTable() {
+		when_parsingDocument(
+		"""
+		Feature: f
+
+		Scenario Outline: s
+		   Given the customer <customer>
+		
+		Examples:
+		      | customer     |
+		      | Ada Lovelace |
+		      we expected a table row here!
+		      | Alan Turing  |
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(9:1): expected: #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
+			location: Location(column: 1, line: 9))
 	}
 
 	func test_severalNonGherkinLines() {
