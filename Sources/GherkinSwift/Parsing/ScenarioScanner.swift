@@ -119,6 +119,11 @@ class ScenarioScanner {
 			} else if shouldStartNewExamples(line) {
 				startNewExamples(line)
 
+			} else if !currentStepScanner.lineBelongsToStep(line) {
+				let expected = "#TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+
 			} else {
 				scanStep(line)
 			}
@@ -144,7 +149,7 @@ class ScenarioScanner {
 
 			} else if !line.isEmpty()  {
 				let expected = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
-				
+
 				parseErrors.append(
 					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
 				

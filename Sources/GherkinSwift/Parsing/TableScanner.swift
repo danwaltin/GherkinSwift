@@ -35,6 +35,10 @@ class TableScanner {
 	private var hasStartedOnBody = false
 	private var bodyLocation = Location.zero()
 
+	func lineBelongsToTable(_ line: Line) -> Bool {
+		return line.isEmpty() || line.hasKeyword(.table)
+	}
+	
 	func scan(_ line: Line) {
 		hasTable = true
 		
