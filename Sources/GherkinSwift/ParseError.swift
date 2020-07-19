@@ -38,7 +38,7 @@ extension ParseError {
 
 	static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
 		return ParseError(
-			message: "(\(lineNumber):1): \(message)",
+			message: message,
 			source: ParseErrorSource(
 				location: Location(column: 1, line: lineNumber),
 				uri: fileUri))

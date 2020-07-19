@@ -46,7 +46,7 @@ class InvalidLanguageTests : TestErrorParseBase {
 			""")
 		
 		then_shouldReturnParseErrorWith(message:
-			"(1:1): Language not supported: three")
+			"Language not supported: three")
 	}
 	
 	func test_invalidLanguage_location() {
