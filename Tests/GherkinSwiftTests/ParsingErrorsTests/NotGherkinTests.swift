@@ -24,7 +24,6 @@
 import XCTest
 @testable import GherkinSwift
 
-#warning("TODO: add test for invalid after docString")
 class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
@@ -156,6 +155,80 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(message:
 			"(5:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'gherkin, not so much'",
 			location: Location(column: 1, line: 5))
+	}
+
+	func test_invalidAfterScenarioStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: first
+		   Given something
+		      | header |
+		      | row    |
+
+		not gherkin
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 7))
+	}
+
+	func test_invalidAfterScenarioStepDocString() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: first
+		   Given something
+		      ===
+		      lorem ipsum
+		      ===
+
+		not gherkin
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(8:1): expected: #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 8))
+	}
+
+	func test_invalidAfterBackgroundStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given something
+		      | header |
+		      | row    |
+
+		not gherkin
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 7))
+	}
+
+	func test_invalidAfterBackgroundStepDocString() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given something
+		      ===
+		      lorem ipsum
+		      ===
+
+		not gherkin
+		""")
+		
+		then_shouldReturnParseErrorWith(message:
+			"(8:1): expected: #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
+			location: Location(column: 1, line: 8))
 	}
 
 	func test_invalidBetweenExamplesTagAndFirstExamples() {
