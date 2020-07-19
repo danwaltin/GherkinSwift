@@ -73,7 +73,8 @@ extension ParseError : Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
-		try container.encode(message, forKey: .message)
+		let messageLocation = "(\(source.location.column):\(source.location.line)): "
+		try container.encode(messageLocation + message, forKey: .message)
 		try container.encode(source, forKey: .source)
 	}
 }
