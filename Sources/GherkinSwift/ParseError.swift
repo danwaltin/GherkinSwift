@@ -33,7 +33,7 @@ public struct ParseErrorSource {
 
 extension ParseError {
 	static func withExpectedTags( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
-		return ParseError.withMessage("expected: \(tags), got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
+		return ParseError.withMessage("expected: X, got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
 	}
 
 	static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {

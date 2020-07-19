@@ -24,6 +24,10 @@
 import XCTest
 @testable import GherkinSwift
 
+// #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty
+// #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty
+// #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty
+// #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty
 class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
@@ -32,8 +36,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "(1:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'lorem ipsum'",
-			location: Location(column: 1, line: 1))
+			message: "(1:1): expected: X, got 'lorem ipsum'")
 		
 	}
 
@@ -45,8 +48,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'rabarber'",
-			location: Location(column: 1, line: 2))
+			message: "(2:1): expected: X, got 'rabarber'")
 	}
 
 	func test_invalidBetweenFeatureTagAndFeature() {
@@ -59,9 +61,8 @@ class NotGherkinTests : TestErrorParseBase {
 		Feature: blubb
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(3:1): expected: #TagLine, #FeatureLine, #Comment, #Empty, got 'between'",
-			location: Location(column: 1, line: 3))
+		then_shouldReturnParseErrorWith(
+			message: "(3:1): expected: X, got 'between'")
 	}
 
 	func test_invalidBetweenScenarioTagAndFirstScenario() {
@@ -78,9 +79,8 @@ class NotGherkinTests : TestErrorParseBase {
 		Scenario: second
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(4:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 4))
+		then_shouldReturnParseErrorWith(
+			message: "(4:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidBetweenScenarioTagAndSecondScenario() {
@@ -97,9 +97,8 @@ class NotGherkinTests : TestErrorParseBase {
 		Scenario: second
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(8:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 8))
+		then_shouldReturnParseErrorWith(
+			message: "(8:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepFirstScenario() {
@@ -115,9 +114,8 @@ class NotGherkinTests : TestErrorParseBase {
 		   Given something else
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(5:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 5))
+		then_shouldReturnParseErrorWith(
+			message: "(5:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepSecondScenario() {
@@ -133,9 +131,8 @@ class NotGherkinTests : TestErrorParseBase {
 		not gherkin
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(8:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 8))
+		then_shouldReturnParseErrorWith(
+			message: "(8:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStep() {
@@ -152,9 +149,8 @@ class NotGherkinTests : TestErrorParseBase {
 
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(5:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'gherkin, not so much'",
-			location: Location(column: 1, line: 5))
+		then_shouldReturnParseErrorWith(
+			message: "(5:1): expected: X, got 'gherkin, not so much'")
 	}
 
 	func test_invalidAfterScenarioStepTable() {
@@ -169,9 +165,8 @@ class NotGherkinTests : TestErrorParseBase {
 		not gherkin
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(7:1): expected: #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 7))
+		then_shouldReturnParseErrorWith(
+			message: "(7:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepDocString() {
@@ -189,9 +184,8 @@ class NotGherkinTests : TestErrorParseBase {
 		not gherkin
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(8:1): expected: #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 8))
+		then_shouldReturnParseErrorWith(
+			message: "(8:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStepTable() {
@@ -206,9 +200,8 @@ class NotGherkinTests : TestErrorParseBase {
 		not gherkin
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 7))
+		then_shouldReturnParseErrorWith(
+			message: "(7:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStepDocString() {
@@ -226,9 +219,8 @@ class NotGherkinTests : TestErrorParseBase {
 		not gherkin
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(8:1): expected: #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'",
-			location: Location(column: 1, line: 8))
+		then_shouldReturnParseErrorWith(
+			message: "(8:1): expected: X, got 'not gherkin'")
 	}
 
 	func test_invalidBetweenExamplesTagAndFirstExamples() {
@@ -252,9 +244,8 @@ class NotGherkinTests : TestErrorParseBase {
 		      | moon  |
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(7:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
-			location: Location(column: 1, line: 7))
+		then_shouldReturnParseErrorWith(
+			message: "(7:1): expected: X, got 'nope, not gherkin'")
 	}
 
 	func test_invalidBetweenExamplesTagAndSecondExamples() {
@@ -278,9 +269,8 @@ class NotGherkinTests : TestErrorParseBase {
 		      | moon  |
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(13:1): expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'",
-			location: Location(column: 1, line: 13))
+		then_shouldReturnParseErrorWith(
+			message: "(13:1): expected: X, got 'nope, not gherkin'")
 	}
 
 	func test_invalidInScenarioStepTable() {
@@ -295,9 +285,8 @@ class NotGherkinTests : TestErrorParseBase {
 		      | Alan Turing  |
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(6:1): expected: #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
-			location: Location(column: 1, line: 6))
+		then_shouldReturnParseErrorWith(
+			message: "(6:1): X, got 'we expected a table row here!'")
 	}
 
 	func test_invalidInBackgroundStepTable() {
@@ -315,9 +304,8 @@ class NotGherkinTests : TestErrorParseBase {
 		Scenario: s
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(7:1): expected: #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
-			location: Location(column: 1, line: 7))
+		then_shouldReturnParseErrorWith(
+			message: "(7:1): X, got 'we expected a table row here!'")
 	}
 
 	func test_invalidInExamplesTable() {
@@ -335,9 +323,8 @@ class NotGherkinTests : TestErrorParseBase {
 		      | Alan Turing  |
 		""")
 		
-		then_shouldReturnParseErrorWith(message:
-			"(9:1): expected: #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'",
-			location: Location(column: 1, line: 9))
+		then_shouldReturnParseErrorWith(
+			message: "(9:1): expected: X, got 'we expected a table row here!'")
 	}
 
 	func test_severalNonGherkinLines() {
@@ -368,12 +355,12 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturn(numberOfParseErrors: 6)
 		
 		then_shouldReturnParseErrorWith(messages: [
-			"(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
-			"(4:1): expected: #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
-			"(8:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin three\'",
-			"(13:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin four\'",
-			"(16:1): expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin five\'",
-			"(20:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin six\'",
+			"(2:1): expected: X, got \'no gherkin one\'",
+			"(4:1): expected: X, got \'no gherkin two\'",
+			"(8:1): expected: X, got \'no gherkin three\'",
+			"(13:1): expected: X, got \'no gherkin four\'",
+			"(16:1): expected: X, got \'no gherkin five\'",
+			"(20:1): expected: X, got \'no gherkin six\'",
 		])
 		
 		then_shouldReturnParseErrorWith(locations: [
