@@ -31,6 +31,8 @@ class BackgroundScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 
+	private var parseErrors = [ParseError]()
+
 	private var name = ""
 	private var descriptionLines = [String]()
 	
@@ -41,7 +43,7 @@ class BackgroundScanner {
 		self.stepScannerFactory = stepScannerFactory
 	}
 	
-	func scan(_ line: Line) {
+	func scan(_ line: Line, fileUri: String) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.background) {
@@ -62,6 +64,9 @@ class BackgroundScanner {
 			if shouldStartNewStep(line) {
 				startNewStep(line)
 
+			} else if !currentStepScanner().lineBelongsToStep(line) {
+				let expected = "#TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
 			} else {
 				scanStep(line)
 			}
@@ -81,18 +86,23 @@ class BackgroundScanner {
 	}
 	
 	private func scanStep(_ line: Line) {
-		stepScanners.last!.scan(line)
+		currentStepScanner().scan(line)
 	}
 	
-	func getBackground() -> Background? {
+	private func currentStepScanner() -> StepScanner {
+		return stepScanners.last!
+	}
+	func getBackground() -> (background: Background?, errors: [ParseError]) {
 		if state == .started {
-			return nil
+			return (nil, parseErrors)
 		}
 
-		return Background(name: name,
-						  steps: steps(),
-						  description: descriptionLines.asDescription(),
-						  location: location)
+		let background = Background(name: name,
+									steps: steps(),
+									description: descriptionLines.asDescription(),
+									location: location)
+
+		return (background, parseErrors)
 	}
 
 	private func steps() -> [Step] {

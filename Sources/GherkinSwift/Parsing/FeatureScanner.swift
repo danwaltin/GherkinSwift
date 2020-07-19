@@ -86,7 +86,7 @@ class FeatureScanner {
 				state = .foundNextScenarioTags
 
 			} else if shouldStartBackground(line) {
-				startBackground(line)
+				startBackground(line, fileUri: fileUri)
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line, fileUri: fileUri)
@@ -103,7 +103,7 @@ class FeatureScanner {
 				startNewScenario(line, fileUri: fileUri)
 				
 			} else {
-				backgroundScanner.scan(line)
+				backgroundScanner.scan(line, fileUri: fileUri)
 			}
 			
 		case .scanningScenario:
@@ -139,8 +139,8 @@ class FeatureScanner {
 		return line.hasKeyword(.background)
 	}
 	
-	private func startBackground(_ line: Line) {
-		backgroundScanner.scan(line)
+	private func startBackground(_ line: Line, fileUri: String) {
+		backgroundScanner.scan(line, fileUri: fileUri)
 		state = .scanningBackground
 	}
 	
@@ -171,11 +171,14 @@ class FeatureScanner {
 		let scenarios = scenariosWithScenarioParseErrors.map { $0.scenario }
 		let scenarioParseErrors = scenariosWithScenarioParseErrors.flatMap { $0.errors }
 		
+		let backgroundWithBackgroundParseErrors = backgroundScanner.getBackground()
+
 		parseErrors.append(contentsOf: scenarioParseErrors)
+		parseErrors.append(contentsOf: backgroundWithBackgroundParseErrors.errors)
 		
 		let feature = Feature(name: name,
 							  description: descriptionLines.asDescription(),
-							  background: backgroundScanner.getBackground(),
+							  background: backgroundWithBackgroundParseErrors.background,
 							  tags: featureTagScanner.getTags(),
 							  location: location,
 							  scenarios: scenarios,
