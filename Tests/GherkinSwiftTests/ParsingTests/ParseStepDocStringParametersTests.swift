@@ -23,8 +23,6 @@
 import XCTest
 @testable import GherkinSwift
 
-#warning("TODO: add test for @tag in docstring")
-
 class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
@@ -193,6 +191,29 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 			docString("one line", "==="))
 	}
 
+	// MARK: - Tag character in doc string
+	func test_docStringParameter_withTagCharacter() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario with docString
+		   Given something
+		      ===
+		      @thisLooksLikeATag but it's not
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("@thisLooksLikeATag but it's not", "==="))
+	}
 	// MARK: - Givens, whens, thens
 
 	private func docString(_ content: String, _ separator: String) -> DocString {
