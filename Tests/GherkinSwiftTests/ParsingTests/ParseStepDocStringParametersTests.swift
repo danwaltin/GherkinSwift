@@ -215,6 +215,29 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 			docString("@thisLooksLikeATag but it's not", "==="))
 	}
 
+	func test_docStringParameter_withTagCharacter_inBackground() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given something
+		      ===
+		      @thisLooksLikeATag but it's not
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("@thisLooksLikeATag but it's not", "==="))
+	}
+
 	// MARK: - Table in doc string
 	func test_docStringParameter_withTable() {
 		given_docStringSeparator("===", alternative: "---")
