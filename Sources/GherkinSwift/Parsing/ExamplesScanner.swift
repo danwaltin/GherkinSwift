@@ -41,9 +41,9 @@ class ExamplesScanner {
 		self.tableScanner = tableScanner
 	}
 	
-	func scan(_ line: Line) {
+	func scan(_ line: Line, fileUri: String) {
 		handleName(line)
-		handleTable(line)
+		handleTable(line, fileUri: fileUri)
 		handleDescription(line)
 	}
 	
@@ -67,7 +67,7 @@ class ExamplesScanner {
 		}
 	}
 	
-	private func handleTable(_ line: Line) {
+	private func handleTable(_ line: Line, fileUri: String) {
 		if line.isEmpty() {
 			return
 		}
@@ -75,7 +75,11 @@ class ExamplesScanner {
 		isScanningTable = isScanningTable || line.hasKeyword(.table)
 		
 		if isScanningTable {
-			tableScanner.scan(line)
+			if !tableScanner.lineBelongsToTable(line) {
+				parseErrors.append(ParseError.withExpectedTags("", atLine: line, inFile: fileUri))
+			} else {
+				tableScanner.scan(line)
+			}
 		}
 	}
 
