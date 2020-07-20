@@ -24,6 +24,8 @@
 class ExamplesScanner {
 	var name = ""
 	
+	private var parseErrors = [ParseError]()
+
 	var isScanningDescription = false
 	var descriptionLines = [String]()
 
@@ -77,11 +79,13 @@ class ExamplesScanner {
 		}
 	}
 
-	func getExamples() -> ScenarioOutlineExamples {
-		return ScenarioOutlineExamples(name: name,
-									   description: descriptionLines.asDescription(),
-									   tags: tags,
-									   location: location,
-									   table: tableScanner.getTable())
+	func getExamples() -> (examples: ScenarioOutlineExamples, errors: [ParseError]) {
+		let examples = ScenarioOutlineExamples(name: name,
+											   description: descriptionLines.asDescription(),
+											   tags: tags,
+											   location: location,
+											   table: tableScanner.getTable())
+		
+		return (examples, parseErrors)
 	}
 }

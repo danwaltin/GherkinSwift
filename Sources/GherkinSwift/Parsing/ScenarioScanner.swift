@@ -196,12 +196,19 @@ class ScenarioScanner {
 	}
 	
 	func getScenario() -> (scenario: Scenario, errors: [ParseError])  {
+		
+		let examplesWithScenarioParseErrors = examplesScanners.map { $0.getExamples() }
+		let examples = examplesWithScenarioParseErrors.map { $0.examples }
+		let examplesParseErrors = examplesWithScenarioParseErrors.flatMap { $0.errors }
+
+		parseErrors.append(contentsOf: examplesParseErrors)
+		
 		let scenario = Scenario(name: name,
 								description: descriptionLines.asDescription(),
 								tags: tags,
 								location: location,
 								steps: steps(),
-								examples: examples(),
+								examples: examples,
 								isScenarioOutline: isScenarioOutline,
 								localizedKeyword: keyword.localized)
 
@@ -210,9 +217,5 @@ class ScenarioScanner {
 
 	private func steps() -> [Step] {
 		return stepScanners.map{$0.getStep()}
-	}
-
-	private func examples() -> [ScenarioOutlineExamples] {
-		return examplesScanners.map{$0.getExamples()}
 	}
 }
