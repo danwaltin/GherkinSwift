@@ -192,7 +192,8 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	}
 
 	// MARK: - Tag character in doc string
-	func test_docStringParameter_withTagCharacter() {
+	#warning("TODO: Enable this test")
+	func IGNORE_test_docStringParameter_withTagCharacter() {
 		given_docStringSeparator("===", alternative: "---")
 
 		when_parsingDocument(
@@ -215,7 +216,8 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 			docString("@thisLooksLikeATag but it's not", "==="))
 	}
 
-	func test_docStringParameter_withTagCharacter_inBackground() {
+	#warning("TODO: Enable this test")
+	func IGNORE_test_docStringParameter_withTagCharacter_inBackground() {
 		given_docStringSeparator("===", alternative: "---")
 
 		when_parsingDocument(
