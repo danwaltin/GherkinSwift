@@ -58,7 +58,7 @@ public class GherkinFeatureParser {
 		
 		let featureResult = featureScanner.getFeature(languageKey: language.key)
 		if featureResult.errors.count > 0 {
-			return .error(featureResult.errors)
+			return .error(featureResult.errors.sorted(by: {a,b in a.source.location.line < b.source.location.line}))
 		}
 		
 		let document = GherkinDocument(comments: commentCollector.getComments(),
