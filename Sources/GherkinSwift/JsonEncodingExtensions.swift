@@ -24,20 +24,26 @@
 import Foundation
 
 extension PickleResult : Encodable {
-	enum CodingKeys: String, CodingKey {
+	enum DocumentCodingKeys: String, CodingKey {
 		case gherkinDocument
+	}
+
+	enum ErrorCodingKeys: String, CodingKey {
 		case parseError
 	}
 
+
 	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		
 		switch self {
 		case .success(let document):
+			var container = encoder.container(keyedBy: DocumentCodingKeys.self)
 			try container.encode(document, forKey: .gherkinDocument)
+
 		case .error(let errors):
+			var e = encoder.unkeyedContainer()
 			for error in errors {
-				try container.encode(error, forKey: .parseError)
+				var nested = e.nestedContainer(keyedBy: ErrorCodingKeys.self)
+				try nested.encode(error, forKey: .parseError)
 			}
 		}
 	}
