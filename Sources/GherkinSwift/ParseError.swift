@@ -32,6 +32,10 @@ public struct ParseErrorSource {
 }
 
 extension ParseError {
+	static func invalidGherkin( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
+		return ParseError.withMessage("expected: \(tags), got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
+	}
+	
 	static func withExpectedTags( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
 		return ParseError.withMessage("expected: X, got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
 	}

@@ -77,7 +77,7 @@ class FeatureScanner {
 					: "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty"
 				
 				parseErrors.append(
-					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(expected, atLine: line, inFile: fileUri))
 			}
 			
 		case .scanningFeature:

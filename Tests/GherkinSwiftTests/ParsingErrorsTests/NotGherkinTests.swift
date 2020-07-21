@@ -36,7 +36,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'lorem ipsum'")
+			message: "expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'lorem ipsum'")
 		
 	}
 
@@ -48,7 +48,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'rabarber'")
+			message: "expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'rabarber'")
 	}
 
 	func test_invalidBetweenFeatureTagAndFeature() {
@@ -355,8 +355,8 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturn(numberOfParseErrors: 6)
 		
 		then_shouldReturnParseErrorWith(messages: [
-			"expected: X, got \'no gherkin one\'",
-			"expected: X, got \'no gherkin two\'",
+			"expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
+			"expected: #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
 			"expected: X, got \'no gherkin three\'",
 			"expected: X, got \'no gherkin four\'",
 			"expected: X, got \'no gherkin five\'",
