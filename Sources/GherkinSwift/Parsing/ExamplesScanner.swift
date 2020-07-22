@@ -41,7 +41,7 @@ class ExamplesScanner {
 		self.tableScanner = tableScanner
 	}
 	
-	func scan(_ line: Line, fileUri: String) {
+	func scan(_ line: Line) {
 		handleName(line)
 		handleTable(line)
 		handleDescription(line)

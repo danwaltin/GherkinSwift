@@ -53,7 +53,7 @@ public class GherkinFeatureParser {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
 			} else {
-				featureScanner.scan(line, allLines: theLines, fileUri: fileUri)
+				featureScanner.scan(line, allLines: theLines)
 			}
 		}
 		

@@ -56,7 +56,7 @@ class FeatureScanner {
 		self.scenarioScannerFactory = scenarioScannerFactory
 	}
 	
-	func scan(_ line: Line, allLines: [Line], fileUri: String) {
+	func scan(_ line: Line, allLines: [Line]) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.tag) {
@@ -86,10 +86,10 @@ class FeatureScanner {
 				state = .foundNextScenarioTags
 
 			} else if shouldStartBackground(line) {
-				startBackground(line, fileUri: fileUri)
+				startBackground(line)
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line, fileUri: fileUri)
+				startNewScenario(line)
 				
 			} else {
 				descriptionLines.append(line.text)
@@ -100,10 +100,10 @@ class FeatureScanner {
 				scenarioTagScanner.scan(line)
 				state = .foundNextScenarioTags
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line, fileUri: fileUri)
+				startNewScenario(line)
 				
 			} else {
-				backgroundScanner.scan(line, fileUri: fileUri)
+				backgroundScanner.scan(line)
 			}
 			
 		case .scanningScenario:
@@ -112,10 +112,10 @@ class FeatureScanner {
 				state = .foundNextScenarioTags
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line, fileUri: fileUri)
+				startNewScenario(line)
 				
 			} else {
-				scanScenario(line, fileUri: fileUri)
+				scanScenario(line)
 			}
 			
 		case .foundNextScenarioTags:
@@ -123,7 +123,7 @@ class FeatureScanner {
 				scenarioTagScanner.scan(line)
 				
 			} else if shouldStartNewScenario(line) {
-				startNewScenario(line, fileUri: fileUri)
+				startNewScenario(line)
 
 			} else if !line.isEmpty()  {
 				let tags = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
@@ -138,8 +138,8 @@ class FeatureScanner {
 		return line.hasKeyword(.background)
 	}
 	
-	private func startBackground(_ line: Line, fileUri: String) {
-		backgroundScanner.scan(line, fileUri: fileUri)
+	private func startBackground(_ line: Line) {
+		backgroundScanner.scan(line)
 		state = .scanningBackground
 	}
 	
@@ -147,17 +147,17 @@ class FeatureScanner {
 		return line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline)
 	}
 	
-	private func startNewScenario(_ line: Line, fileUri: String) {
+	private func startNewScenario(_ line: Line) {
 		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
 		scenarioTagScanner.clear()
 		
-		scanScenario(line, fileUri: fileUri)
+		scanScenario(line)
 		
 		state = .scanningScenario
 	}
 	
-	private func scanScenario(_ line: Line, fileUri: String) {
-		scenarioScanners.last!.scan(line, fileUri: fileUri)
+	private func scanScenario(_ line: Line) {
+		scenarioScanners.last!.scan(line)
 	}
 	
 	func getFeature(languageKey: String) -> (feature: Feature?, errors: [ParseError]) {

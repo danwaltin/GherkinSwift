@@ -43,7 +43,7 @@ class BackgroundScanner {
 		self.stepScannerFactory = stepScannerFactory
 	}
 	
-	func scan(_ line: Line, fileUri: String) {
+	func scan(_ line: Line) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.background) {
@@ -54,7 +54,7 @@ class BackgroundScanner {
 
 		case .scanningBackground:
 			if shouldStartNewStep(line) {
-				startNewStep(line, fileUri: fileUri)
+				startNewStep(line)
 				
 			} else {
 				descriptionLines.append(line.text)
@@ -62,7 +62,7 @@ class BackgroundScanner {
 
 		case .scanningSteps:
 			if shouldStartNewStep(line) {
-				startNewStep(line, fileUri: fileUri)
+				startNewStep(line)
 
 			} else if !currentStepScanner().lineBelongsToStep(line) {
 				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
@@ -78,7 +78,7 @@ class BackgroundScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, fileUri: String) {
+	private func startNewStep(_ line: Line) {
 		stepScanners.append(stepScannerFactory.stepScanner())
 		
 		scanStep(line)

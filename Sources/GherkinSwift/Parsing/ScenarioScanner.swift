@@ -80,7 +80,7 @@ class ScenarioScanner {
 		return nil
 	}
 	
-	func scan(_ line: Line, fileUri: String) {
+	func scan(_ line: Line) {
 		switch state {
 		case .started:
 			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) {
@@ -99,10 +99,10 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewStep(line) {
-				startNewStep(line, fileUri: fileUri)
+				startNewStep(line)
 				
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, fileUri: fileUri)
+				startNewExamples(line)
 
 			} else {
 				descriptionLines.append(line.text)
@@ -114,10 +114,10 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewStep(line) {
-				startNewStep(line, fileUri: fileUri)
+				startNewStep(line)
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, fileUri: fileUri)
+				startNewExamples(line)
 
 			} else if !currentStepScanner.lineBelongsToStep(line) {
 				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
@@ -134,10 +134,10 @@ class ScenarioScanner {
 				state = .foundNextExamplesTags
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, fileUri: fileUri)
+				startNewExamples(line)
 
 			} else {
-				scanExamples(line, fileUri: fileUri)
+				scanExamples(line)
 			}
 
 		case .foundNextExamplesTags:
@@ -145,7 +145,7 @@ class ScenarioScanner {
 				examplesTagScanner.scan(line)
 
 			} else if shouldStartNewExamples(line) {
-				startNewExamples(line, fileUri: fileUri)
+				startNewExamples(line)
 
 			} else if !line.isEmpty()  {
 				let tags = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
@@ -160,7 +160,7 @@ class ScenarioScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line, fileUri: String) {
+	private func startNewStep(_ line: Line) {
 		stepScanners.append(stepScannerFactory.stepScanner())
 		
 		scanStep(line)
@@ -176,20 +176,20 @@ class ScenarioScanner {
 		return stepScanners.last!
 	}
 
-	private func scanExamples(_ line: Line, fileUri: String) {
-		examplesScanners.last!.scan(line, fileUri: fileUri)
+	private func scanExamples(_ line: Line) {
+		examplesScanners.last!.scan(line)
 	}
 	
 	private func shouldStartNewExamples(_ line: Line) -> Bool {
 		return line.hasKeyword(.examples)
 	}
 	
-	private func startNewExamples(_ line: Line, fileUri: String) {
+	private func startNewExamples(_ line: Line) {
 		let scanner = examplesScannerFactory.examplesScanner(tags: examplesTagScanner.getTags())
 		examplesScanners.append(scanner)
 		examplesTagScanner.clear()
 
-		scanExamples(line, fileUri: fileUri)
+		scanExamples(line)
 
 		state = .scanningExamples
 	}
