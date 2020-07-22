@@ -126,10 +126,9 @@ class FeatureScanner {
 				startNewScenario(line, fileUri: fileUri)
 
 			} else if !line.isEmpty()  {
-				let expected = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
-				
+				let tags = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 				
 			}
 		}

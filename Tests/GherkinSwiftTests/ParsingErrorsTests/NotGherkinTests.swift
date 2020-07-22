@@ -80,7 +80,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidBetweenScenarioTagAndSecondScenario() {
@@ -98,7 +98,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepFirstScenario() {
@@ -358,9 +358,9 @@ class NotGherkinTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(messages: [
 			"expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
 			"expected: #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
-			"expected: X, got \'no gherkin three\'",
+			"expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin three\'",
 			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin four\'",
-			"expected: X, got \'no gherkin five\'",
+			"expected: #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin five\'",
 			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin six\'",
 		])
 		
