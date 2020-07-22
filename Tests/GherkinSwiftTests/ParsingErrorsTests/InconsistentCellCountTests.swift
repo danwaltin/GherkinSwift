@@ -118,7 +118,7 @@ class InconsistentCellCountTests : TestErrorParseBase {
 			message: "inconsistent cell count within the table")
 	}
 	
-	func test_twoSteps_withInconsistentCellCounts() {
+	func test_twoSteps_withInconsistentCellCounts_locations() {
 		when_parsingDocument(
 		"""
 		Feature: feature
@@ -140,7 +140,7 @@ class InconsistentCellCountTests : TestErrorParseBase {
 		])
 	}
 
-	func test_twoInconsistentCellCounts_inSameTable() {
+	func test_twoInconsistentCellCounts_inSameTable_locations() {
 		when_parsingDocument(
 		"""
 		Feature: feature
@@ -155,7 +155,7 @@ class InconsistentCellCountTests : TestErrorParseBase {
 
 		then_shouldReturn(numberOfParseErrors: 2)
 		then_shouldReturnParseErrorWith(locations: [
-			Location(column: 7, line: 6),
+			Location(column: 10, line: 6),
 			Location(column: 4, line: 8)
 		])
 	}

@@ -80,7 +80,7 @@ class ExamplesScanner {
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 			} else {
-				tableScanner.scan(line)
+				tableScanner.scan(line, fileUri: fileUri)
 			}
 		}
 	}

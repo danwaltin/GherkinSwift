@@ -54,7 +54,7 @@ class BackgroundScanner {
 
 		case .scanningBackground:
 			if shouldStartNewStep(line) {
-				startNewStep(line)
+				startNewStep(line, fileUri: fileUri)
 				
 			} else {
 				descriptionLines.append(line.text)
@@ -62,14 +62,14 @@ class BackgroundScanner {
 
 		case .scanningSteps:
 			if shouldStartNewStep(line) {
-				startNewStep(line)
+				startNewStep(line, fileUri: fileUri)
 
 			} else if !currentStepScanner().lineBelongsToStep(line) {
 				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 			} else {
-				scanStep(line)
+				scanStep(line, fileUri: fileUri)
 			}
 		}
 	}
@@ -78,16 +78,16 @@ class BackgroundScanner {
 		return line.isStep()
 	}
 	
-	private func startNewStep(_ line: Line) {
+	private func startNewStep(_ line: Line, fileUri: String) {
 		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		scanStep(line)
+		scanStep(line, fileUri: fileUri)
 		
 		state = .scanningSteps
 	}
 	
-	private func scanStep(_ line: Line) {
-		currentStepScanner().scan(line)
+	private func scanStep(_ line: Line, fileUri: String) {
+		currentStepScanner().scan(line, fileUri: fileUri)
 	}
 	
 	private func currentStepScanner() -> StepScanner {

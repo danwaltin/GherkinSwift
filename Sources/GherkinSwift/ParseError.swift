@@ -33,22 +33,36 @@ public struct ParseErrorSource {
 
 extension ParseError {
 	static func invalidGherkin( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
-		return ParseError.withMessage("expected: \(tags), got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
+		return ParseError.withMessage(
+			"expected: \(tags), got '\(line.text.trim())'",
+			atLineNumber: line.number,
+			inFile: fileUri)
 	}
 	
 	static func invalidLanguage(_ language: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
-		return ParseError.withMessage("Language not supported: \(language)", atLineNumber: lineNumber, inFile: fileUri)
+		return ParseError.withMessage(
+			"Language not supported: \(language)",
+			atLineNumber: lineNumber,
+			inFile: fileUri)
 	}
 
 	static func inconsistentCellCount(atLine line: Line, inFile fileUri: String) -> ParseError {
-		return ParseError.withMessage("inconsistent cell count within the table", atLineNumber: line.number, inFile: fileUri)
+		return ParseError.withMessage(
+			"inconsistent cell count within the table",
+			atLineNumber: line.number,
+			column: line.text.indentation() + 1,
+			inFile: fileUri)
 	}
 
-	private static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
+	private static func withMessage( _ message: String,
+									 atLineNumber lineNumber: Int,
+									 column: Int = 1,
+									 inFile fileUri: String) -> ParseError {
 		return ParseError(
 			message: message,
 			source: ParseErrorSource(
-				location: Location(column: 1, line: lineNumber),
+				location: Location(column: column, line: lineNumber),
 				uri: fileUri))
 	}
+	
 }

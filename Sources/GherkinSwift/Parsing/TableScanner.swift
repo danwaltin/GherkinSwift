@@ -41,13 +41,13 @@ class TableScanner {
 		return line.isEmpty() || line.hasKeyword(.table)
 	}
 	
-	func scan(_ line: Line) {
+	func scan(_ line: Line, fileUri: String) {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line)
+			addRow(line, fileUri: fileUri)
 		} else {
-			createColumns(line)
+			createColumns(line, fileUri: fileUri)
 		}
 	}
 
@@ -64,28 +64,28 @@ class TableScanner {
 		return (table, parseErrors)
 	}
 
-	private func createColumns(_ line: Line) {
+	private func createColumns(_ line: Line, fileUri: String) {
 		columns = lineItems(line.text)
 		
 		let location = line.keywordLocation()
 		headerLocation = location
 
-		headerRow = TableRow(cells: cells(line), location: location)
+		headerRow = TableRow(cells: cells(line, fileUri: fileUri), location: location)
 		
 		hasScannedColumns = true
 	}
 
-	private func addRow(_ line: Line) {
+	private func addRow(_ line: Line, fileUri: String) {
 		if !line.hasKeyword(.table) {
 			return
 		}
 		
 		let location = line.keywordLocation()
 		
-		rows.append(TableRow(cells: cells(line), location: location))
+		rows.append(TableRow(cells: cells(line, fileUri: fileUri), location: location))
 	}
 	
-	private func cells(_ line: Line) -> [TableCell] {
+	private func cells(_ line: Line, fileUri: String) -> [TableCell] {
 		
 		let i = line.text.firstIndex(of: tableSeparator)!
 		let d = line.text.distance(from: line.text.startIndex, to: i)
@@ -96,7 +96,7 @@ class TableScanner {
 
 		if cellValues.count != columns.count {
 			parseErrors.append(
-				ParseError.inconsistentCellCount(atLine: line, inFile: ""))
+				ParseError.inconsistentCellCount(atLine: line, inFile: fileUri))
 		}
 
 		var cells = [TableCell]()

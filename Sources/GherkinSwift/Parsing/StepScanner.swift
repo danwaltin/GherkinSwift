@@ -78,7 +78,7 @@ class StepScanner {
 		}
 	}
 	
-	func scan(_ line: Line) {
+	func scan(_ line: Line, fileUri: String) {
 		switch state {
 		case .started:
 			if !line.isEmpty() {
@@ -88,7 +88,7 @@ class StepScanner {
 			
 		case .scanningStep:
 			if shouldStartScanTable(line) {
-				handleTable(line)
+				handleTable(line, fileUri: fileUri)
 				state = .scanningTableParameter
 			}
 			if shouldStartScanDocString(line) {
@@ -97,7 +97,7 @@ class StepScanner {
 			}
 
 		case .scanningTableParameter:
-			handleTable(line)
+			handleTable(line, fileUri: fileUri)
 
 		case .scanningDocString:
 			handleDocString(line)
@@ -142,9 +142,9 @@ class StepScanner {
 		return docStringScanner.isDocString(line)
 	}
 
-	private func handleTable(_ line: Line) {
+	private func handleTable(_ line: Line, fileUri: String) {
 		if line.hasKeyword(.table) {
-			tableScanner.scan(line)
+			tableScanner.scan(line, fileUri: fileUri)
 		}
 	}
 
