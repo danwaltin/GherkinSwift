@@ -36,11 +36,11 @@ extension ParseError {
 		return ParseError.withMessage("expected: \(tags), got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
 	}
 	
-	static func withExpectedTags( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
-		return ParseError.withMessage("expected: X, got '\(line.text.trim())'", atLineNumber: line.number, inFile: fileUri)
+	static func invalidLanguage(_ language: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
+		return ParseError.withMessage("Language not supported: \(language)", atLineNumber: lineNumber, inFile: fileUri)
 	}
-
-	static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
+	
+	private static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
 		return ParseError(
 			message: message,
 			source: ParseErrorSource(

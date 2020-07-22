@@ -42,7 +42,8 @@ public class GherkinFeatureParser {
 		
 		let languageKey = getLanguageKey(from: firstLine)
 		if !languages.languageExist(key: languageKey) {
-			return .error([ParseError.withMessage("Language not supported: \(languageKey)", atLineNumber: 1, inFile: fileUri)])
+			let error = ParseError.invalidLanguage(languageKey, atLineNumber: 1, inFile: fileUri)
+			return .error([error])
 		}
 		
 		let language = languages.language(withKey: languageKey)
