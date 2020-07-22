@@ -148,7 +148,9 @@ class FeatureScanner {
 	}
 	
 	private func startNewScenario(_ line: Line) {
-		let tags = scenarioTagScanner.getTags().tags
+		let tagsWithErrors = scenarioTagScanner.getTags()
+		let tags = tagsWithErrors.tags
+		parseErrors.append(contentsOf: tagsWithErrors.errors)
 		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: tags))
 		scenarioTagScanner.clear()
 		
