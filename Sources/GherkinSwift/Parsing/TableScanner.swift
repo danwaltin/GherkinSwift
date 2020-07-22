@@ -54,10 +54,12 @@ class TableScanner {
 			return nil
 		}
 		
-		return Table(header: headerRow,
-					 columns: columns,
-					 rows: rows,
-					 headerLocation: headerLocation)
+		let table =  Table(header: headerRow,
+						   columns: columns,
+						   rows: rows,
+						   headerLocation: headerLocation)
+
+		return table
 	}
 
 	private func createColumns(_ line: Line) {
