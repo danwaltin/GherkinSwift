@@ -79,6 +79,7 @@ class PickleTestDataFilesTests: XCTestCase {
 	let badExtension = ".feature.errors.ndjson"
 	
 	let badTests: [String] = [
+		"inconsistent_cell_count",
 		"invalid_language",
 		"multiple_parser_errors",
 		"not_gherkin",
@@ -88,7 +89,6 @@ class PickleTestDataFilesTests: XCTestCase {
 	/*
 	These test cases are not implemented yet
 	
-	"inconsistent_cell_count",
 	"unexpected_eof",
 	"whitespace_in_tags",
 	*/

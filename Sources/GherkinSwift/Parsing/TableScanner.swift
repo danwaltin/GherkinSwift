@@ -35,6 +35,8 @@ class TableScanner {
 	private var hasStartedOnBody = false
 	private var bodyLocation = Location.zero()
 
+	private var parseErrors = [ParseError]()
+	
 	func lineBelongsToTable(_ line: Line) -> Bool {
 		return line.isEmpty() || line.hasKeyword(.table)
 	}
@@ -51,7 +53,7 @@ class TableScanner {
 
 	func getTable() -> (table: Table?, errors: [ParseError]) {
 		if !hasTable {
-			return (nil, [])
+			return (nil, parseErrors)
 		}
 		
 		let table =  Table(header: headerRow,
@@ -59,7 +61,7 @@ class TableScanner {
 						   rows: rows,
 						   headerLocation: headerLocation)
 
-		return (table, [])
+		return (table, parseErrors)
 	}
 
 	private func createColumns(_ line: Line) {
