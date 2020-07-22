@@ -82,11 +82,6 @@ class TableScanner {
 		
 		let location = line.keywordLocation()
 		
-		let rowCells = cells(line)
-		if rowCells.count != columns.count {
-			parseErrors.append(
-				ParseError.inconsistentCellCount(atLine: line, inFile: ""))
-		}
 		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	
@@ -98,6 +93,11 @@ class TableScanner {
 		var cellValues = line.text.components(separatedBy: String(tableSeparator))
 		cellValues.removeLast()
 		cellValues.remove(at: 0)
+
+		if cellValues.count != columns.count {
+			parseErrors.append(
+				ParseError.inconsistentCellCount(atLine: line, inFile: ""))
+		}
 
 		var cells = [TableCell]()
 		
