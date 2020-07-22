@@ -201,7 +201,7 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 		         | anything  |
 		""")
 
-		then_shouldReturn(numberOfParseErrors: 1)
+		then_shouldReturn(numberOfParseErrors: 3)
 		then_shouldReturnParseErrorWith(
 			locations: [
 				Location(column: 1, line: 1),
