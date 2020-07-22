@@ -43,7 +43,7 @@ class ExamplesScanner {
 	
 	func scan(_ line: Line, fileUri: String) {
 		handleName(line)
-		handleTable(line, fileUri: fileUri)
+		handleTable(line)
 		handleDescription(line)
 	}
 	
@@ -67,7 +67,7 @@ class ExamplesScanner {
 		}
 	}
 	
-	private func handleTable(_ line: Line, fileUri: String) {
+	private func handleTable(_ line: Line) {
 		if line.isEmpty() {
 			return
 		}
@@ -80,7 +80,7 @@ class ExamplesScanner {
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line))
 			} else {
-				tableScanner.scan(line, fileUri: fileUri)
+				tableScanner.scan(line)
 			}
 		}
 	}

@@ -41,13 +41,13 @@ class TableScanner {
 		return line.isEmpty() || line.hasKeyword(.table)
 	}
 	
-	func scan(_ line: Line, fileUri: String) {
+	func scan(_ line: Line) {
 		hasTable = true
 		
 		if hasScannedColumns {
-			addRow(line, fileUri: fileUri)
+			addRow(line)
 		} else {
-			createColumns(line, fileUri: fileUri)
+			createColumns(line)
 		}
 	}
 
@@ -64,28 +64,28 @@ class TableScanner {
 		return (table, parseErrors)
 	}
 
-	private func createColumns(_ line: Line, fileUri: String) {
+	private func createColumns(_ line: Line) {
 		columns = lineItems(line.text)
 		
 		let location = line.keywordLocation()
 		headerLocation = location
 
-		headerRow = TableRow(cells: cells(line, fileUri: fileUri), location: location)
+		headerRow = TableRow(cells: cells(line), location: location)
 		
 		hasScannedColumns = true
 	}
 
-	private func addRow(_ line: Line, fileUri: String) {
+	private func addRow(_ line: Line) {
 		if !line.hasKeyword(.table) {
 			return
 		}
 		
 		let location = line.keywordLocation()
 		
-		rows.append(TableRow(cells: cells(line, fileUri: fileUri), location: location))
+		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	
-	private func cells(_ line: Line, fileUri: String) -> [TableCell] {
+	private func cells(_ line: Line) -> [TableCell] {
 		
 		let i = line.text.firstIndex(of: tableSeparator)!
 		let d = line.text.distance(from: line.text.startIndex, to: i)

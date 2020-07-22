@@ -125,7 +125,7 @@ class ScenarioScanner {
 					ParseError.invalidGherkin(tags, atLine: line))
 
 			} else {
-				scanStep(line, fileUri: fileUri)
+				scanStep(line)
 			}
 			
 		case .scanningExamples:
@@ -163,13 +163,13 @@ class ScenarioScanner {
 	private func startNewStep(_ line: Line, fileUri: String) {
 		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		scanStep(line, fileUri: fileUri)
+		scanStep(line)
 		
 		state = .scanningSteps
 	}
 	
-	private func scanStep(_ line: Line, fileUri: String) {
-		currentStepScanner.scan(line, fileUri: fileUri)
+	private func scanStep(_ line: Line) {
+		currentStepScanner.scan(line)
 	}
 	
 	private var currentStepScanner: StepScanner {

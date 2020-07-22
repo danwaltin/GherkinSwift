@@ -69,7 +69,7 @@ class BackgroundScanner {
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line))
 			} else {
-				scanStep(line, fileUri: fileUri)
+				scanStep(line)
 			}
 		}
 	}
@@ -81,13 +81,13 @@ class BackgroundScanner {
 	private func startNewStep(_ line: Line, fileUri: String) {
 		stepScanners.append(stepScannerFactory.stepScanner())
 		
-		scanStep(line, fileUri: fileUri)
+		scanStep(line)
 		
 		state = .scanningSteps
 	}
 	
-	private func scanStep(_ line: Line, fileUri: String) {
-		currentStepScanner().scan(line, fileUri: fileUri)
+	private func scanStep(_ line: Line) {
+		currentStepScanner().scan(line)
 	}
 	
 	private func currentStepScanner() -> StepScanner {
