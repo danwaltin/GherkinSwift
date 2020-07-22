@@ -102,6 +102,21 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 			message: "A tag may not contain whitespace")
 	}
 
+	func test_parseTwoScenariosWithTagsWithWhitespace() {
+		when_parsingDocument(
+		"""
+		Feature: name
+		@first has whitespace
+		Scenario: one
+		@second has whitespace
+		Scenario: two
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 2)
+		then_shouldReturnParseErrorWith(
+			messages: ["A tag may not contain whitespace", "A tag may not contain whitespace"])
+	}
+
 	// MARK: - Scenario Outline examples
 	func test_parseScenarioOutlineExamplesWithOneTagWithWhitespace() {
 		when_parsingDocument(

@@ -185,7 +185,9 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line) {
-		let tags = examplesTagScanner.getTags().tags
+		let tagsWithErrors = examplesTagScanner.getTags()
+		let tags = tagsWithErrors.tags
+		parseErrors.append(contentsOf: tagsWithErrors.errors)
 		let scanner = examplesScannerFactory.examplesScanner(tags: tags)
 		examplesScanners.append(scanner)
 		examplesTagScanner.clear()
