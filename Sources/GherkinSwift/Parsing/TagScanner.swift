@@ -35,6 +35,7 @@ class TagScanner {
 	
 	func clear() {
 		tags = []
+		parseErrors = []
 	}
 	
 	func numberOfTags() -> Int {
