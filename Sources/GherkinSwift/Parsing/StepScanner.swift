@@ -46,14 +46,16 @@ class StepScanner {
 		self.docStringScanner = docStringScanner
 	}
 
-	func getStep() -> Step {
+	func getStep() -> (step: Step, errors: [ParseError]) {
 		let tableWithErrors = tableScanner.getTable()
-		return Step(type,
-					text,
-					location: location,
-					tableParameter: tableWithErrors.table,
-					docStringParameter: docStringScanner.getDocString(),
-					localizedKeyword: keyword.localized)
+		let step = Step(type,
+						text,
+						location: location,
+						tableParameter: tableWithErrors.table,
+						docStringParameter: docStringScanner.getDocString(),
+						localizedKeyword: keyword.localized)
+
+		return (step, tableWithErrors.errors)
 	}
 	
 	func lineBelongsToStep(_ line: Line) -> Bool {

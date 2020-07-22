@@ -98,15 +98,17 @@ class BackgroundScanner {
 			return (nil, parseErrors)
 		}
 
+		let stepsWithErrors = stepScanners.map{$0.getStep()}
+		let steps = stepsWithErrors.map{ $0.step }
+		let stepsParseErrors = stepsWithErrors.flatMap { $0.errors }
+
+		parseErrors.append(contentsOf: stepsParseErrors)
+
 		let background = Background(name: name,
-									steps: steps(),
+									steps: steps,
 									description: descriptionLines.asDescription(),
 									location: location)
 
 		return (background, parseErrors)
-	}
-
-	private func steps() -> [Step] {
-		return stepScanners.map{$0.getStep()}
 	}
 }
