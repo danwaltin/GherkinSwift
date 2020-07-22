@@ -38,7 +38,27 @@ class ParseLanguageTests: TestSuccessfulParseBase {
 		
 		then_featureNameShouldBe("feature name")
 	}
-	
+
+	func test_languageMustBeOnLineNumber_1() {
+		given_defaultLanguage("bpa")
+		
+		given_languages(
+			["apa" : L(feature: ["Aaa"]),
+			 "bpa" : L(feature: ["Bbb"])])
+		
+		when_parsingDocument(
+		"""
+		
+		#language: apa
+		Bbb: feature name
+		""")
+		
+		then_featureNameShouldBe("feature name")
+		then_document(shouldHaveComments: [
+			"#language: apa"
+		])
+	}
+
 	func test_language_withBasicKeywords() {
 		given_languages(
 			["lang" : L(feature: ["Egenskap"],

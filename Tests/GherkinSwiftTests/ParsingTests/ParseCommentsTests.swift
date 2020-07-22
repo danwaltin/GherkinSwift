@@ -83,12 +83,4 @@ class ParseCommentsTests: TestSuccessfulParseBase {
 		then_document(shouldHaveComments: [
 			"  # This is the only thing"])
 	}
-
-
-	private func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
-		assert.gherkinDocument(file, line) {
-			let actual = $0.comments.map{c in c.text}
-			XCTAssertEqual(actual, expected, file: file, line: line)
-		}
-	}
 }

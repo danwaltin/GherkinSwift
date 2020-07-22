@@ -24,6 +24,13 @@
 import XCTest
 
 class TestSuccessfulParseBase : TestParseBase {
+	func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
+		assert.gherkinDocument(file, line) {
+			let actual = $0.comments.map{c in c.text}
+			XCTAssertEqual(actual, expected, file: file, line: line)
+		}
+	}
+
 	// MARK: - Assertions
 	var assert: Asserter {
 		return Asserter(actualPickleResult: actualPickleResult)
