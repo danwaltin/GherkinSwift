@@ -70,7 +70,7 @@ class FeatureScanner {
 				
 			} else if !(line.text.isLanguageSpecification() || line.isEmpty()) {
 
-				let hasFoundFeatureTags = featureTagScanner.getTags().count > 0
+				let hasFoundFeatureTags = featureTagScanner.numberOfTags() > 0
 				
 				let expected = hasFoundFeatureTags
 					? "#TagLine, #FeatureLine, #Comment, #Empty"
@@ -148,7 +148,8 @@ class FeatureScanner {
 	}
 	
 	private func startNewScenario(_ line: Line) {
-		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
+		let tags = scenarioTagScanner.getTags().tags
+		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: tags))
 		scenarioTagScanner.clear()
 		
 		scanScenario(line)
@@ -171,14 +172,21 @@ class FeatureScanner {
 		let scenarioParseErrors = scenariosWithScenarioParseErrors.flatMap { $0.errors }
 		
 		let backgroundWithBackgroundParseErrors = backgroundScanner.getBackground()
+		let background = backgroundWithBackgroundParseErrors.background
+		let backgroundErrors = backgroundWithBackgroundParseErrors.errors
+
+		let tagsWithParseErrors = featureTagScanner.getTags()
+		let tags = tagsWithParseErrors.tags
+		let tagsErrors = tagsWithParseErrors.errors
 
 		parseErrors.append(contentsOf: scenarioParseErrors)
-		parseErrors.append(contentsOf: backgroundWithBackgroundParseErrors.errors)
+		parseErrors.append(contentsOf: backgroundErrors)
+		parseErrors.append(contentsOf: tagsErrors)
 		
 		let feature = Feature(name: name,
 							  description: descriptionLines.asDescription(),
-							  background: backgroundWithBackgroundParseErrors.background,
-							  tags: featureTagScanner.getTags(),
+							  background: background,
+							  tags: tags,
 							  location: location,
 							  scenarios: scenarios,
 							  language: languageKey,

@@ -25,7 +25,8 @@
 class TagScanner {
 
 	var tags = [Tag]()
-
+	var parseErrors = [ParseError]()
+	
 	func scan(_ line: Line) {
 		if line.hasKeyword(.tag) {
 			tags.append(contentsOf: tagsFromLine(line))
@@ -36,8 +37,12 @@ class TagScanner {
 		tags = []
 	}
 	
-	func getTags() -> [Tag] {
-		return tags
+	func numberOfTags() -> Int {
+		return tags.count
+	}
+	
+	func getTags() -> (tags: [Tag], errors: [ParseError]) {
+		return (tags, parseErrors)
 	}
 
 	private func tagsFromLine(_ line: Line) -> [Tag] {
@@ -55,9 +60,17 @@ class TagScanner {
 		for tagName in tagNames {
 			let col = previousTagColumn
 			
-			let tag = Tag(name: tagName.trimSpaces(),
-						  location: Location(column: col, line: line.number))
-			tags.append(tag)
+			let location = Location(column: col, line: line.number)
+			
+			let trimmed = tagName.trimSpaces()
+			if trimmed.contains(" ") {
+				parseErrors.append(
+					ParseError.tagWithWhitespace(atLocation: location, atLine: line))
+			} else {
+				let tag = Tag(name: trimmed,
+							  location: location)
+				tags.append(tag)
+			}
 			
 			previousTagColumn += tagName.count + String(tableSeparator).count
 		}

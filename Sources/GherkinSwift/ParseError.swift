@@ -54,6 +54,14 @@ extension ParseError {
 			inFile: line.file)
 	}
 
+	static func tagWithWhitespace(atLocation location: Location, atLine line: Line) -> ParseError {
+		return ParseError.withMessage(
+			"A tag may not contain whitespace",
+			atLineNumber: location.line,
+			column: location.column,
+			inFile: line.file)
+	}
+	
 	private static func withMessage( _ message: String,
 									 atLineNumber lineNumber: Int,
 									 column: Int = 1,
