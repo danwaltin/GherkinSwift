@@ -25,10 +25,11 @@ import XCTest
 @testable import GherkinSwift
 
 class WhitespaceInTagsTests : TestErrorParseBase {
+	// MARK: - Feature
 	func test_parseFeatureWithOneTagWithWhitespace() {
 		when_parsingDocument(
 		"""
-		@with withspace
+		@with whitespace
 		Feature: name
 		""")
 
@@ -39,7 +40,7 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 	func test_parseFeatureWithTwoTagsWithWhitespace() {
 		when_parsingDocument(
 		"""
-		@with withspace
+		@with whitespace
 		
 		@also with whitespace
 		Feature: name
@@ -50,11 +51,24 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 			messages: ["A tag may not contain whitespace", "A tag may not contain whitespace"])
 	}
 
+	func test_parseFeatureWithTwoTags_secondWithWhitespace() {
+		when_parsingDocument(
+		"""
+		@first @second has whitespace
+		Feature: name
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 1)
+		then_shouldReturnParseErrorWith(
+			message: "A tag may not contain whitespace")
+	}
+
+	// MARK: - Scenario
 	func test_parseScenarioWithOneTagWithWhitespace() {
 		when_parsingDocument(
 		"""
 		Feature: name
-		@with withspace
+		@with whitespace
 		Scenario: name
 		""")
 
@@ -66,13 +80,118 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 		when_parsingDocument(
 		"""
 		Feature: name
-		@with withspace @also with whitespace
+		@with whitespace @also with whitespace
 		Scenario: name
 		""")
 
 		then_shouldReturn(numberOfParseErrors: 2)
 		then_shouldReturnParseErrorWith(
 			messages: ["A tag may not contain whitespace", "A tag may not contain whitespace"])
+	}
+
+	func test_parseScenarioWithTwoTags_secondWithWhitespace() {
+		when_parsingDocument(
+		"""
+		Feature: name
+		@first @second has whitespace
+		Scenario: name
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 1)
+		then_shouldReturnParseErrorWith(
+			message: "A tag may not contain whitespace")
+	}
+
+	// MARK: - Scenario Outline examples
+	func test_parseScenarioOutlineExamplesWithOneTagWithWhitespace() {
+		when_parsingDocument(
+		"""
+		Feature: name
+		Scenario Outline: name
+			Given <something>
+
+			@with whitespace
+			Examples:
+				| something |
+		        | anything  |
+		""")
+
+		then_shouldReturnParseErrorWith(
+			message: "A tag may not contain whitespace")
+	}
+
+	func test_parseScenarioOutlineExamplesWithTwoTagsWithWhitespace() {
+		when_parsingDocument(
+		"""
+		Feature: name
+		Scenario Outline: name
+			Given <something>
+
+			@with whitespace
+			Examples: one
+				| something |
+		        | anything  |
+
+		   @also with whitespace
+		   Examples: two
+		      | something |
+		      | anything  |
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 2)
+		then_shouldReturnParseErrorWith(
+			messages: ["A tag may not contain whitespace", "A tag may not contain whitespace"])
+	}
+
+	func test_parseScenarioOutlineExamplesWithTwoTags_secondWithWhitespace() {
+		when_parsingDocument(
+		"""
+		Feature: name
+		Scenario Outline: name
+			Given <something>
+
+			@first
+			Examples: one
+				| something |
+		        | anything  |
+
+		   @second with whitespace
+		   Examples: two
+		      | something |
+		      | anything  |
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 1)
+		then_shouldReturnParseErrorWith(
+			messages: ["A tag may not contain whitespace"])
+	}
+
+	// MARK: - Locations
+	func test_tagsWithWhitespace_locations() {
+		when_parsingDocument(
+		"""
+		@feature whitespace
+		Feature: feature
+
+		   @scenario whitespace
+		   Scenario: scenario
+			   Given something
+
+		   Scenario Outline: outline
+		      Given <something>
+
+		      @examples whitespace
+		      Examples:
+		         | something |
+		         | anything  |
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 1)
+		then_shouldReturnParseErrorWith(
+			locations: [
+				Location(column: 1, line: 1),
+				Location(column: 4, line: 4),
+				Location(column: 7, line: 11)])
 	}
 
 	// MARK: - helpers
@@ -91,5 +210,9 @@ class WhitespaceInTagsTests : TestErrorParseBase {
 	private func then_shouldReturnParseErrorWith(messages: [String],
 												 file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessages: messages, file, line)
+	}
+
+	private func then_shouldReturnParseErrorWith(locations: [Location], file: StaticString = #file, line: UInt = #line) {
+		assert.parseError(withLocations: locations, file, line)
 	}
 }
