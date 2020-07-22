@@ -150,7 +150,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'gherkin, not so much'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'gherkin, not so much'")
 	}
 
 	func test_invalidAfterScenarioStepTable() {
@@ -201,7 +201,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStepDocString() {
@@ -220,7 +220,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidBetweenExamplesTagAndFirstExamples() {
@@ -304,8 +304,9 @@ class NotGherkinTests : TestErrorParseBase {
 		Scenario: s
 		""")
 		
+		//#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'we expected a table row here!'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'")
 	}
 
 	func test_invalidInExamplesTable() {
