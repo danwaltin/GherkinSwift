@@ -120,9 +120,9 @@ class ScenarioScanner {
 				startNewExamples(line, fileUri: fileUri)
 
 			} else if !currentStepScanner.lineBelongsToStep(line) {
-				let expected = "#TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 
 			} else {
 				scanStep(line)

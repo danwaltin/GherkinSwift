@@ -62,7 +62,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'between'")
+			message: "expected: #TagLine, #FeatureLine, #Comment, #Empty, got 'between'")
 	}
 
 	func test_invalidBetweenScenarioTagAndFirstScenario() {
@@ -115,7 +115,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepSecondScenario() {
@@ -132,7 +132,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStep() {
@@ -166,7 +166,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterScenarioStepDocString() {
@@ -185,7 +185,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'not gherkin'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStepTable() {
@@ -286,7 +286,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'we expected a table row here!'")
+			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'")
 	}
 
 	func test_invalidInBackgroundStepTable() {
@@ -358,9 +358,9 @@ class NotGherkinTests : TestErrorParseBase {
 			"expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin one\'",
 			"expected: #TagLine, #FeatureLine, #Comment, #Empty, got \'no gherkin two\'",
 			"expected: X, got \'no gherkin three\'",
-			"expected: X, got \'no gherkin four\'",
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin four\'",
 			"expected: X, got \'no gherkin five\'",
-			"expected: X, got \'no gherkin six\'",
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'no gherkin six\'",
 		])
 		
 		then_shouldReturnParseErrorWith(locations: [
