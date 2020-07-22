@@ -14,7 +14,7 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  NotGherkinTests.swift
+//  InvalidGherkinTests.swift
 //  GherkinSwift
 //
 //  Created by Dan Waltin on 2020-07-16.
@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class NotGherkinTests : TestErrorParseBase {
+class InvalidGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
 		"""

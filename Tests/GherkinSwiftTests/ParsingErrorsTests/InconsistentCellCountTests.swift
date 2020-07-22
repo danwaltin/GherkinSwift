@@ -49,7 +49,7 @@ class InconsistentCellCountTests : TestErrorParseBase {
 		
 	}
 	
-	func test_several_inconsistentCellCount() {
+	func test_several_inconsistentCellCounts() {
 		
 	}
 
