@@ -84,13 +84,13 @@ class PickleTestDataFilesTests: XCTestCase {
 		"multiple_parser_errors",
 		"not_gherkin",
 		"single_parser_error",
+		"whitespace_in_tags",
 	]
 	
 	/*
 	These test cases are not implemented yet
 	
 	"unexpected_eof",
-	"whitespace_in_tags",
 	*/
 	
 	// MARK: - test cases
