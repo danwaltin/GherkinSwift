@@ -42,13 +42,13 @@ public class GherkinFeatureParser {
 		
 		let languageKey = getLanguageKey(from: firstLine)
 		if !languages.languageExist(key: languageKey) {
-			let error = ParseError.invalidLanguage(languageKey, atLineNumber: 1, inFile: fileUri)
+			let error = ParseError.invalidLanguage(languageKey, atLineNumber: 1, file: fileUri)
 			return .error([error])
 		}
 		
 		let language = languages.language(withKey: languageKey)
 
-		let theLines = getLines(lines, language: language)
+		let theLines = getLines(lines, file: fileUri, language: language)
 		for line in theLines {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
@@ -80,13 +80,14 @@ public class GherkinFeatureParser {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
 	
-	private func getLines(_ lines: [String], language: Language) -> [Line] {
+	private func getLines(_ lines: [String], file: String, language: Language) -> [Line] {
 		return lines.enumerated().map{ (index, text) in
 			let keyword = Keyword.createFrom(text: text, language: language)
 			
 			return Line(text: text,
 						number: index + 1,
-						keyword: keyword) }
+						keyword: keyword,
+						file: file) }
 	}
 	
 	private func getLanguageKey(from text: String) -> String {

@@ -77,7 +77,7 @@ class FeatureScanner {
 					: "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty"
 				
 				parseErrors.append(
-					ParseError.invalidGherkin(expected, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(expected, atLine: line))
 			}
 			
 		case .scanningFeature:
@@ -128,7 +128,7 @@ class FeatureScanner {
 			} else if !line.isEmpty()  {
 				let tags = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line))
 				
 			}
 		}

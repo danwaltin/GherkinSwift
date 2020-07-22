@@ -122,7 +122,7 @@ class ScenarioScanner {
 			} else if !currentStepScanner.lineBelongsToStep(line) {
 				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line))
 
 			} else {
 				scanStep(line, fileUri: fileUri)
@@ -150,7 +150,7 @@ class ScenarioScanner {
 			} else if !line.isEmpty()  {
 				let tags = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line))
 				
 			}
 		}

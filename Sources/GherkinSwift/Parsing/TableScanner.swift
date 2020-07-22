@@ -96,7 +96,7 @@ class TableScanner {
 
 		if cellValues.count != columns.count {
 			parseErrors.append(
-				ParseError.inconsistentCellCount(atLine: line, inFile: fileUri))
+				ParseError.inconsistentCellCount(atLine: line))
 		}
 
 		var cells = [TableCell]()

@@ -32,26 +32,26 @@ public struct ParseErrorSource {
 }
 
 extension ParseError {
-	static func invalidGherkin( _ tags: String, atLine line: Line, inFile fileUri: String) -> ParseError {
+	static func invalidGherkin( _ tags: String, atLine line: Line) -> ParseError {
 		return ParseError.withMessage(
 			"expected: \(tags), got '\(line.text.trim())'",
 			atLineNumber: line.number,
-			inFile: fileUri)
+			inFile: line.file)
 	}
 	
-	static func invalidLanguage(_ language: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
+	static func invalidLanguage(_ language: String, atLineNumber lineNumber: Int, file: String) -> ParseError {
 		return ParseError.withMessage(
 			"Language not supported: \(language)",
 			atLineNumber: lineNumber,
-			inFile: fileUri)
+			inFile: file)
 	}
 
-	static func inconsistentCellCount(atLine line: Line, inFile fileUri: String) -> ParseError {
+	static func inconsistentCellCount(atLine line: Line) -> ParseError {
 		return ParseError.withMessage(
 			"inconsistent cell count within the table",
 			atLineNumber: line.number,
 			column: line.text.indentation() + 1,
-			inFile: fileUri)
+			inFile: line.file)
 	}
 
 	private static func withMessage( _ message: String,

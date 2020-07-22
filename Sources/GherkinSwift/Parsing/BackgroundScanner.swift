@@ -67,7 +67,7 @@ class BackgroundScanner {
 			} else if !currentStepScanner().lineBelongsToStep(line) {
 				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line))
 			} else {
 				scanStep(line, fileUri: fileUri)
 			}

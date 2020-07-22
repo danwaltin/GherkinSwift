@@ -33,13 +33,8 @@ struct Line {
 	let text: String
 	let number: Int
 	let keyword: Keyword
+	let file: String
 	
-	init(text: String, number: Int, keyword: Keyword) {
-		self.text = text
-		self.number = number
-		self.keyword = keyword
-	}
-
 	func hasKeyword(_ type: KeywordType) -> Bool {
 		return keyword.isType(type)
 	}
