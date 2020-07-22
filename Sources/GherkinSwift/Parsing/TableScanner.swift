@@ -49,9 +49,9 @@ class TableScanner {
 		}
 	}
 
-	func getTable() -> Table? {
+	func getTable() -> (table: Table?, errors: [ParseError]) {
 		if !hasTable {
-			return nil
+			return (nil, [])
 		}
 		
 		let table =  Table(header: headerRow,
@@ -59,7 +59,7 @@ class TableScanner {
 						   rows: rows,
 						   headerLocation: headerLocation)
 
-		return table
+		return (table, [])
 	}
 
 	private func createColumns(_ line: Line) {

@@ -47,10 +47,11 @@ class StepScanner {
 	}
 
 	func getStep() -> Step {
+		let tableWithErrors = tableScanner.getTable()
 		return Step(type,
 					text,
 					location: location,
-					tableParameter: tableScanner.getTable(),
+					tableParameter: tableWithErrors.table,
 					docStringParameter: docStringScanner.getDocString(),
 					localizedKeyword: keyword.localized)
 	}
