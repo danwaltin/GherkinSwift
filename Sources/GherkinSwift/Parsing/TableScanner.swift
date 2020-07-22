@@ -82,6 +82,11 @@ class TableScanner {
 		
 		let location = line.keywordLocation()
 		
+		let rowCells = cells(line)
+		if rowCells.count != columns.count {
+			parseErrors.append(
+				ParseError.inconsistentCellCount(atLine: line, inFile: ""))
+		}
 		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	

@@ -39,7 +39,11 @@ extension ParseError {
 	static func invalidLanguage(_ language: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
 		return ParseError.withMessage("Language not supported: \(language)", atLineNumber: lineNumber, inFile: fileUri)
 	}
-	
+
+	static func inconsistentCellCount(atLine line: Line, inFile fileUri: String) -> ParseError {
+		return ParseError.withMessage("inconsistent cell count within the table", atLineNumber: line.number, inFile: fileUri)
+	}
+
 	private static func withMessage( _ message: String, atLineNumber lineNumber: Int, inFile fileUri: String) -> ParseError {
 		return ParseError(
 			message: message,
