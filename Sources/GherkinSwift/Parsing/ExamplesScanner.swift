@@ -87,6 +87,9 @@ class ExamplesScanner {
 
 	func getExamples() -> (examples: ScenarioOutlineExamples, errors: [ParseError]) {
 		let tableWithErrors = tableScanner.getTable()
+		
+		parseErrors.append(contentsOf: tableWithErrors.errors)
+		
 		let examples = ScenarioOutlineExamples(name: name,
 											   description: descriptionLines.asDescription(),
 											   tags: tags,
