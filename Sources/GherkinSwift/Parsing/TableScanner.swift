@@ -97,6 +97,10 @@ class TableScanner {
 
 		var columnIndex = 0
 		for cellValue in cellValues {
+			if columnIndex == columns.count {
+				break
+			}
+
 			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
 			
