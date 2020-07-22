@@ -26,31 +26,118 @@ import XCTest
 
 class InconsistentCellCountTests : TestErrorParseBase {
 	func test_inconsistentCellCount_atRowTwo_inScenarioStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		   Given inconsistent table
+		      | h1   |
+		      | r1c1 | r1c2 |
+		""")
 		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
 	}
 
 	func test_inconsistentCellCount_atRowThree_inScenarioStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		   Given inconsistent table
+		      | h1   | h2   |
+		      | r1c1 | r1c2 |
+		      | r2c1 |
+		""")
 		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
 	}
 
 	func test_inconsistentCellCount_atRowTwo_inBackgroundStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given inconsistent table
+		      | h1   |
+		      | r1c1 | r1c2 |
+		""")
 		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
 	}
 
 	func test_inconsistentCellCount_atRowThree_inBackgroundStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given inconsistent table
+		      | h1   | h2   |
+		      | r1c1 | r1c2 |
+		      | r2c1 |
+		""")
 		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
 	}
 
 	func test_inconsistentCellCount_atRowTwo_inExamplesTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: scenario
+		   Given <h1>
 		
+		   Examples:
+		      | h1   |
+		      | r1c1 | r1c2 |
+		""")
+		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
+
 	}
 
 	func test_inconsistentCellCount_atRowThree_inExamplesStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario Outline: scenario
+		   Given <h1>
+		   And <h2>
 		
+		   Examples:
+		      | h1   | h2   |
+		      | r1c1 | r1c2 |
+		      | r2c1 |
+		""")
+		
+		then_shouldReturnParseErrorWith(
+			message: "inconsistent cell count within the table")
 	}
 	
 	func test_several_inconsistentCellCounts() {
-		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+		   Given inconsistent table
+		      | h1   |
+		      | r1c1 | r1c2 |
+
+		   Given inconsistent table
+		      | h1   | h2   |
+		      | r1c1 | r1c2 |
+		         | r2c1 |
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 2)
+		then_shouldReturnParseErrorWith(locations: [
+			Location(column: 7, line: 5),
+			Location(column: 10, line: 10)
+		])
 	}
 
 	// MARK: - helpers
@@ -63,10 +150,6 @@ class InconsistentCellCountTests : TestErrorParseBase {
 	private func then_shouldReturnParseErrorWith(message: String,
 												 file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessage: message, file, line)
-	}
-
-	private func then_shouldReturnParseErrorWith(messages: [String], file: StaticString = #file, line: UInt = #line) {
-		assert.parseError(withMessages: messages, file, line)
 	}
 
 	private func then_shouldReturnParseErrorWith(locations: [Location], file: StaticString = #file, line: UInt = #line) {
