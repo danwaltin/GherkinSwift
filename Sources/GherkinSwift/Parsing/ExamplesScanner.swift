@@ -76,7 +76,9 @@ class ExamplesScanner {
 		
 		if isScanningTable {
 			if !tableScanner.lineBelongsToTable(line) {
-				parseErrors.append(ParseError.withExpectedTags("", atLine: line, inFile: fileUri))
+				let tags = "#TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 			} else {
 				tableScanner.scan(line)
 			}

@@ -245,7 +245,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'nope, not gherkin'")
+			message: "expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'")
 	}
 
 	func test_invalidBetweenExamplesTagAndSecondExamples() {
@@ -270,7 +270,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'nope, not gherkin'")
+			message: "expected: #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'nope, not gherkin'")
 	}
 
 	func test_invalidInScenarioStepTable() {
@@ -325,7 +325,7 @@ class NotGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: X, got 'we expected a table row here!'")
+			message: "expected: #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'")
 	}
 
 	func test_severalNonGherkinLines() {

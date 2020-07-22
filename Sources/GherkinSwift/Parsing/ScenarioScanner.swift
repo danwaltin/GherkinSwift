@@ -148,10 +148,9 @@ class ScenarioScanner {
 				startNewExamples(line, fileUri: fileUri)
 
 			} else if !line.isEmpty()  {
-				let expected = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
-
+				let tags = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				parseErrors.append(
-					ParseError.withExpectedTags(expected, atLine: line, inFile: fileUri))
+					ParseError.invalidGherkin(tags, atLine: line, inFile: fileUri))
 				
 			}
 		}
