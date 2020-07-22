@@ -24,10 +24,6 @@
 import XCTest
 @testable import GherkinSwift
 
-// #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty
-// #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty
-// #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty
-// #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty
 class NotGherkinTests : TestErrorParseBase {
 	func test_firstLineNotGherkin_message() {
 		when_parsingDocument(
@@ -37,7 +33,6 @@ class NotGherkinTests : TestErrorParseBase {
 		
 		then_shouldReturnParseErrorWith(
 			message: "expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'lorem ipsum'")
-		
 	}
 
 	func test_secondLineNotGherkin_message() {
@@ -382,23 +377,12 @@ class NotGherkinTests : TestErrorParseBase {
 	}
 	
 	private func then_shouldReturnParseErrorWith(message: String,
-												 location: Location,
-												 file: StaticString = #file, line: UInt = #line) {
-		assert.parseError(withMessage: message, file, line)
-		assert.parseError(withLocation: location, file, line)
-	}
-
-	private func then_shouldReturnParseErrorWith(message: String,
 												 file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessage: message, file, line)
 	}
 
 	private func then_shouldReturnParseErrorWith(messages: [String], file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessages: messages, file, line)
-	}
-
-	private func then_shouldReturnParseErrorWith(location: Location, file: StaticString = #file, line: UInt = #line) {
-		assert.parseError(withLocation: location, file, line)
 	}
 
 	private func then_shouldReturnParseErrorWith(locations: [Location], file: StaticString = #file, line: UInt = #line) {
