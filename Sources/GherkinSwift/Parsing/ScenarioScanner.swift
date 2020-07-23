@@ -70,6 +70,10 @@ class ScenarioScanner {
 		let nextIndex = currentLine.number
 		let lastIndex = allLines.count - 1
 		
+		if lastIndex < nextIndex {
+			return nil
+		}
+
 		for i in nextIndex...lastIndex {
 			let line = allLines[i]
 			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) || line.hasKeyword(.examples) {
