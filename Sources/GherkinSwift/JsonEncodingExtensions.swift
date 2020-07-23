@@ -23,15 +23,29 @@
 
 import Foundation
 
-extension GherkinFile : Encodable {
-	enum CodingKeys: String, CodingKey {
+extension PickleResult : Encodable {
+	enum DocumentCodingKeys: String, CodingKey {
 		case gherkinDocument
 	}
 
-	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
+	enum ErrorCodingKeys: String, CodingKey {
+		case parseError
+	}
 
-		try container.encode(gherkinDocument, forKey: .gherkinDocument)
+
+	public func encode(to encoder: Encoder) throws {
+		switch self {
+		case .success(let document):
+			var container = encoder.container(keyedBy: DocumentCodingKeys.self)
+			try container.encode(document, forKey: .gherkinDocument)
+
+		case .error(let errors):
+			var e = encoder.unkeyedContainer()
+			for error in errors {
+				var nested = e.nestedContainer(keyedBy: ErrorCodingKeys.self)
+				try nested.encode(error, forKey: .parseError)
+			}
+		}
 	}
 }
 
@@ -55,6 +69,36 @@ extension GherkinDocument : Encodable {
 		try container.encode(uri, forKey: .uri)
 	}
 }
+
+extension ParseError : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case message
+		case source
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		let messageLocation = "(\(source.location.line):\(source.location.column)): "
+		try container.encode(messageLocation + message, forKey: .message)
+		try container.encode(source, forKey: .source)
+	}
+}
+
+extension ParseErrorSource : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case location
+		case uri
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		try container.encode(location, forKey: .location)
+		try container.encode(uri, forKey: .uri)
+	}
+}
+
 
 extension Comment : Encodable {
 	enum CodingKeys: String, CodingKey {
@@ -322,5 +366,21 @@ extension TableCell : Encodable {
 			try container.encode(value, forKey: .value)
 		}
 		try container.encode(location, forKey: .location)
+	}
+}
+
+extension Location : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case column
+		case line
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		if column > 0 {
+			try container.encode(column, forKey: .column)
+		}
+		try container.encode(line, forKey: .line)
 	}
 }

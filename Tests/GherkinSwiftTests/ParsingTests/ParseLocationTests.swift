@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseLocationTests: TestParseBase {
+class ParseLocationTests: TestSuccessfulParseBase {
 	// MARK: - feature
 	
 	func test_location_feature_at_1_1() {
@@ -457,8 +457,9 @@ class ParseLocationTests: TestParseBase {
 	
 	private func then_comment(_ commentIndex: Int, shouldHaveLocation location: Location,
 							  file: StaticString = #file, line: UInt = #line) {
-		XCTAssertEqual(actualGherkinDocument.comments[commentIndex].location, location,
-					   file: file, line: line)
+		assert.gherkinDocument(file, line) {
+			XCTAssertEqual($0.comments[commentIndex].location, location, file: file, line: line)
+		}
 	}
 	
 	// MARK: - Step table locations

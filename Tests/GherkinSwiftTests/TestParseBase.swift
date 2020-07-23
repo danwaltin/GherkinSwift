@@ -24,7 +24,8 @@ import XCTest
 @testable import GherkinSwift
 
 class TestParseBase: XCTestCase {
-	var actualGherkinDocument: GherkinDocument!
+	var actualPickleResult: PickleResult!
+	
 	var docStringSeparator: String = "..."
 	var alternativeDocStringSeparator: String = ",,,"
 	var defaultLanguage: String = ""
@@ -75,18 +76,22 @@ class TestParseBase: XCTestCase {
 	}
 	
 	func when_parsingDocument(_ document: String) {
-		actualGherkinDocument = parseDocument(document, parser: parser())
+		when_parsingDocument(document, parser())
+	}
+
+	func when_parsingDocument(_ document: String, _ parser: GherkinFeatureParser) {
+		actualPickleResult = parseDocument(document, parser: parser)
 	}
 
 	func when_parsing(_ lines: [String]) {
-		actualGherkinDocument = parse(lines, parser: parser())
+		actualPickleResult = parse(lines, parser: parser())
 	}
 
-	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> GherkinDocument {
-		return parser.pickle(lines: lines, fileUri: "").gherkinDocument
+	private func parse(_ lines: [String], parser: GherkinFeatureParser) -> PickleResult {
+		return parser.pickle(lines: lines, fileUri: "")
 	}
 
-	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> GherkinDocument {
+	func parseDocument(_ document: String, parser: GherkinFeatureParser) -> PickleResult {
 		let lines = parser.getAllLinesInDocument(document: document)
 		return parse(lines, parser: parser)
 	}
@@ -157,10 +162,4 @@ class TestParseBase: XCTestCase {
 	private func cell(_ value: String, _ header: String) -> TableCell {
 		return TableCell(value: value, location: Location.zero(), header: header)
 	}
-	
-	// MARK: - Assertions
-	var assert: Asserter {
-		return Asserter(actualDocument: actualGherkinDocument)
-	}
 }
-

@@ -35,6 +35,12 @@ class TableScanner {
 	private var hasStartedOnBody = false
 	private var bodyLocation = Location.zero()
 
+	private var parseErrors = [ParseError]()
+	
+	func lineBelongsToTable(_ line: Line) -> Bool {
+		return line.isEmpty() || line.hasKeyword(.table)
+	}
+	
 	func scan(_ line: Line) {
 		hasTable = true
 		
@@ -45,15 +51,17 @@ class TableScanner {
 		}
 	}
 
-	func getTable() -> Table? {
+	func getTable() -> (table: Table?, errors: [ParseError]) {
 		if !hasTable {
-			return nil
+			return (nil, parseErrors)
 		}
 		
-		return Table(header: headerRow,
-					 columns: columns,
-					 rows: rows,
-					 headerLocation: headerLocation)
+		let table =  Table(header: headerRow,
+						   columns: columns,
+						   rows: rows,
+						   headerLocation: headerLocation)
+
+		return (table, parseErrors)
 	}
 
 	private func createColumns(_ line: Line) {
@@ -68,6 +76,10 @@ class TableScanner {
 	}
 
 	private func addRow(_ line: Line) {
+		if !line.hasKeyword(.table) {
+			return
+		}
+		
 		let location = line.keywordLocation()
 		
 		rows.append(TableRow(cells: cells(line), location: location))
@@ -82,6 +94,11 @@ class TableScanner {
 		cellValues.removeLast()
 		cellValues.remove(at: 0)
 
+		if cellValues.count != columns.count {
+			parseErrors.append(
+				ParseError.inconsistentCellCount(atLine: line))
+		}
+
 		var cells = [TableCell]()
 		
 		// + 1 because tableSeparator is at index zero based, and cell location starts one column to the right:
@@ -89,6 +106,10 @@ class TableScanner {
 
 		var columnIndex = 0
 		for cellValue in cellValues {
+			if columnIndex == columns.count {
+				break
+			}
+
 			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
 			

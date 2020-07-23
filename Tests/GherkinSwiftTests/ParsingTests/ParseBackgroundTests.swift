@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseBackgroundTests: TestParseBase {
+class ParseBackgroundTests: TestSuccessfulParseBase {
 	// MARK: - No background
 	func test_featureWithoutBackground() {
 		when_parsingDocument(

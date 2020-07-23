@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseTagsTest : TestParseBase {
+class ParseTagsTest : TestSuccessfulParseBase {
 
 	// MARK: - Feature tags
 	func test_parseFeatureWithZeroTags_shouldHaveEmptyListOfTags() {

@@ -23,7 +23,7 @@
 import Foundation
 
 public struct LanguagesConfiguration {
-	private let defaultLanguageKey: String
+	let defaultLanguageKey: String
 	private let languages: [String: Language]
 	
 	init(defaultLanguageKey: String,
@@ -52,6 +52,10 @@ public struct LanguagesConfiguration {
 		return parentDirectory.appendingPathComponent(file)
 	}
 
+	func languageExist(key: String) -> Bool {
+		return languages[key] != nil
+	}
+	
 	func language(withKey key: String) -> Language {
 		if var l = languages[key] {
 			l.key = key

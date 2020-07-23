@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepTableParametersTests: TestParseBase {
+class ParseStepTableParametersTests: TestSuccessfulParseBase {
 	func test_tableParametersToSteps_oneColumnOneRow() {
 		when_parsingDocument(
 		"""

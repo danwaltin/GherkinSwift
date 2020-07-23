@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Copyright 2017 Dan Waltin
+// Copyright 2020 Dan Waltin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,25 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 //
-//  Location.swift
+//  TestSuccessfulParseBase.swift
 //  GherkinSwift
 //
-//  Created by Dan Waltin on 2020-06-20.
+//  Created by Dan Waltin on 2020-07-16.
 //
 // ------------------------------------------------------------------------
 
-import Foundation
+import XCTest
 
-public struct Location : Equatable {
-	public let column: Int
-	public let line: Int
-	
-	public init(column: Int, line: Int) {
-		self.column = column
-		self.line = line
+class TestSuccessfulParseBase : TestParseBase {
+	func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
+		assert.gherkinDocument(file, line) {
+			let actual = $0.comments.map{c in c.text}
+			XCTAssertEqual(actual, expected, file: file, line: line)
+		}
 	}
-}
 
-extension Location {
-	public static func zero() -> Location {
-		return Location(column: 0, line: 0)
+	// MARK: - Assertions
+	var assert: Asserter {
+		return Asserter(actualPickleResult: actualPickleResult)
 	}
 }

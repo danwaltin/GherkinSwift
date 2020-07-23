@@ -21,6 +21,8 @@
 //
 // ------------------------------------------------------------------------
 
+#warning("TODO: Can a step have both a table and a docString? If so, tests are needed. If not, tests are needed!")
+
 class StepScanner {
 	enum State {
 		case started
@@ -44,13 +46,36 @@ class StepScanner {
 		self.docStringScanner = docStringScanner
 	}
 
-	func getStep() -> Step {
-		return Step(type,
-					text,
-					location: location,
-					tableParameter: tableScanner.getTable(),
-					docStringParameter: docStringScanner.getDocString(),
-					localizedKeyword: keyword.localized)
+	func getStep() -> (step: Step, errors: [ParseError]) {
+		let tableWithErrors = tableScanner.getTable()
+		let step = Step(type,
+						text,
+						location: location,
+						tableParameter: tableWithErrors.table,
+						docStringParameter: docStringScanner.getDocString(),
+						localizedKeyword: keyword.localized)
+
+		return (step, tableWithErrors.errors)
+	}
+	
+	func lineBelongsToStep(_ line: Line) -> Bool {
+		if line.isEmpty() {
+			return true
+		}
+
+		switch state {
+		case .started:
+			return line.isStep()
+			
+		case .scanningStep:
+			return shouldStartScanTable(line) || shouldStartScanDocString(line)
+
+		case .scanningTableParameter:
+			return tableScanner.lineBelongsToTable(line)
+
+		case .scanningDocString:
+			return docStringScanner.lineBelongsToDocString(line)
+		}
 	}
 	
 	func scan(_ line: Line) {

@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseDescriptionTests: TestParseBase {
+class ParseDescriptionTests: TestSuccessfulParseBase {
 	
 	// MARK: feature
 	func testFeatureWithDescription() {

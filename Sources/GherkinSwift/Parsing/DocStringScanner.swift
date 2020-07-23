@@ -42,6 +42,19 @@ class DocStringScanner {
 		self.configuration = configuration
 	}
 	
+	func lineBelongsToDocString(_ line: Line) -> Bool {
+		switch state {
+		case .started:
+			return isDocString(line)
+			
+		case .scanningDocString:
+			return true
+			
+		case .done:
+			return false
+		}
+	}
+	
 	func scan(_ line: Line) {
 		switch state {
 		case .started:

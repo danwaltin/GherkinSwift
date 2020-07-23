@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseStepDocStringParametersTests: TestParseBase {
+class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 	// MARK: - Scenario
 	func test_docStringParametersToScenarioStep_oneRow() {
 		given_docStringSeparator("===", alternative: "---")
@@ -189,6 +189,80 @@ class ParseStepDocStringParametersTests: TestParseBase {
 			.given,
 			"something",
 			docString("one line", "==="))
+	}
+
+	// MARK: - Tag character in doc string
+	#warning("TODO: Enable this test")
+	func IGNORE_test_docStringParameter_withTagCharacter() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario with docString
+		   Given something
+		      ===
+		      @thisLooksLikeATag but it's not
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("@thisLooksLikeATag but it's not", "==="))
+	}
+
+	#warning("TODO: Enable this test")
+	func IGNORE_test_docStringParameter_withTagCharacter_inBackground() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Background:
+		   Given something
+		      ===
+		      @thisLooksLikeATag but it's not
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("@thisLooksLikeATag but it's not", "==="))
+	}
+
+	// MARK: - Table in doc string
+	func test_docStringParameter_withTable() {
+		given_docStringSeparator("===", alternative: "---")
+
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario with docString
+		   Given something
+		      ===
+		      | this | looks   |
+		      | like | a table |
+		      ===
+		
+		Scenario: second scenario
+		   Given another thing
+		""")
+
+		then_shouldReturnScenarioWithStep(
+			forScenario: 0,
+			.given,
+			"something",
+			docString("| this | looks   |\n| like | a table |", "==="))
 	}
 
 	// MARK: - Givens, whens, thens

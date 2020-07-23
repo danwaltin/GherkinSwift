@@ -24,6 +24,8 @@
 class ExamplesScanner {
 	var name = ""
 	
+	private var parseErrors = [ParseError]()
+
 	var isScanningDescription = false
 	var descriptionLines = [String]()
 
@@ -73,15 +75,27 @@ class ExamplesScanner {
 		isScanningTable = isScanningTable || line.hasKeyword(.table)
 		
 		if isScanningTable {
-			tableScanner.scan(line)
+			if !tableScanner.lineBelongsToTable(line) {
+				let tags = "#TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line))
+			} else {
+				tableScanner.scan(line)
+			}
 		}
 	}
 
-	func getExamples() -> ScenarioOutlineExamples {
-		return ScenarioOutlineExamples(name: name,
-									   description: descriptionLines.asDescription(),
-									   tags: tags,
-									   location: location,
-									   table: tableScanner.getTable())
+	func getExamples() -> (examples: ScenarioOutlineExamples, errors: [ParseError]) {
+		let tableWithErrors = tableScanner.getTable()
+		
+		parseErrors.append(contentsOf: tableWithErrors.errors)
+		
+		let examples = ScenarioOutlineExamples(name: name,
+											   description: descriptionLines.asDescription(),
+											   tags: tags,
+											   location: location,
+											   table: tableWithErrors.table)
+		
+		return (examples, parseErrors)
 	}
 }

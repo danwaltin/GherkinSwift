@@ -4,9 +4,7 @@ in turn has `Step`-s etc.
 
 For more information about Gherkin, see the [Gherkin github page](https://github.com/cucumber/cucumber/tree/master/gherkin).
 
-Currently does not handle
-* rule
-* errors when parsing
+Currently does not handle the keyword `Rule`.
 
 ## Usage
 GherkinSwift exposes its functionality as a Swift library package. 
@@ -30,3 +28,102 @@ Scenario: ett scenario på svenska
 ```
 
 The available languages can be found in the [`gherkin-languages.json`](https://github.com/danwaltin/GherkinSwift/blob/master/Sources/GherkinSwift/gherkin-languages.json) file.
+
+## Differences to the cucumber project
+The json serialization of parsing errors is different from the cucumber project.
+
+### Unexpected EOF
+The expected tags error message in json testfile for unexpected eof (`unexpected_eof.feature.errors.ndjson`) is changed.
+An `#ExamplesLine` is added.
+
+**GherkinSwift**
+`#TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty`
+
+**Cucumber json**
+`#TagLine, #ScenarioLine, #Comment, #Empty`
+
+### Arrays of parse error objects
+The errors are serialized to an array of parse error objects. The parse error "bad" test files 
+have been changed.
+
+**GherkinSwift**
+```
+[
+  {
+    "parseError": {
+    }
+  },
+  {
+    "parseError": {
+    }
+  }
+]
+```
+**Cucumber json**
+```
+{
+  "parseError": {
+  }
+}
+{
+  "parseError": {
+  }
+}
+```
+
+**GherkinSwift, multiple_parser_error**
+```
+[
+  {
+    "parseError": {
+      "message": "(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'invalid line here'",
+      "source": {
+        "location": {
+          "column": 1,
+          "line": 2
+        },
+        "uri": "testdata/bad/multiple_parser_errors.feature"
+      }
+    }
+  },
+  {
+    "parseError": {
+      "message": "(9:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'another invalid line here'",
+      "source": {
+        "location": {
+          "column": 1,
+          "line": 9
+        },
+        "uri": "testdata/bad/multiple_parser_errors.feature"
+      }
+    }
+  }
+]
+```
+**Cucumber json, multiple_parser_error**
+```
+{
+  "parseError": {
+    "message": "(2:1): expected: #EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty, got 'invalid line here'",
+	"source": {
+	  "location": {
+		"column": 1,
+		"line": 2
+	  },
+	  "uri": "testdata/bad/multiple_parser_errors.feature"
+	}
+  }
+}
+{
+  "parseError": {
+	"message": "(9:1): expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'another invalid line here'",
+	"source": {
+	  "location": {
+		"column": 1,
+		"line": 9
+	  },
+	  "uri": "testdata/bad/multiple_parser_errors.feature"
+	}
+  }
+}
+```

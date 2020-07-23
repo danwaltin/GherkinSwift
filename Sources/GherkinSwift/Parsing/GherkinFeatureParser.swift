@@ -34,14 +34,21 @@ public class GherkinFeatureParser {
 		self.languages = languages
 	}
 	
-	public func pickle(lines: [String], fileUri: String) -> GherkinFile {
+	public func pickle(lines: [String], fileUri: String) -> PickleResult {
 		let featureScanner = scannerFactory.featureScanner()
 		let commentCollector = scannerFactory.commentCollector()
 		
 		let firstLine = lines.count > 0 ? lines.first! : ""
-		let language = getLanguage(text: firstLine)
+		
+		let languageKey = getLanguageKey(from: firstLine)
+		if !languages.languageExist(key: languageKey) {
+			let error = ParseError.invalidLanguage(languageKey, atLineNumber: 1, file: fileUri)
+			return .error([error])
+		}
+		
+		let language = languages.language(withKey: languageKey)
 
-		let theLines = getLines(lines, language: language)
+		let theLines = getLines(lines, file: fileUri, language: language)
 		for line in theLines {
 			if line.hasKeyword(.comment) {
 				commentCollector.collectComment(line)
@@ -50,10 +57,41 @@ public class GherkinFeatureParser {
 			}
 		}
 		
-		return GherkinFile(gherkinDocument: GherkinDocument(
-			comments: commentCollector.getComments(),
-			feature: featureScanner.getFeature(languageKey: language.key),
-			uri: fileUri))
+		let featureResult = featureScanner.getFeature(languageKey: language.key)
+		
+		var errors = featureResult.errors
+		
+		if lastNonEmptyLineIsTag(theLines) {
+			errors.append(ParseError.unexpectedEof(theLines.last!, feature: featureResult.feature))
+		}
+		
+		if errors.count > 0 {
+			return .error(errors.sorted(by: {a,b in a.source.location.line < b.source.location.line}))
+		}
+		
+		let document = GherkinDocument(comments: commentCollector.getComments(),
+									   feature: featureResult.feature,
+									   uri: fileUri)
+		
+		return .success(document)
+	}
+	
+	private func lastNonEmptyLineIsTag(_ lines: [Line]) -> Bool {
+		if lines.count == 0 {
+			return false
+		}
+
+		var copy = lines
+		copy.reverse()
+		for line in copy {
+			if line.isEmpty() {
+				continue
+			}
+			
+			return line.hasKeyword(.tag)
+		}
+		
+		return false
 	}
 	
 	public func getAllLinesInFile(url: URL) -> [String] {
@@ -67,13 +105,23 @@ public class GherkinFeatureParser {
 		return document.allLines().map { $0.replacingOccurrences(of: "\\n", with: "\n")}
 	}
 	
-	private func getLines(_ lines: [String], language: Language) -> [Line] {
+	private func getLines(_ lines: [String], file: String, language: Language) -> [Line] {
 		return lines.enumerated().map{ (index, text) in
 			let keyword = Keyword.createFrom(text: text, language: language)
 			
 			return Line(text: text,
 						number: index + 1,
-						keyword: keyword) }
+						keyword: keyword,
+						file: file) }
+	}
+	
+	private func getLanguageKey(from text: String) -> String {
+		if let languageKeyword = text.languageKeyword() {
+			let languageKey = text.removeKeyword(languageKeyword)
+			return languageKey
+		}
+		
+		return languages.defaultLanguageKey
 	}
 	
 	private func getLanguage(text: String) -> Language {

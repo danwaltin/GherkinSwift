@@ -31,6 +31,8 @@ class BackgroundScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 
+	private var parseErrors = [ParseError]()
+
 	private var name = ""
 	private var descriptionLines = [String]()
 	
@@ -62,6 +64,10 @@ class BackgroundScanner {
 			if shouldStartNewStep(line) {
 				startNewStep(line)
 
+			} else if !currentStepScanner().lineBelongsToStep(line) {
+				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line))
 			} else {
 				scanStep(line)
 			}
@@ -81,21 +87,28 @@ class BackgroundScanner {
 	}
 	
 	private func scanStep(_ line: Line) {
-		stepScanners.last!.scan(line)
+		currentStepScanner().scan(line)
 	}
 	
-	func getBackground() -> Background? {
+	private func currentStepScanner() -> StepScanner {
+		return stepScanners.last!
+	}
+	func getBackground() -> (background: Background?, errors: [ParseError]) {
 		if state == .started {
-			return nil
+			return (nil, parseErrors)
 		}
 
-		return Background(name: name,
-						  steps: steps(),
-						  description: descriptionLines.asDescription(),
-						  location: location)
-	}
+		let stepsWithErrors = stepScanners.map{$0.getStep()}
+		let steps = stepsWithErrors.map{ $0.step }
+		let stepsParseErrors = stepsWithErrors.flatMap { $0.errors }
 
-	private func steps() -> [Step] {
-		return stepScanners.map{$0.getStep()}
+		parseErrors.append(contentsOf: stepsParseErrors)
+
+		let background = Background(name: name,
+									steps: steps,
+									description: descriptionLines.asDescription(),
+									location: location)
+
+		return (background, parseErrors)
 	}
 }

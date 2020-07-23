@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseCommentsTests: TestParseBase {
+class ParseCommentsTests: TestSuccessfulParseBase {
 	func testScenarioWithComment() {
 		when_parsingDocument(
 		"""
@@ -82,11 +82,5 @@ class ParseCommentsTests: TestParseBase {
 		
 		then_document(shouldHaveComments: [
 			"  # This is the only thing"])
-	}
-
-
-	private func then_document(shouldHaveComments expected: [String], file: StaticString = #file, line: UInt = #line) {
-		let actual = actualGherkinDocument.comments.map{c in c.text}
-		XCTAssertEqual(actual, expected, file: file, line: line)
 	}
 }

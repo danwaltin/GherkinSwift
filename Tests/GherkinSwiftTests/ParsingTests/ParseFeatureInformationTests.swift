@@ -24,7 +24,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseFeatureInformationTests: TestParseBase {
+class ParseFeatureInformationTests: TestSuccessfulParseBase {
 
 	func test_parseFeature_shouldReturnFeatureWithName() {
 		when_parsing([
@@ -51,11 +51,11 @@ class ParseFeatureInformationTests: TestParseBase {
 	func test_parsingTwoFeaturesWithTheSameParserInstance() {
 		let instance = parser()
 		
-		let one = parseDocument("Feature: one", parser: instance).feature!
-		XCTAssertEqual("one", one.name)
+		when_parsingDocument("Feature: one", instance)
+		then_featureNameShouldBe("one")
 
-		let two = parseDocument("Feature: two", parser: instance).feature!
-		XCTAssertEqual("two", two.name)
+		when_parsingDocument("Feature: two", instance)
+		then_featureNameShouldBe("two")
 	}
 	
 	// MARK: - Givens, whens, thens

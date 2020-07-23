@@ -23,7 +23,7 @@
 import XCTest
 @testable import GherkinSwift
 
-class ParseScenarioOutlinesTests: TestParseBase {
+class ParseScenarioOutlinesTests: TestSuccessfulParseBase {
 	func test_oneScenarioOutlineWithOneExampleShouldReturnScenarioWithName() {
 		when_parsingDocument(
 			"""

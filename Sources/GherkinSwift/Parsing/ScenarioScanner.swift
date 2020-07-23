@@ -33,6 +33,7 @@ class ScenarioScanner {
 	private var state: State = .started
 	private var location = Location.zero()
 
+	private var parseErrors = [ParseError]()
 	private var keyword: Keyword = Keyword.none()
 	private var name = ""
 	private var descriptionLines = [String]()
@@ -69,6 +70,10 @@ class ScenarioScanner {
 		let nextIndex = currentLine.number
 		let lastIndex = allLines.count - 1
 		
+		if lastIndex < nextIndex {
+			return nil
+		}
+
 		for i in nextIndex...lastIndex {
 			let line = allLines[i]
 			if line.hasKeyword(.scenario) || line.hasKeyword(.scenarioOutline) || line.hasKeyword(.examples) {
@@ -118,6 +123,11 @@ class ScenarioScanner {
 			} else if shouldStartNewExamples(line) {
 				startNewExamples(line)
 
+			} else if !currentStepScanner.lineBelongsToStep(line) {
+				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line))
+
 			} else {
 				scanStep(line)
 			}
@@ -141,6 +151,11 @@ class ScenarioScanner {
 			} else if shouldStartNewExamples(line) {
 				startNewExamples(line)
 
+			} else if !line.isEmpty()  {
+				let tags = "#TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line))
+				
 			}
 		}
 	}
@@ -158,9 +173,13 @@ class ScenarioScanner {
 	}
 	
 	private func scanStep(_ line: Line) {
-		stepScanners.last!.scan(line)
+		currentStepScanner.scan(line)
 	}
 	
+	private var currentStepScanner: StepScanner {
+		return stepScanners.last!
+	}
+
 	private func scanExamples(_ line: Line) {
 		examplesScanners.last!.scan(line)
 	}
@@ -170,7 +189,10 @@ class ScenarioScanner {
 	}
 	
 	private func startNewExamples(_ line: Line) {
-		let scanner = examplesScannerFactory.examplesScanner(tags: examplesTagScanner.getTags())
+		let tagsWithErrors = examplesTagScanner.getTags()
+		let tags = tagsWithErrors.tags
+		parseErrors.append(contentsOf: tagsWithErrors.errors)
+		let scanner = examplesScannerFactory.examplesScanner(tags: tags)
 		examplesScanners.append(scanner)
 		examplesTagScanner.clear()
 
@@ -179,22 +201,28 @@ class ScenarioScanner {
 		state = .scanningExamples
 	}
 	
-	func getScenario() -> Scenario {
-		return Scenario(name: name,
-						description: descriptionLines.asDescription(),
-						tags: tags,
-						location: location,
-						steps: steps(),
-						examples: examples(),
-						isScenarioOutline: isScenarioOutline,
-						localizedKeyword: keyword.localized)
-	}
+	func getScenario() -> (scenario: Scenario, errors: [ParseError])  {
+		
+		let examplesWithScenarioParseErrors = examplesScanners.map { $0.getExamples() }
+		let examples = examplesWithScenarioParseErrors.map { $0.examples }
+		let examplesParseErrors = examplesWithScenarioParseErrors.flatMap { $0.errors }
 
-	private func steps() -> [Step] {
-		return stepScanners.map{$0.getStep()}
-	}
+		let stepsWithErrors = stepScanners.map{$0.getStep()}
+		let steps = stepsWithErrors.map{ $0.step }
+		let stepsParseErrors = stepsWithErrors.flatMap { $0.errors }
+		
+		parseErrors.append(contentsOf: examplesParseErrors)
+		parseErrors.append(contentsOf: stepsParseErrors)
 
-	private func examples() -> [ScenarioOutlineExamples] {
-		return examplesScanners.map{$0.getExamples()}
+		let scenario = Scenario(name: name,
+								description: descriptionLines.asDescription(),
+								tags: tags,
+								location: location,
+								steps: steps,
+								examples: examples,
+								isScenarioOutline: isScenarioOutline,
+								localizedKeyword: keyword.localized)
+
+		return (scenario, parseErrors)
 	}
 }

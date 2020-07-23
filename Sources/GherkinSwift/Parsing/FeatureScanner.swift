@@ -40,6 +40,7 @@ class FeatureScanner {
 	let scenarioScannerFactory: ScenarioScannerFactory
 	var scenarioScanners: [ScenarioScanner] = []
 	
+	private var parseErrors = [ParseError]()
 	private var keyword: Keyword = Keyword.none()
 	var name = ""
 	var descriptionLines = [String]()
@@ -60,19 +61,30 @@ class FeatureScanner {
 		case .started:
 			if line.hasKeyword(.tag) {
 				featureTagScanner.scan(line)
-			}
 			
-			if line.hasKeyword(.feature) {
+			} else if line.hasKeyword(.feature) {
 				keyword = line.keyword
 				name = line.keywordRemoved()
 				location = line.keywordLocation()
 				state = .scanningFeature
+				
+			} else if !(line.text.isLanguageSpecification() || line.isEmpty()) {
+
+				let hasFoundFeatureTags = featureTagScanner.numberOfTags() > 0
+				
+				let expected = hasFoundFeatureTags
+					? "#TagLine, #FeatureLine, #Comment, #Empty"
+					: "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty"
+				
+				parseErrors.append(
+					ParseError.invalidGherkin(expected, atLine: line))
 			}
 			
 		case .scanningFeature:
 			if line.hasKeyword(.tag) {
 				scenarioTagScanner.scan(line)
-				
+				state = .foundNextScenarioTags
+
 			} else if shouldStartBackground(line) {
 				startBackground(line)
 				
@@ -112,6 +124,12 @@ class FeatureScanner {
 				
 			} else if shouldStartNewScenario(line) {
 				startNewScenario(line)
+
+			} else if !line.isEmpty()  {
+				let tags = "#TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				parseErrors.append(
+					ParseError.invalidGherkin(tags, atLine: line))
+				
 			}
 		}
 	}
@@ -130,7 +148,10 @@ class FeatureScanner {
 	}
 	
 	private func startNewScenario(_ line: Line) {
-		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: scenarioTagScanner.getTags()))
+		let tagsWithErrors = scenarioTagScanner.getTags()
+		let tags = tagsWithErrors.tags
+		parseErrors.append(contentsOf: tagsWithErrors.errors)
+		scenarioScanners.append(scenarioScannerFactory.scenarioScanner(tags: tags))
 		scenarioTagScanner.clear()
 		
 		scanScenario(line)
@@ -142,26 +163,37 @@ class FeatureScanner {
 		scenarioScanners.last!.scan(line)
 	}
 	
-	func getFeature(languageKey: String) -> Feature? {
-		if state == .started {
-			return nil
-		}
+	func getFeature(languageKey: String) -> (feature: Feature?, errors: [ParseError]) {
 		
-		return Feature(name: name,
-					   description: descriptionLines.asDescription(),
-					   background: backgroundScanner.getBackground(),
-					   tags: tags(),
-					   location: location,
-					   scenarios: scenarios(),
-					   language: languageKey,
-					   localizedKeyword: keyword.localized)
-	}
-	
-	private func tags() -> [Tag] {
-		return featureTagScanner.getTags()
-	}
-	
-	private func scenarios() -> [Scenario] {
-		return scenarioScanners.map { $0.getScenario() }
+		if state == .started {
+			return (nil, parseErrors)
+		}
+
+		let scenariosWithScenarioParseErrors = scenarioScanners.map { $0.getScenario() }
+		let scenarios = scenariosWithScenarioParseErrors.map { $0.scenario }
+		let scenarioParseErrors = scenariosWithScenarioParseErrors.flatMap { $0.errors }
+		
+		let backgroundWithBackgroundParseErrors = backgroundScanner.getBackground()
+		let background = backgroundWithBackgroundParseErrors.background
+		let backgroundErrors = backgroundWithBackgroundParseErrors.errors
+
+		let tagsWithParseErrors = featureTagScanner.getTags()
+		let tags = tagsWithParseErrors.tags
+		let tagsErrors = tagsWithParseErrors.errors
+
+		parseErrors.append(contentsOf: scenarioParseErrors)
+		parseErrors.append(contentsOf: backgroundErrors)
+		parseErrors.append(contentsOf: tagsErrors)
+		
+		let feature = Feature(name: name,
+							  description: descriptionLines.asDescription(),
+							  background: background,
+							  tags: tags,
+							  location: location,
+							  scenarios: scenarios,
+							  language: languageKey,
+							  localizedKeyword: keyword.localized)
+		
+		return (feature, parseErrors)
 	}
 }
