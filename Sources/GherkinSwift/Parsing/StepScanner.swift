@@ -79,7 +79,11 @@ class StepScanner {
 	func isScanningTable() -> Bool {
 		return state == .scanningTableParameter
 	}
-	
+
+	func isScanningDocString() -> Bool {
+		return state == .scanningDocString
+	}
+
 	func scan(_ line: Line) {
 		switch state {
 		case .started:

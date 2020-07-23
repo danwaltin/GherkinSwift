@@ -129,6 +129,11 @@ class ScenarioScanner {
 				if currentStepScanner.isScanningTable() {
 					tags = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
 				}
+
+				if currentStepScanner.isScanningDocString() {
+					tags = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				}
+
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line))
 

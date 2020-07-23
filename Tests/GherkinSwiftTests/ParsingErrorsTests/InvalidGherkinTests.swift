@@ -180,7 +180,7 @@ class InvalidGherkinTests : TestErrorParseBase {
 		""")
 		
 		then_shouldReturnParseErrorWith(
-			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
+			message: "expected: #EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'not gherkin'")
 	}
 
 	func test_invalidAfterBackgroundStepTable() {
@@ -416,8 +416,8 @@ class InvalidGherkinTests : TestErrorParseBase {
 		then_shouldReturn(numberOfParseErrors: 2)
 		
 		then_shouldReturnParseErrorWith(messages: [
-			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Person |\'",
-			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Alan   |\'",
+			"expected: #EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Person |\'",
+			"expected: #EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Alan   |\'",
 		])
 		
 		then_shouldReturnParseErrorWith(locations: [
