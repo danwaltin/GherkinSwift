@@ -28,7 +28,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 	func test_eofAfterTagBeforeFeature() {
 		when_parsingDocument(
 		"""
-		@with whitespace
+		@tag
 		""")
 
 		then_shouldReturnParseErrorWith(
@@ -71,7 +71,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 	func test_eofAfterTagAfterTwoNewLinesBeforeFeature() {
 		when_parsingDocument(
 		"""
-		@with whitespace
+		@tag
 
 
 		""")
