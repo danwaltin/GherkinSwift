@@ -299,7 +299,6 @@ class InvalidGherkinTests : TestErrorParseBase {
 		Scenario: s
 		""")
 		
-		//#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty
 		then_shouldReturnParseErrorWith(
 			message: "expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'we expected a table row here!'")
 	}
@@ -366,6 +365,64 @@ class InvalidGherkinTests : TestErrorParseBase {
 			Location(column: 1, line: 13),
 			Location(column: 1, line: 16),
 			Location(column: 1, line: 20)
+		])
+	}
+
+	func test_tableAndThenDocStringParametersToScenarioStep() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+			Given something
+		      | Person |
+		      | Ada    |
+			  ===
+			  Ada Lovelace
+			  ===
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 3)
+		
+		then_shouldReturnParseErrorWith(messages: [
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'===\'",
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'Ada Lovelace\'",
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'===\'",
+		])
+		
+		then_shouldReturnParseErrorWith(locations: [
+			Location(column: 1, line: 6),
+			Location(column: 1, line: 7),
+			Location(column: 1, line: 8),
+		])
+	}
+
+	func test_docStringAndThenTableParametersToScenarioStep() {
+		given_docStringSeparator("===", alternative: "---")
+		
+		when_parsingDocument(
+		"""
+		Feature: feature
+		Scenario: scenario
+			Given something
+			  ---
+			  Alan Turing
+			  ---
+		      | Person |
+		      | Alan   |
+		""")
+
+		then_shouldReturn(numberOfParseErrors: 2)
+		
+		then_shouldReturnParseErrorWith(messages: [
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Person |\'",
+			"expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got \'| Alan   |\'",
+		])
+		
+		then_shouldReturnParseErrorWith(locations: [
+			Location(column: 1, line: 7),
+			Location(column: 1, line: 8),
 		])
 	}
 

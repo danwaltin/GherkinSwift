@@ -21,8 +21,6 @@
 //
 // ------------------------------------------------------------------------
 
-#warning("TODO: Can a step have both a table and a docString? If so, tests are needed. If not, tests are needed!")
-
 class StepScanner {
 	enum State {
 		case started

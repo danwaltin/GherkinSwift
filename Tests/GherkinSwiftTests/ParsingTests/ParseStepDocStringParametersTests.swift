@@ -43,7 +43,6 @@ class ParseStepDocStringParametersTests: TestSuccessfulParseBase {
 			  ---
 		""")
 
-		then_shouldReturnScenarioWith(numberOfSteps: 1)
 		then_shouldReturnScenarioWithStep(
 			forScenario: 0,
 			.given,
