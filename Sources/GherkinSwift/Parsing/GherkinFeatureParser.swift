@@ -61,23 +61,8 @@ public class GherkinFeatureParser {
 		
 		var errors = featureResult.errors
 		
-		// well this ain't pretty...
-		if lastLineIsTag(theLines) {
-			let lastLine = theLines.last!
-			let location = Location(column: 0, line: lastLine.number + 1)
-			let source = ParseErrorSource(location: location, uri: fileUri)
-			var tags = ""
-			if let feature = featureResult.feature {
-				if feature.scenarios.count == 0 {
-					tags = "#TagLine, #ScenarioLine, #Comment, #Empty"
-				} else {
-					tags = "#TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty"
-				}
-			} else {
-				tags = "#TagLine, #FeatureLine, #Comment, #Empty"
-			}
-			let message = "unexpected end of file, expected: \(tags)"
-			errors.append(ParseError(message: message, source: source))
+		if lastNonEmptyLineIsTag(theLines) {
+			errors.append(ParseError.unexpectedEof(theLines.last!, feature: featureResult.feature))
 		}
 		
 		if errors.count > 0 {
@@ -91,7 +76,7 @@ public class GherkinFeatureParser {
 		return .success(document)
 	}
 	
-	private func lastLineIsTag(_ lines: [Line]) -> Bool {
+	private func lastNonEmptyLineIsTag(_ lines: [Line]) -> Bool {
 		if lines.count == 0 {
 			return false
 		}

@@ -62,6 +62,24 @@ extension ParseError {
 			inFile: line.file)
 	}
 	
+	static func unexpectedEof(_ lastLine: Line, feature: Feature?) -> ParseError {
+		let location = Location(column: 0, line: lastLine.number + 1)
+		let source = ParseErrorSource(location: location, uri: lastLine.file)
+		var tags = ""
+		if let feature = feature {
+			if feature.scenarios.count == 0 {
+				tags = "#TagLine, #ScenarioLine, #Comment, #Empty"
+			} else {
+				tags = "#TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty"
+			}
+		} else {
+			tags = "#TagLine, #FeatureLine, #Comment, #Empty"
+		}
+		let message = "unexpected end of file, expected: \(tags)"
+		
+		return ParseError(message: message, source: source)
+	}
+	
 	private static func withMessage( _ message: String,
 									 atLineNumber lineNumber: Int,
 									 column: Int = 1,
