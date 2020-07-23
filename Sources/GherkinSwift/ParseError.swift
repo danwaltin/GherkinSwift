@@ -63,7 +63,7 @@ extension ParseError {
 	}
 	
 	static func unexpectedEof(_ lastLine: Line, feature: Feature?) -> ParseError {
-		let location = Location(column: 0, line: lastLine.number + 1)
+		let location = Location(column: 0, line: lastLine.number)
 		let source = ParseErrorSource(location: location, uri: lastLine.file)
 		var tags = ""
 		if let feature = feature {

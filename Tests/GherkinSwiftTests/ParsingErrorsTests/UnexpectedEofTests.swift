@@ -34,7 +34,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(
 			message: "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty")
 		then_shouldReturnParseErrorWith(location:
-			Location(column: 0, line: 2))
+			Location(column: 0, line: 1))
 	}
 
 	func test_eofAfterTagBeforeScenario() {
@@ -48,7 +48,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(
 			message: "unexpected end of file, expected: #TagLine, #ScenarioLine, #Comment, #Empty")
 		then_shouldReturnParseErrorWith(location:
-			Location(column: 0, line: 4))
+			Location(column: 0, line: 3))
 	}
 
 	func test_eofAfterTagAfterScenarioAndAfterFeature() {
@@ -65,7 +65,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(
 			message: "unexpected end of file, expected: #TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty")
 		then_shouldReturnParseErrorWith(location:
-			Location(column: 0, line: 7))
+			Location(column: 0, line: 6))
 	}
 
 	func test_eofAfterTagAfterTwoNewLinesBeforeFeature() {
@@ -79,7 +79,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 		then_shouldReturnParseErrorWith(
 			message: "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty")
 		then_shouldReturnParseErrorWith(location:
-			Location(column: 0, line: 4))
+			Location(column: 0, line: 3))
 	}
 
 	// MARK: - Helpers
