@@ -23,7 +23,7 @@
 
 import Foundation
 
-public struct Location : Equatable, Encodable {
+public struct Location : Equatable {
 	public let column: Int
 	public let line: Int
 	

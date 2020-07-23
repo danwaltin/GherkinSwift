@@ -368,3 +368,19 @@ extension TableCell : Encodable {
 		try container.encode(location, forKey: .location)
 	}
 }
+
+extension Location : Encodable {
+	enum CodingKeys: String, CodingKey {
+		case column
+		case line
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		if column > 0 {
+			try container.encode(column, forKey: .column)
+		}
+		try container.encode(line, forKey: .line)
+	}
+}
