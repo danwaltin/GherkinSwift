@@ -175,7 +175,7 @@ class InconsistentCellCountTests : TestErrorParseBase {
 		
 		then_shouldReturn(numberOfParseErrors: 2)
 		then_shouldReturnParseErrorWith(messages:
-			["expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'Pippi      | Långstrump  |'",
+			["expected: #EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'Pippi      | Långstrump  |'",
 			 "inconsistent cell count within the table"
 		])
 		then_shouldReturnParseErrorWith(locations: [

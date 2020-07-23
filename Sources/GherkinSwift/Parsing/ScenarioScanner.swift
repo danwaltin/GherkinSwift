@@ -124,7 +124,11 @@ class ScenarioScanner {
 				startNewExamples(line)
 
 			} else if !currentStepScanner.lineBelongsToStep(line) {
-				let tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				var tags = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				
+				if currentStepScanner.isScanningTable() {
+					tags = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty"
+				}
 				parseErrors.append(
 					ParseError.invalidGherkin(tags, atLine: line))
 
