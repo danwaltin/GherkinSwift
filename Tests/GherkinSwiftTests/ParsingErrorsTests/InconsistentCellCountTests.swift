@@ -160,6 +160,30 @@ class InconsistentCellCountTests : TestErrorParseBase {
 		])
 	}
 
+	func test_missingPipesInScenarioStepTable() {
+		when_parsingDocument(
+		"""
+		Feature: f
+		Scenario: s
+		   Given the following customers
+		      | First Name | Last Name   |
+		      | Ada        | Lovelace    |
+		        Pippi      | Långstrump  |
+		      | Ronja      | Rövardotter
+		      | Alan       | Turing      |
+		""")
+		
+		then_shouldReturn(numberOfParseErrors: 2)
+		then_shouldReturnParseErrorWith(messages:
+			["expected: #EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty, got 'Pippi      | Långstrump  |'",
+			 "inconsistent cell count within the table"
+		])
+		then_shouldReturnParseErrorWith(locations: [
+			Location(column: 1, line: 6),
+			Location(column: 7, line: 7)
+		])
+	}
+
 	// MARK: - helpers
 	private func then_shouldReturn(numberOfParseErrors expected: Int, file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(file, line) {
@@ -170,6 +194,11 @@ class InconsistentCellCountTests : TestErrorParseBase {
 	private func then_shouldReturnParseErrorWith(message: String,
 												 file: StaticString = #file, line: UInt = #line) {
 		assert.parseError(withMessage: message, file, line)
+	}
+
+	private func then_shouldReturnParseErrorWith(messages: [String],
+												 file: StaticString = #file, line: UInt = #line) {
+		assert.parseError(withMessages: messages, file, line)
 	}
 
 	private func then_shouldReturnParseErrorWith(locations: [Location], file: StaticString = #file, line: UInt = #line) {
