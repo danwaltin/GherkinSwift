@@ -77,7 +77,7 @@ class UnexpectedEofTests : TestErrorParseBase {
 		""")
 
 		then_shouldReturnParseErrorWith(
-			message: "unexpected end of file, expected: #TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty")
+			message: "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty")
 		then_shouldReturnParseErrorWith(location:
 			Location(column: 0, line: 4))
 	}

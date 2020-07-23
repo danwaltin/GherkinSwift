@@ -58,8 +58,25 @@ public class GherkinFeatureParser {
 		}
 		
 		let featureResult = featureScanner.getFeature(languageKey: language.key)
-		if featureResult.errors.count > 0 {
-			return .error(featureResult.errors.sorted(by: {a,b in a.source.location.line < b.source.location.line}))
+		
+		var errors = featureResult.errors
+		
+		// well this ain't pretty...
+		if lastLineIsTag(theLines) {
+			let lastLine = theLines.last!
+			if let feature = featureResult.feature {
+				if feature.scenarios.count == 0 {
+					errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #ScenarioLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+				} else {
+					errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+				}
+			} else {
+				errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+			}
+		}
+		
+		if errors.count > 0 {
+			return .error(errors.sorted(by: {a,b in a.source.location.line < b.source.location.line}))
 		}
 		
 		let document = GherkinDocument(comments: commentCollector.getComments(),
@@ -67,6 +84,24 @@ public class GherkinFeatureParser {
 									   uri: fileUri)
 		
 		return .success(document)
+	}
+	
+	private func lastLineIsTag(_ lines: [Line]) -> Bool {
+		if lines.count == 0 {
+			return false
+		}
+
+		var copy = lines
+		copy.reverse()
+		for line in copy {
+			if line.isEmpty() {
+				continue
+			}
+			
+			return line.hasKeyword(.tag)
+		}
+		
+		return false
 	}
 	
 	public func getAllLinesInFile(url: URL) -> [String] {
