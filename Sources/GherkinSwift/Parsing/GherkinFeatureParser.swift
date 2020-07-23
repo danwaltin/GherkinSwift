@@ -64,15 +64,19 @@ public class GherkinFeatureParser {
 		// well this ain't pretty...
 		if lastLineIsTag(theLines) {
 			let lastLine = theLines.last!
+			let location = Location(column: 0, line: lastLine.number + 1)
+			let source = ParseErrorSource(location: location, uri: fileUri)
+			var message = ""
 			if let feature = featureResult.feature {
 				if feature.scenarios.count == 0 {
-					errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #ScenarioLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+					message = "unexpected end of file, expected: #TagLine, #ScenarioLine, #Comment, #Empty"
 				} else {
-					errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+					message = "unexpected end of file, expected: #TagLine, #ExamplesLine, #ScenarioLine, #Comment, #Empty"
 				}
 			} else {
-				errors.append(ParseError(message: "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty", source: ParseErrorSource(location: Location(column: 0, line: lastLine.number + 1), uri: fileUri)))
+				message = "unexpected end of file, expected: #TagLine, #FeatureLine, #Comment, #Empty"
 			}
+			errors.append(ParseError(message: message, source: source))
 		}
 		
 		if errors.count > 0 {
