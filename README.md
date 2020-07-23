@@ -4,7 +4,9 @@ in turn has `Step`-s etc.
 
 For more information about Gherkin, see the [Gherkin github page](https://github.com/cucumber/cucumber/tree/master/gherkin).
 
-Currently does not handle the keyword `Rule`.
+Currently does not handle 
+* The keyword `Rule`
+* @-characters in DocString step parameters
 
 ## Usage
 GherkinSwift exposes its functionality as a Swift library package. 
