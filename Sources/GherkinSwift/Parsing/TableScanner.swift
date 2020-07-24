@@ -24,7 +24,6 @@
 class TableScanner {
 	
 	private var hasScannedColumns = false
-	private var columns = [String]()
 	private var headerRow: TableRow!
 	private var rows = [TableRow]()
 	
@@ -57,7 +56,6 @@ class TableScanner {
 		}
 		
 		let table =  Table(header: headerRow,
-						   columns: columns,
 						   rows: rows,
 						   headerLocation: headerLocation)
 
@@ -65,12 +63,10 @@ class TableScanner {
 	}
 
 	private func createColumns(_ line: Line) {
-		columns = lineItems(line.text)
-		
 		let location = line.keywordLocation()
 		headerLocation = location
 
-		headerRow = TableRow(cells: cells(line), location: location)
+		headerRow = TableRow(cells: cells(line, isDataRow: false), location: location)
 		
 		hasScannedColumns = true
 	}
@@ -85,7 +81,7 @@ class TableScanner {
 		rows.append(TableRow(cells: cells(line), location: location))
 	}
 	
-	private func cells(_ line: Line) -> [TableCell] {
+	private func cells(_ line: Line, isDataRow: Bool = true) -> [TableCell] {
 		
 		let i = line.text.firstIndex(of: tableSeparator)!
 		let d = line.text.distance(from: line.text.startIndex, to: i)
@@ -94,7 +90,7 @@ class TableScanner {
 		cellValues.removeLast()
 		cellValues.remove(at: 0)
 
-		if cellValues.count != columns.count {
+		if isDataRow && cellValues.count != headerRow.cells.count {
 			parseErrors.append(
 				ParseError.inconsistentCellCount(atLine: line))
 		}
@@ -106,14 +102,14 @@ class TableScanner {
 
 		var columnIndex = 0
 		for cellValue in cellValues {
-			if columnIndex == columns.count {
+			if isDataRow && columnIndex == headerRow.cells.count {
 				break
 			}
 
 			let numberOfColumnsFromSeparatorToNonWhitespace = cellValue.count - cellValue.trimLeft().count
 			let col = previousCellColumn + numberOfColumnsFromSeparatorToNonWhitespace
 			
-			let column = columns[columnIndex]
+			let column = isDataRow ? headerRow.cells[columnIndex].value : cellValue.trimSpaces()
 			let cell = TableCell(value: cellValue.trimSpaces(),
 								 location: Location(column: col, line: line.number),
 								 header: column)

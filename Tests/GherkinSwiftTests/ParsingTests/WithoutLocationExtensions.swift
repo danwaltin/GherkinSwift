@@ -36,7 +36,6 @@ extension Table {
 			newRows.append(row.withoutLocation())
 		}
 		return Table(header: header.withoutLocation(),
-					 columns: columns,
 					 rows: newRows,
 					 headerLocation: Location.zero())
 	}
