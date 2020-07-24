@@ -24,4 +24,9 @@
 public struct Tag : Equatable {
 	public let name: String
 	public let location: Location
+	
+	public init(name: String, location: Location) {
+		self.name = name
+		self.location = location
+	}
 }
