@@ -23,7 +23,11 @@
 
 import Foundation
 
-public class GherkinFeatureParser {
+public protocol	FeatureParser {
+	func pickle(lines: [String], fileUri: String) -> PickleResult
+}
+
+public class GherkinFeatureParser : FeatureParser {
 	
 	private let scannerFactory: ScannerFactory
 	private let languages: LanguagesConfiguration
