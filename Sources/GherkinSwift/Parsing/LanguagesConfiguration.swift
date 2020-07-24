@@ -26,12 +26,16 @@ public struct LanguagesConfiguration {
 	let defaultLanguageKey: String
 	private let languages: [String: Language]
 	
-	init(defaultLanguageKey: String,
-		 languages: [String: Language] = LanguagesConfiguration.getAvailableLanguages()) {
+	public init(defaultLanguageKey: String,
+				languages: [String: Language]) {
 		self.defaultLanguageKey = defaultLanguageKey
 		self.languages = languages
 	}
-	
+
+	public init(defaultLanguageKey: String) {
+		self.init(defaultLanguageKey: defaultLanguageKey, languages: LanguagesConfiguration.getAvailableLanguages())
+	}
+
 	private static func getAvailableLanguages() -> [String : Language] {
 		let languagesFileUrl = fileUrl(of: "gherkin-languages.json")
 		

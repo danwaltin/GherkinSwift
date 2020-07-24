@@ -22,8 +22,8 @@
 // ------------------------------------------------------------------------
 
 public struct Table : Equatable {
-	let header: TableRow
-	let rows: [TableRow]
+	public let header: TableRow
+	public let rows: [TableRow]
 	let headerLocation: Location
 
 	init(header: TableRow, columns: [String], rows: [TableRow], headerLocation: Location) {

@@ -25,8 +25,8 @@ public struct ParseConfiguration {
 	let docStringSeparator: String
 	let alternativeDocStringSeparator: String
 	
-	init(docStringSeparator: String = "\"\"\"",
-		 alternativeDocStringSeparator: String = "```") {
+	public init(docStringSeparator: String = "\"\"\"",
+				alternativeDocStringSeparator: String = "```") {
 		self.docStringSeparator = docStringSeparator
 		self.alternativeDocStringSeparator = alternativeDocStringSeparator
 	}

@@ -21,11 +21,7 @@
 //
 // ------------------------------------------------------------------------
 
-struct LanguageTest : Codable {
-	var name: String
-}
-
-struct Language : Codable {
+public struct Language : Codable {
 	enum CodingKeys: CodingKey {
 		// all but "key"
 		case name
