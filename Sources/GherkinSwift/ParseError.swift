@@ -24,11 +24,21 @@
 public struct ParseError {
 	public let message: String
 	public let source: ParseErrorSource
+	
+	public init(message: String, source: ParseErrorSource) {
+		self.message = message
+		self.source = source
+	}
 }
 
 public struct ParseErrorSource {
 	public let location: Location
 	public let uri: String
+	
+	public init(location: Location, uri: String) {
+		self.location = location
+		self.uri = uri
+	}
 }
 
 extension ParseError {
