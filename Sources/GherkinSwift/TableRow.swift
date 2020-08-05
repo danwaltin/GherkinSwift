@@ -24,11 +24,15 @@
 import Foundation
 
 public struct TableRow : Equatable {
-	
 	public let cells: [TableCell]
 	public let location: Location
 	
 	public subscript(column: String) -> TableCell {
 		return cells.filter { $0.header == column }[0]
+	}
+
+	public init(cells: [TableCell], location: Location) {
+		self.cells = cells
+		self.location = location
 	}
 }

@@ -27,4 +27,10 @@ public struct TableCell : Equatable {
 
 	// the header of the column this cell belongs to
 	public let header: String
+
+	public init(value: String, location: Location, header: String) {
+		self.value = value
+		self.location = location
+		self.header = header
+	}
 }

@@ -26,7 +26,7 @@ public struct Table : Equatable {
 	public let rows: [TableRow]
 	let headerLocation: Location
 
-	init(header: TableRow, rows: [TableRow], headerLocation: Location) {
+	public init(header: TableRow, rows: [TableRow], headerLocation: Location) {
 		self.header = header
 		self.rows = rows
 		self.headerLocation = headerLocation
