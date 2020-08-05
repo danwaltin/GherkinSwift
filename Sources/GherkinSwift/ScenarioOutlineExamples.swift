@@ -27,4 +27,12 @@ public struct ScenarioOutlineExamples : Equatable, Taggable {
 	public let tags: [Tag]
 	public let location: Location
 	public let table: Table?
+
+	public init(name: String, description: String?, tags: [Tag], location: Location, table: Table?) {
+		self.name = name
+		self.description = description
+		self.tags = tags
+		self.location = location
+		self.table = table
+	}
 }
